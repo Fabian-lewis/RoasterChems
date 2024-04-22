@@ -1,5 +1,14 @@
-public class App {
-    public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+public class App extends Application {
+    @Override
+    public void start(Stage primaryStage) {
+        Login loginWindow = new Login();
+        loginWindow.display();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
