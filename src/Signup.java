@@ -75,7 +75,7 @@ public class Signup {
         signupWindow.show();
     }
     public void saveUser(String Username, String Phone, String Password, String NationalId){
-        String sql = "INSERT INTO users(username, phone, password,nationalid) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO users(username, phone, pass,nationalid) VALUES (?,?,?,?)";
 
         try (Connection conn = DatabaseManager.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql)){

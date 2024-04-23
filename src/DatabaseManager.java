@@ -10,24 +10,31 @@ public class DatabaseManager {
     +"id INTEGER PRIMARY KEY,\n"
     +"username TEXT UNIQUE NOT NULL, \n"
     +"phone TEXT NOT NULL,\n"
-    +"nationalid TEXT UNIQUE NOT NULL\n"
-    +"password TEXT NOT NULL\n"
+    +"nationalid TEXT UNIQUE NOT NULL,\n"
+    +"pass TEXT NOT NULL\n"
     +");";
 
     public static Connection connect() {
         Connection conn = null;
         try{
+            // Load JDBC driver
+            Class.forName("org.sqlite.JDBC");
+            // Connect to the database
             conn = DriverManager.getConnection(URL);
             System.out.println("Connected to SQLITE database");
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e){
+            System.out.println("JDBC Driver not found: " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Error connecting to database: " + e.getMessage());
         }
         return conn;
     }
+    
 
     public static void createTables(){
-        try(Connection conn = connect();
-        Statement stmt = conn.createStatement()){
+        try(
+            Connection conn = connect();
+            Statement stmt = conn.createStatement()){
             
             stmt.execute(CREATE_USERS_TABLE);
             System.out.println("Users table created successfully.");
