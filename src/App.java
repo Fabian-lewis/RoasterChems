@@ -5,8 +5,8 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
         DatabaseManager.createTables();
-        Signup signupWindow = new Signup();
-        signupWindow.display();
+        Login loginWindow = new Login();
+        loginWindow.display();
     }
 
     public static void main(String[] args) {

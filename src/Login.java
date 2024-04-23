@@ -1,5 +1,11 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -45,5 +51,61 @@ public class Login {
         loginWindow.setScene(loginScene);
         loginWindow.show();
 
+        clearButton.setOnAction(e->{
+            usernameTextField.clear();
+            passwordTextField.clear();
+        });
+        exitButton.setOnAction(e->{
+            loginWindow.close();
+        });
+        loginButton.setOnAction(e->{
+            String username, password;
+            username = usernameTextField.getText();
+            password = passwordTextField.getText();
+
+            confirmDetails(username, password);
+
+        });
+
+
+    }
+    public static void confirmDetails(String Username, String Password){
+        //DatabaseManager databaseManager = new DatabaseManager();
+        Connection conn = DatabaseManager.connect();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String query = "SELECT *FROM users WHERE username = ? AND pass = ?";
+
+        try {
+            preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, Username);
+            preparedStatement.setString(2, Password);
+            resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Login Successful");
+                alert.setHeaderText(null);
+                alert.setContentText("Welcome, "+Username);
+                alert.showAndWait();
+            } else{
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Login Failed");
+                alert.setHeaderText(null);
+                alert.setContentText("Invalid username or password");
+                alert.showAndWait();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(resultSet != null) resultSet.close();
+                if(preparedStatement!= null) preparedStatement.close();
+                if(conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

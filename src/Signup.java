@@ -65,7 +65,19 @@ public class Signup {
             Password = userpasswordTextField.getText();
             NationalId = idnumberTextField.getText();
             saveUser(Username, Phone, Password, NationalId);
+            Login loginWindow = new Login();
+            loginWindow.display();
 
+        });
+
+        exitButton.setOnAction(e ->{
+            signupWindow.close();
+        });
+        clearButton.setOnAction(e->{
+            usernameTextField.clear();
+            phoneTextField.clear();
+            userpasswordTextField.clear();
+            idnumberTextField.clear();
         });
 
         signupGrid.getChildren().addAll(usernamLabel, usernameTextField, userpasswordLabel, userpasswordTextField, idnumberLabel,idnumberTextField,phoneLabel, phoneTextField, exitButton,clearButton, signupButton);
