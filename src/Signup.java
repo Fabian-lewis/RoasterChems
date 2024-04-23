@@ -1,10 +1,12 @@
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
 
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -64,9 +66,17 @@ public class Signup {
             Phone = phoneTextField.getText();
             Password = userpasswordTextField.getText();
             NationalId = idnumberTextField.getText();
-            saveUser(Username, Phone, Password, NationalId);
-            Login loginWindow = new Login();
-            loginWindow.display();
+            if(!Username.isEmpty() && !Phone.isEmpty() && !Password.isEmpty() && !NationalId.isEmpty()){
+                saveUser(Username, Phone, Password, NationalId);
+            }
+            else{
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(null);
+                alert.setContentText("You have to fill all the entries");
+                alert.showAndWait();
+            }
+            
+            
 
         });
 
@@ -87,16 +97,39 @@ public class Signup {
         signupWindow.show();
     }
     public void saveUser(String Username, String Phone, String Password, String NationalId){
+        String usercheck = "SELECT COUNT (*) FROM users WHERE username = ?";
         String sql = "INSERT INTO users(username, phone, pass,nationalid) VALUES (?,?,?,?)";
 
         try (Connection conn = DatabaseManager.connect();
+        PreparedStatement check = conn.prepareStatement(usercheck);
         PreparedStatement pstmt = conn.prepareStatement(sql)){
-            pstmt.setString(1, Username);
-            pstmt.setString(2, Phone);
-            pstmt.setString(3, Password);
-            pstmt.setString(4, NationalId);
-            pstmt.executeUpdate();
-            System.out.println("User added Successfully");
+
+            check.setString(1, Username);
+            ResultSet resultSet = check.executeQuery();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+            
+            if (count == 0){
+                pstmt.setString(1, Username);
+                pstmt.setString(2, Phone);
+                pstmt.setString(3, Password);
+                pstmt.setString(4, NationalId);
+                pstmt.executeUpdate();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Success");
+                alert.setContentText("User added successfully");
+                alert.showAndWait();
+                System.out.println("User added Successfully");
+                Login loginWindow = new Login();
+                loginWindow.display();
+            }
+            else{
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(null);
+                alert.setContentText("User already exists");
+                alert.showAndWait();
+            }
+           
 
         } catch (SQLException e){
             System.out.println(e.getMessage());

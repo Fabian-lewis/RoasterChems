@@ -63,7 +63,16 @@ public class Login {
             username = usernameTextField.getText();
             password = passwordTextField.getText();
 
-            confirmDetails(username, password);
+            if(!username.isEmpty() && !password.isEmpty()){
+                confirmDetails(username, password);
+            }
+            else{
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(null);
+                alert.setContentText("You have to fill all the entries");
+                alert.showAndWait();
+            }
+            
 
         });
 
