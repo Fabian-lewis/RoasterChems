@@ -97,6 +97,8 @@ public class Login {
                 alert.setHeaderText(null);
                 alert.setContentText("Welcome, "+Username);
                 alert.showAndWait();
+                Dashboard dashboardWindow = new Dashboard();
+                dashboardWindow.display();
             } else{
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Login Failed");
