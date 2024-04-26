@@ -1,11 +1,15 @@
 //import javax.swing.ImageIcon;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Dashboard {
@@ -16,9 +20,15 @@ public class Dashboard {
         Label dashboardtitleLabel = new Label("WELCOME TO ROASTER CHEMICALS DASHBOARD");
         dashboardtitleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
-        ImageView usersView = createImageView("C:/Projects/Roaster Chems Inventory System/RoasterChems/lib/users.jpg", 100,100);
-        ImageView itemsView = createImageView("C:/Projects/Roaster Chems Inventory System/RoasterChems/lib/items.jpg", 100,100);
-        ImageView salesView = createImageView("C:/Projects/Roaster Chems Inventory System/RoasterChems/lib/sales.jpg", 100,100);
+        ImageView usersView = createImageView("lib/users.jpg", 100,100);
+        ImageView itemsView = createImageView("lib/items.jpg", 100,100);
+        ImageView salesView = createImageView("lib/sales.jpg", 100,100);
+
+        HBox iconBox = new HBox(20);
+        iconBox.getChildren().addAll(usersView, itemsView, salesView);
+        iconBox.setAlignment(Pos.CENTER);
+
+        
 
         GridPane dashboardGrid = new GridPane();
         dashboardGrid.setPadding(new Insets(10,10,10,10));
@@ -36,14 +46,23 @@ public class Dashboard {
 
         dashboardGrid.getChildren().addAll(usersButton, itemsButton, salesButton);
 
-        Scene dashboardScene = new Scene(dashboardGrid);
+        VBox layout = new VBox(20);
+        layout.setPadding(new Insets(20));
+        layout.getChildren().addAll(dashboardtitleLabel, iconBox, dashboardGrid);
+
+        Scene dashboardScene = new Scene(layout);
         dashboardWindow.setScene(dashboardScene);
         dashboardWindow.show();
 
 
 
     }
-    public static void createImageView(){
-        
+    private ImageView createImageView(String imagePath, double fitWidth, double fitHeight){
+        Image image = new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/" + imagePath);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(fitWidth);
+        imageView.setFitHeight(fitHeight);
+        return imageView;
     }
+        
 }
