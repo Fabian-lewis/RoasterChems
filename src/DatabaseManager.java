@@ -14,6 +14,22 @@ public class DatabaseManager {
     +"pass TEXT NOT NULL\n"
     +");";
 
+    //public static final CREATE_ITEMS_TABLE = "CREATE TABLE IF  NOT EXISTS items(\n"
+    //+"id_items INTEGER PRIMARY KEY,\n"
+    //+"item_name_itmes TEXT NOT NULL,\n"
+    //+"description_items TEXT, \n"
+    //+"quantity_items INTEGER, \n"
+    //+"order_control-items INTEGER, \n
+    //+");";
+
+    //public static final CREATE_PURCHASES_TABLE = "CREATE TABLE IF NOT EXISTS purchases(\n"
+    //+"id_purchases INTEGER PRIMARY KEY'\n"
+    //+"item_name_purchases TEXT NOT NULL, \n"
+    //+"quantity_purchases INTEGER NOT NULL,\n"
+    //+"buying_price_purchases INTEGER NOT NULL,\n"
+    //+"date_of_purchase DATE\n"
+    //+");";
+
     public static Connection connect() {
         Connection conn = null;
         try{

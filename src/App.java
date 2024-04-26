@@ -4,11 +4,13 @@ import javafx.stage.Stage;
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
-        DatabaseManager.createTables();
-        Login loginWindow = new Login();
-        loginWindow.display();
+        //DatabaseManager.createTables();
+        //Login loginWindow = new Login();
+        //loginWindow.display();
         //Signup signupWindow = new Signup();
         //signupWindow.display();
+        Items itemsWindow = new Items();
+        itemsWindow.display();
     }
 
     public static void main(String[] args) {
