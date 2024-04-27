@@ -55,8 +55,8 @@ public class Items {
         Button addItemButton1 = new Button("ADD ITEM");
         GridPane.setConstraints(addItemButton1, 0, 0);
 
-        Button button5 = new Button("Button 5");
-        GridPane.setConstraints(button5, 1, 0);
+        Button itemsTableButton = new Button("VIEW ITEMS");
+        GridPane.setConstraints(itemsTableButton, 1, 0);
 
 
         Button button6 = new Button("Button 6");
@@ -71,7 +71,7 @@ public class Items {
         Label orderControLabel = new Label("ORDER CONTROL");
         GridPane.setConstraints(orderControLabel, 2, 1);
 
-        itemsGridPane.getChildren().addAll(addItemButton1, button5, button6, itemNameLabel,quantityLabel,orderControLabel);
+        itemsGridPane.getChildren().addAll(addItemButton1, itemsTableButton, button6, itemNameLabel,quantityLabel,orderControLabel);
 
         itemsWindow.getChildren().addAll(navigationPane, itemsGridPane);
 
