@@ -9,8 +9,11 @@ public class App extends Application {
         //loginWindow.display();
         //Signup signupWindow = new Signup();
         //signupWindow.display();
-        Items itemsWindow = new Items();
-        itemsWindow.display();
+        //Items itemsWindow = new Items();
+        //itemsWindow.display();
+        Sales salesWindow = new Sales();
+        salesWindow.display();
+
     }
 
     public static void main(String[] args) {
