@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Items {
-    int grid_row, grid_column;
+    int grid_row=2, grid_column;
     public void display(){
         Stage itemsStage = new Stage();
         itemsStage.setTitle("Roaster Chemicals Items");
@@ -91,20 +91,11 @@ public class Items {
 
        
         grid_column = 0;
-        grid_row =2;
 
         addItemButton1.setOnAction(e ->{
-            TextField textField1 = (TextField)itemsGridPane.getChildren().get(grid_row*5);
+            TextField textField1 = (TextField)itemsGridPane.getChildren().get((grid_row-1)*5);
             if(!textField1.getText().isEmpty()){
-                for(int i = 1; i<=1;i++){
-                
-                    for(grid_column =0; grid_column<=4;grid_column++){
-                        TextField textField = new TextField();
-                        GridPane.setConstraints(textField, grid_column, grid_row);
-                        itemsGridPane.getChildren().addAll(textField);
-                    }
-                    grid_row+=1;
-                }
+               addTextfield(itemsGridPane);
             }
             else{
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -116,16 +107,17 @@ public class Items {
         });
         
     }
-    public void addTextfield(GridPane gridPane){
+    public Integer addTextfield(GridPane gridPane){
         for(int i=1; i<=1;i++){
-            for(grid_row=2; grid_row<=2;grid_row++){
-                for(grid_column=0; grid_column<=4; grid_column++){
-                    TextField textField = new TextField();
-                    GridPane.setConstraints(textField, grid_column, grid_row);
-                    gridPane.getChildren().addAll(textField);
-                }
+            for(grid_column=0; grid_column<=4; grid_column++){
+                TextField textField = new TextField();
+                GridPane.setConstraints(textField, grid_column, grid_row);
+                gridPane.getChildren().addAll(textField);
             }
         }
+        grid_row++;
+        return grid_row;
+        
     }
     
 
