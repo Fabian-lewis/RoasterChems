@@ -1,5 +1,6 @@
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -77,9 +78,10 @@ public class Items {
         Label sellingpriceLabel = new Label("SELLING PRICE");
         GridPane.setConstraints(sellingpriceLabel, 4, 1);
 
-
+        
 
         itemsGridPane.getChildren().addAll(addItemButton1, itemsTableButton, saveItemsButton, itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
+        addTextfield(itemsGridPane);
 
         itemsWindow.getChildren().addAll(navigationPane, itemsGridPane);
 
@@ -92,15 +94,39 @@ public class Items {
         grid_row =2;
 
         addItemButton1.setOnAction(e ->{
-            for(int i = 1; i<=1;i++){
-                for(grid_column =0; grid_column<=4;grid_column++){
-                    TextField textField = new TextField();
-                    GridPane.setConstraints(textField, grid_column, grid_row);
-                    itemsGridPane.getChildren().addAll(textField);
+            TextField textField1 = (TextField)itemsGridPane.getChildren().get(grid_row*5);
+            if(!textField1.getText().isEmpty()){
+                for(int i = 1; i<=1;i++){
+                
+                    for(grid_column =0; grid_column<=4;grid_column++){
+                        TextField textField = new TextField();
+                        GridPane.setConstraints(textField, grid_column, grid_row);
+                        itemsGridPane.getChildren().addAll(textField);
+                    }
+                    grid_row+=1;
                 }
-                grid_row+=1;
             }
+            else{
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setContentText("Fill in the previous row first");
+                alert.show();
+                }
+
         });
         
     }
+    public void addTextfield(GridPane gridPane){
+        for(int i=1; i<=1;i++){
+            for(grid_row=2; grid_row<=2;grid_row++){
+                for(grid_column=0; grid_column<=4; grid_column++){
+                    TextField textField = new TextField();
+                    GridPane.setConstraints(textField, grid_column, grid_row);
+                    gridPane.getChildren().addAll(textField);
+                }
+            }
+        }
+    }
+    
+
 }
