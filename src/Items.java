@@ -59,8 +59,8 @@ public class Items {
         GridPane.setConstraints(itemsTableButton, 1, 0);
 
 
-        Button button6 = new Button("Button 6");
-        GridPane.setConstraints(button6, 2, 0);
+        Button saveItemsButton = new Button("SAVE ITEMS");
+        GridPane.setConstraints(saveItemsButton, 2, 0);
 
         Label itemNameLabel = new Label("ITEM NAME");
         GridPane.setConstraints(itemNameLabel, 0, 1);
@@ -71,7 +71,15 @@ public class Items {
         Label orderControLabel = new Label("ORDER CONTROL");
         GridPane.setConstraints(orderControLabel, 2, 1);
 
-        itemsGridPane.getChildren().addAll(addItemButton1, itemsTableButton, button6, itemNameLabel,quantityLabel,orderControLabel);
+        Label buyingPriceLabel = new Label("BUYING PRICE");
+        GridPane.setConstraints(buyingPriceLabel, 3, 1);
+
+        Label sellingpriceLabel = new Label("SELLING PRICE");
+        GridPane.setConstraints(sellingpriceLabel, 4, 1);
+
+
+
+        itemsGridPane.getChildren().addAll(addItemButton1, itemsTableButton, saveItemsButton, itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
 
         itemsWindow.getChildren().addAll(navigationPane, itemsGridPane);
 
@@ -85,7 +93,7 @@ public class Items {
 
         addItemButton1.setOnAction(e ->{
             for(int i = 1; i<=1;i++){
-                for(grid_column =0; grid_column<=2;grid_column++){
+                for(grid_column =0; grid_column<=4;grid_column++){
                     TextField textField = new TextField();
                     GridPane.setConstraints(textField, grid_column, grid_row);
                     itemsGridPane.getChildren().addAll(textField);

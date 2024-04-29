@@ -75,7 +75,10 @@ public class Sales {
         Label totalPriceLabel = new Label("TOTAL PRICE");
         GridPane.setConstraints(totalPriceLabel, 3, 1);
 
-        salesGridPane.getChildren().addAll(addItemButton1, itemsTableButton, button6, itemNameLabel,quantityLabel,unitPriceLabel, totalPriceLabel);
+        Label vatPriceLabel = new Label("VAT PRICE");
+        GridPane.setConstraints(vatPriceLabel, 4, 1);
+
+        salesGridPane.getChildren().addAll(addItemButton1, itemsTableButton, button6, itemNameLabel,quantityLabel,unitPriceLabel, totalPriceLabel, vatPriceLabel);
 
         salesWindowHBox.getChildren().addAll(navigationPane, salesGridPane);
 
@@ -88,7 +91,7 @@ public class Sales {
 
         addItemButton1.setOnAction(e ->{
             for(int i = 1; i<=1;i++){
-                for(grid_column =0; grid_column<=3;grid_column++){
+                for(grid_column =0; grid_column<=4;grid_column++){
                     TextField textField = new TextField();
                     GridPane.setConstraints(textField, grid_column, grid_row);
                     salesGridPane.getChildren().addAll(textField);

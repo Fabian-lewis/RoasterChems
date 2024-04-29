@@ -14,21 +14,43 @@ public class DatabaseManager {
     +"pass TEXT NOT NULL\n"
     +");";
 
-    //public static final CREATE_ITEMS_TABLE = "CREATE TABLE IF  NOT EXISTS items(\n"
-    //+"id_items INTEGER PRIMARY KEY,\n"
-    //+"item_name_itmes TEXT NOT NULL,\n"
-    //+"description_items TEXT, \n"
-    //+"quantity_items INTEGER, \n"
-    //+"order_control-items INTEGER, \n
-    //+");";
+    public static final String CREATE_ITEMS_TABLE = "CREATE TABLE IF  NOT EXISTS items(\n"
+    +"id_items INTEGER PRIMARY KEY,\n"
+    +"item_name_items TEXT NOT NULL,\n"
+    +"quantity_items INTEGER, \n"
+    +"order_control_items INTEGER, \n"
+    + "buying_price_items INTEGER,\n"
+    + "selling_price_items INTEGER,\n"
+    +");";
 
-    //public static final CREATE_PURCHASES_TABLE = "CREATE TABLE IF NOT EXISTS purchases(\n"
-    //+"id_purchases INTEGER PRIMARY KEY'\n"
-    //+"item_name_purchases TEXT NOT NULL, \n"
-    //+"quantity_purchases INTEGER NOT NULL,\n"
-    //+"buying_price_purchases INTEGER NOT NULL,\n"
-    //+"date_of_purchase DATE\n"
-    //+");";
+    public static final String CREATE_PURCHASES_TABLE = "CREATE TABLE IF NOT EXISTS purchases(\n"
+    +"id_purchases INTEGER PRIMARY KEY,\n"
+    +"id_itemID INTEGER NOT NULL,\n"
+    +"item_name_purchases TEXT NOT NULL, \n"
+    +"quantity_purchases INTEGER NOT NULL,\n"
+    +"buying_price_purchases INTEGER NOT NULL,\n"
+    +"selling_price_purchases INTEFER NOT NULL,\n"
+    +"date_of_purchase DATE NOT NULL,\n"
+    //+"vat_total_purchases INTEGER,\n" 
+    +"FOREIGN KEY (id_itemID) REFERENCES items(id_items)\n"
+    //IF ITEM IS NEW, NEW ITEM BUTTON CREATES AN NEW ENTRY AND SAVE THE NEW ITEM IN ITEMS TABLE
+    +");";
+
+    public static final String CREATE_SALES_TABLE = "CREATE TABLE IF NOT EXISTS sales(\n"
+    +"id_sales INTEGER PRIMARY KEY,\n"
+    +"id_itemID INTEGER NOT NULL,\n"
+    +"id_userID INTEGER NOT NULL,\n"
+    +"username_sale TEXT NOT NULL,\n"
+    +"item_name_sales TEXT NOT NULL,\n"
+    +"quantity_sales INTEGER NOT NULL,\n"
+    +"unit_price_sales INTEGER NOT NULL,\n"
+    +"total_price_sales INTEGER NOT NULL,\n"
+    +"method_of_payment_sales TEXT NOT NULL,\n"
+    +"mpesa_code_sales TEXT,\n"
+    +"vat_price_sales INTEGER NOT NULL,\n"
+    +"date_of_sale DATETIME NOT NULL\n"
+    +"FOREIGN KEY (id_itemID) REFERENCES items(id_items)\n"
+    +");";
 
     public static Connection connect() {
         Connection conn = null;
@@ -54,6 +76,15 @@ public class DatabaseManager {
             
             stmt.execute(CREATE_USERS_TABLE);
             System.out.println("Users table created successfully.");
+            
+            stmt.execute(CREATE_ITEMS_TABLE);
+            System.out.println("Items table created successfully");
+            
+            stmt.execute(CREATE_PURCHASES_TABLE);
+            System.out.println("Purchases table created successfully");
+            
+            stmt.execute(CREATE_SALES_TABLE);
+            System.out.println("Sales table created sucessfully");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
