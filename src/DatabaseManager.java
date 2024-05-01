@@ -16,7 +16,7 @@ public class DatabaseManager {
 
     public static final String CREATE_ITEMS_TABLE = "CREATE TABLE IF  NOT EXISTS items(\n"
     +"id_items INTEGER PRIMARY KEY,\n"
-    +"item_name_items TEXT NOT NULL,\n"
+    +"item_name_items TEXT UNIQUE NOT NULL,\n"
     +"quantity_items INTEGER, \n"
     +"order_control_items INTEGER, \n"
     + "buying_price_items INTEGER,\n"

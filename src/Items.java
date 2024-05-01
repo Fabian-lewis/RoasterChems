@@ -63,6 +63,12 @@ public class Items {
         Button saveItemsButton = new Button("SAVE ITEMS");
         GridPane.setConstraints(saveItemsButton, 2, 0);
 
+        Button deleteItemButton = new Button("DELETE ITEM");
+        GridPane.setConstraints(deleteItemButton, 3, 0);
+
+        Button exitButton = new Button("EXIT");
+        GridPane.setConstraints(exitButton, 4, 0);
+
         Label itemNameLabel = new Label("ITEM NAME");
         GridPane.setConstraints(itemNameLabel, 0, 1);
 
@@ -80,7 +86,7 @@ public class Items {
 
         
 
-        itemsGridPane.getChildren().addAll(addItemButton1, itemsTableButton, saveItemsButton, itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
+        itemsGridPane.getChildren().addAll(addItemButton1, itemsTableButton, saveItemsButton, itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel, deleteItemButton, exitButton);
         addTextfield(itemsGridPane);
 
         itemsWindow.getChildren().addAll(navigationPane, itemsGridPane);
@@ -105,6 +111,22 @@ public class Items {
                 }
 
         });
+        saveItemsButton.setOnAction(e->{
+            int count = grid_row - 1;
+            StringBuilder data = new StringBuilder();
+            for(int i = 1; i<count;i++){
+                for(grid_column=0; grid_column<=4;grid_column++){
+                    TextField newTextField = (TextField)itemsGridPane.getChildren().get((i+1)*5+grid_column);
+                    
+                    data.append(newTextField.getText()).append("\t");
+                    //System.out.println(newTextField.getText()+"\n");
+                    
+                }
+                data.append("\n");
+            }
+            System.out.println(data.toString());
+
+        });
         
     }
     public Integer addTextfield(GridPane gridPane){
@@ -119,6 +141,8 @@ public class Items {
         return grid_row;
         
     }
-    
+    public void saveItem(String ItemName,Integer Quantity, Integer OrderControl, Integer BuyingPrice, Integer SellingPrice){
+        
+    }
 
 }
