@@ -1,3 +1,6 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -142,7 +145,15 @@ public class Items {
         
     }
     public void saveItem(String ItemName,Integer Quantity, Integer OrderControl, Integer BuyingPrice, Integer SellingPrice){
-        
+        String itemcheck = "SELECT COUNT (*) FROM items WHERE item_name_items = ?";
+
+        String sql = "INSERT INTO items (item_name_items, quantity_items,order_control_items, buying_price, selling_price) VALUES (?,?,?,?,?)";
+
+        try (Connection conn = DatabaseManager.connect();
+        PreparedStatement check = conn.prepareStatement(itemcheck);
+        PreparedStatement pstmt = conn.prepareStatement(sql)){
+            
+        }
     }
 
 }
