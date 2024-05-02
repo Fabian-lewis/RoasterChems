@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -128,6 +129,7 @@ public class Items {
                 data.append("\n");
             }
             System.out.println(data.toString());
+            saveItem(data);
 
         });
         
@@ -144,7 +146,7 @@ public class Items {
         return grid_row;
         
     }
-    public void saveItem(String ItemName,Integer Quantity, Integer OrderControl, Integer BuyingPrice, Integer SellingPrice){
+    public void saveItem(StringBuilder data){
         String itemcheck = "SELECT COUNT (*) FROM items WHERE item_name_items = ?";
 
         String sql = "INSERT INTO items (item_name_items, quantity_items,order_control_items, buying_price, selling_price) VALUES (?,?,?,?,?)";
@@ -152,8 +154,23 @@ public class Items {
         try (Connection conn = DatabaseManager.connect();
         PreparedStatement check = conn.prepareStatement(itemcheck);
         PreparedStatement pstmt = conn.prepareStatement(sql)){
+
+            String item_rows[] = data.toString().split("\n");
             
+            for (String row : item_rows){
+                String item_columns[] = row.split("\t");
+                
+                pstmt.setString(1, item_columns[0]);
+                pstmt.setString(2, item_columns[1]);
+                pstmt.setString(3, item_columns[2]);
+                pstmt.setString(4, item_columns[3]);
+                pstmt.setString(5, item_columns[4]);
+                pstmt.executeUpdate();
+                
+            }
+                
+        } catch(SQLException e){
+            System.out.println(e.getMessage());
         }
     }
-
 }
