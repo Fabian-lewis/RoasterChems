@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+//import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,7 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Items {
-    int grid_row=2, grid_column;
+    int grid_row=1, grid_column;
     public void display(){
         Stage itemsStage = new Stage();
         itemsStage.setTitle("Roaster Chemicals Items");
@@ -51,13 +52,28 @@ public class Items {
 
         navigationPane.getChildren().addAll(usersIcon,itemsIcon, salesIcon,orderItemsIcon);
 
+        VBox containerBox = new VBox();
+        containerBox.setPadding(new Insets(10,10,20,20));
+        
+
+        HBox buttonBox = new HBox();
+        buttonBox.setSpacing(30);
+
+        Button addItemsButton = new Button("ADD ITEMS");
+        Button viewItemsButton = new Button("VIEW ITEMS");
+        Button saveItemsButton = new Button("SAVE ITEMS");
+        Button editItemsButton = new Button("EDIT ITEM");
+        Button exitWindowButton = new Button("EXIT");
+
+        buttonBox.getChildren().addAll(addItemsButton,viewItemsButton,saveItemsButton,editItemsButton,exitWindowButton);
+
         GridPane itemsGridPane = new GridPane();
         itemsGridPane.setPadding(new Insets(10));
         itemsGridPane.setHgap(10);
         itemsGridPane.setVgap(10);
 
 
-        Button addItemButton1 = new Button("ADD ITEM");
+        /*Button addItemButton1 = new Button("ADD ITEM");
         GridPane.setConstraints(addItemButton1, 0, 0);
 
         Button itemsTableButton = new Button("VIEW ITEMS");
@@ -72,28 +88,33 @@ public class Items {
 
         Button exitButton = new Button("EXIT");
         GridPane.setConstraints(exitButton, 4, 0);
+        */
 
         Label itemNameLabel = new Label("ITEM NAME");
-        GridPane.setConstraints(itemNameLabel, 0, 1);
+        GridPane.setConstraints(itemNameLabel, 0, 0);
 
         Label quantityLabel = new Label("QUANTITY");
-        GridPane.setConstraints(quantityLabel, 1, 1);
+        GridPane.setConstraints(quantityLabel, 1, 0);
 
         Label orderControLabel = new Label("ORDER CONTROL");
-        GridPane.setConstraints(orderControLabel, 2, 1);
+        GridPane.setConstraints(orderControLabel, 2, 0);
 
         Label buyingPriceLabel = new Label("BUYING PRICE");
-        GridPane.setConstraints(buyingPriceLabel, 3, 1);
+        GridPane.setConstraints(buyingPriceLabel, 3, 0);
 
         Label sellingpriceLabel = new Label("SELLING PRICE");
-        GridPane.setConstraints(sellingpriceLabel, 4, 1);
+        GridPane.setConstraints(sellingpriceLabel, 4, 0);
 
         
 
-        itemsGridPane.getChildren().addAll(addItemButton1, itemsTableButton, saveItemsButton, itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel, deleteItemButton, exitButton);
+        itemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
         addTextfield(itemsGridPane);
 
-        itemsWindow.getChildren().addAll(navigationPane, itemsGridPane);
+        //TableView <Item> tableView = new TableView<>();
+
+        containerBox.getChildren().addAll(buttonBox, itemsGridPane);
+
+        itemsWindow.getChildren().addAll(navigationPane, containerBox);
 
         Scene itemsScene = new Scene(itemsWindow);
         itemsStage.setScene(itemsScene);
@@ -102,7 +123,7 @@ public class Items {
        
         grid_column = 0;
 
-        addItemButton1.setOnAction(e ->{
+        addItemsButton.setOnAction(e ->{
             TextField textField1 = (TextField)itemsGridPane.getChildren().get((grid_row-1)*5);
             if(!textField1.getText().isEmpty()){
                addTextfield(itemsGridPane);
