@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 public class Items {
     int grid_row=1, grid_column;
+    int additemsclicklistener = 0;
     public void display(){
         Stage itemsStage = new Stage();
         itemsStage.setTitle("Roaster Chemicals Items");
@@ -67,28 +68,13 @@ public class Items {
 
         buttonBox.getChildren().addAll(addItemsButton,viewItemsButton,saveItemsButton,editItemsButton,exitWindowButton);
 
+       
         GridPane itemsGridPane = new GridPane();
         itemsGridPane.setPadding(new Insets(10));
         itemsGridPane.setHgap(10);
         itemsGridPane.setVgap(10);
 
 
-        /*Button addItemButton1 = new Button("ADD ITEM");
-        GridPane.setConstraints(addItemButton1, 0, 0);
-
-        Button itemsTableButton = new Button("VIEW ITEMS");
-        GridPane.setConstraints(itemsTableButton, 1, 0);
-
-
-        Button saveItemsButton = new Button("SAVE ITEMS");
-        GridPane.setConstraints(saveItemsButton, 2, 0);
-
-        Button deleteItemButton = new Button("DELETE ITEM");
-        GridPane.setConstraints(deleteItemButton, 3, 0);
-
-        Button exitButton = new Button("EXIT");
-        GridPane.setConstraints(exitButton, 4, 0);
-        */
 
         Label itemNameLabel = new Label("ITEM NAME");
         GridPane.setConstraints(itemNameLabel, 0, 0);
@@ -112,7 +98,7 @@ public class Items {
 
         //TableView <Item> tableView = new TableView<>();
 
-        containerBox.getChildren().addAll(buttonBox, itemsGridPane);
+        containerBox.getChildren().addAll(buttonBox);
 
         itemsWindow.getChildren().addAll(navigationPane, containerBox);
 
@@ -123,18 +109,26 @@ public class Items {
        
         grid_column = 0;
 
+        
+
         addItemsButton.setOnAction(e ->{
-            TextField textField1 = (TextField)itemsGridPane.getChildren().get((grid_row-1)*5);
-            if(!textField1.getText().isEmpty()){
-               addTextfield(itemsGridPane);
+            
+            if(additemsclicklistener <1){
+                containerBox.getChildren().addAll(itemsGridPane);
+                additemsclicklistener+=1;
             }
             else{
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setContentText("Fill in the previous row first");
-                alert.show();
+                TextField textField1 = (TextField)itemsGridPane.getChildren().get((grid_row-1)*5);
+                if(!textField1.getText().isEmpty()){
+                addTextfield(itemsGridPane);
                 }
-
+                else{
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Fill in the previous row first");
+                    alert.show();
+                    }
+            }
         });
         saveItemsButton.setOnAction(e->{
             int count = grid_row - 1;
@@ -193,5 +187,50 @@ public class Items {
         } catch(SQLException e){
             System.out.println(e.getMessage());
         }
+    }
+    public void getGridPane(){
+        GridPane itemsGridPane = new GridPane();
+        itemsGridPane.setPadding(new Insets(10));
+        itemsGridPane.setHgap(10);
+        itemsGridPane.setVgap(10);
+
+
+        /*Button addItemButton1 = new Button("ADD ITEM");
+        GridPane.setConstraints(addItemButton1, 0, 0);
+
+        Button itemsTableButton = new Button("VIEW ITEMS");
+        GridPane.setConstraints(itemsTableButton, 1, 0);
+
+
+        Button saveItemsButton = new Button("SAVE ITEMS");
+        GridPane.setConstraints(saveItemsButton, 2, 0);
+
+        Button deleteItemButton = new Button("DELETE ITEM");
+        GridPane.setConstraints(deleteItemButton, 3, 0);
+
+        Button exitButton = new Button("EXIT");
+        GridPane.setConstraints(exitButton, 4, 0);
+        */
+
+        Label itemNameLabel = new Label("ITEM NAME");
+        GridPane.setConstraints(itemNameLabel, 0, 0);
+
+        Label quantityLabel = new Label("QUANTITY");
+        GridPane.setConstraints(quantityLabel, 1, 0);
+
+        Label orderControLabel = new Label("ORDER CONTROL");
+        GridPane.setConstraints(orderControLabel, 2, 0);
+
+        Label buyingPriceLabel = new Label("BUYING PRICE");
+        GridPane.setConstraints(buyingPriceLabel, 3, 0);
+
+        Label sellingpriceLabel = new Label("SELLING PRICE");
+        GridPane.setConstraints(sellingpriceLabel, 4, 0);
+
+        
+
+        itemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
+        addTextfield(itemsGridPane);
+
     }
 }
