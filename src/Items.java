@@ -139,7 +139,7 @@ public class Items {
         saveItemsButton.setOnAction(e->{
             int count = grid_row - 1;
             StringBuilder data = new StringBuilder();
-            for(int i = 1; i<count;i++){
+            for(int i = 0; i<count;i++){
                 for(grid_column=0; grid_column<=4;grid_column++){
                     TextField newTextField = (TextField)itemsGridPane.getChildren().get((i+1)*5+grid_column);
                     
@@ -150,7 +150,7 @@ public class Items {
                 data.append("\n");
             }
             System.out.println(data.toString());
-            saveItem(data);
+            //saveItem(data);
 
         });
         
