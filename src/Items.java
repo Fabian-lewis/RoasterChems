@@ -124,6 +124,7 @@ public class Items {
         addItemsButton.setOnAction(e ->{
             
             if(additemsclicklistener <1){
+                containerBox.getChildren().remove(itemsGridPane);
                 containerBox.getChildren().add(itemsGridPane);
                 additemsclicklistener+=1;
             }
@@ -218,9 +219,9 @@ public class Items {
                     viewItemsGridPane.add(quantityField, 1, row_count);
                     TextField orderControlField = new TextField(rs.getString("order_control_items"));
                     viewItemsGridPane.add(orderControlField, 2, row_count);
-                    TextField buyingPriceField = new TextField(rs.getString("buying_price_items"));
+                    TextField buyingPriceField = new TextField(rs.getString("buying_price"));
                     viewItemsGridPane.add(buyingPriceField, 3, row_count);
-                    TextField sellingPriceField = new TextField(rs.getString("buying_price_items"));
+                    TextField sellingPriceField = new TextField(rs.getString("selling_price"));
                     viewItemsGridPane.add(sellingPriceField, 4, row_count);
 
                     Button editRecordButton = new Button("EDIT");
