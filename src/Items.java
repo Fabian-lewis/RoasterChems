@@ -99,8 +99,7 @@ public class Items {
         itemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
         addTextfield(itemsGridPane);
 
-        GridPane viewItemsGridPane = new GridPane();
-        viewItemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
+        
 
 
        
@@ -124,14 +123,14 @@ public class Items {
         addItemsButton.setOnAction(e ->{
             
             if(additemsclicklistener <1){
-                containerBox.getChildren().remove(itemsGridPane);
-                containerBox.getChildren().add(itemsGridPane);
-                additemsclicklistener+=1;
+                containerBox.getChildren().addAll(itemsGridPane);
+                additemsclicklistener=additemsclicklistener+1;
             }
             else{
                 TextField textField1 = (TextField)itemsGridPane.getChildren().get((grid_row-1)*5);
                 if(!textField1.getText().isEmpty()){
                 addTextfield(itemsGridPane);
+                System.out.println("fuck");
                 }
                 else{
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -149,16 +148,19 @@ public class Items {
                     TextField newTextField = (TextField)itemsGridPane.getChildren().get((i+1)*5+grid_column);
                     
                     data.append(newTextField.getText()).append("\t");
-                    //System.out.println(newTextField.getText()+"\n");
+                    System.out.println(newTextField.getText()+"\n");
                     
                 }
                 data.append("\n");
             }
             System.out.println(data.toString());
-            saveItem(data);
+            //saveItem(data);
 
         });
         viewItemsButton.setOnAction(e->{
+            containerBox.getChildren().remove(itemsGridPane);
+            GridPane viewItemsGridPane = new GridPane();
+            viewItemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
             displayItems(viewItemsGridPane);
             containerBox.getChildren().add(viewItemsGridPane);
         });
@@ -166,11 +168,12 @@ public class Items {
     }
     public Integer addTextfield(GridPane gridPane){
         for(int i=1; i<=1;i++){
-            for(grid_column=0; grid_column<=4; grid_column++){
+            for(grid_column=0; grid_column<5; grid_column++){
                 TextField textField = new TextField();
                 GridPane.setConstraints(textField, grid_column, grid_row);
                 gridPane.getChildren().addAll(textField);
             }
+            
         }
         grid_row++;
         return grid_row;
@@ -179,7 +182,7 @@ public class Items {
     public void saveItem(StringBuilder data){
         String itemcheck = "SELECT COUNT (*) FROM items WHERE item_name_items = ?";
 
-        String sql = "INSERT INTO items (item_name_items, quantity_items,order_control_items, buying_price, selling_price) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO items (item_name_items, quantity_items,order_control_items, buying_price_items, selling_price_items) VALUES (?,?,?,?,?)";
 
         try (Connection conn = DatabaseManager.connect();
         PreparedStatement check = conn.prepareStatement(itemcheck);
@@ -219,9 +222,9 @@ public class Items {
                     viewItemsGridPane.add(quantityField, 1, row_count);
                     TextField orderControlField = new TextField(rs.getString("order_control_items"));
                     viewItemsGridPane.add(orderControlField, 2, row_count);
-                    TextField buyingPriceField = new TextField(rs.getString("buying_price"));
+                    TextField buyingPriceField = new TextField(rs.getString("buying_price_items"));
                     viewItemsGridPane.add(buyingPriceField, 3, row_count);
-                    TextField sellingPriceField = new TextField(rs.getString("selling_price"));
+                    TextField sellingPriceField = new TextField(rs.getString("selling_price_items"));
                     viewItemsGridPane.add(sellingPriceField, 4, row_count);
 
                     Button editRecordButton = new Button("EDIT");
