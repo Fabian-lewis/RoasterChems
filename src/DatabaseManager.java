@@ -19,11 +19,11 @@ public class DatabaseManager {
     +"item_name_items TEXT UNIQUE NOT NULL,\n"
     +"quantity_items INTEGER, \n"
     +"order_control_items INTEGER, \n"
-    + "buying_price_items INTEGER,\n"
-    + "selling_price_items INTEGER,\n"
+    + "buying_price_items DOUBLE,\n"
+    + "selling_price_items DOUBLE\n"
     +");";
 
-    public static final String CREATE_PURCHASES_TABLE = "CREATE TABLE IF NOT EXISTS purchases(\n"
+    /*public static final String CREATE_PURCHASES_TABLE = "CREATE TABLE IF NOT EXISTS purchases(\n"
     +"id_purchases INTEGER PRIMARY KEY,\n"
     +"id_itemID INTEGER NOT NULL,\n"
     +"item_name_purchases TEXT NOT NULL, \n"
@@ -51,6 +51,7 @@ public class DatabaseManager {
     +"date_of_sale DATETIME NOT NULL\n"
     +"FOREIGN KEY (id_itemID) REFERENCES items(id_items)\n"
     +");";
+    */
 
     public static Connection connect() {
         Connection conn = null;
@@ -80,11 +81,12 @@ public class DatabaseManager {
             stmt.execute(CREATE_ITEMS_TABLE);
             System.out.println("Items table created successfully");
             
-            stmt.execute(CREATE_PURCHASES_TABLE);
+            /*stmt.execute(CREATE_PURCHASES_TABLE);
             System.out.println("Purchases table created successfully");
             
             stmt.execute(CREATE_SALES_TABLE);
             System.out.println("Sales table created sucessfully");
+            */
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

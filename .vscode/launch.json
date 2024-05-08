@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Item",
+            "request": "launch",
+            "mainClass": "Item",
+            "projectName": "RoasterChems_96a1536b"
+        },
+        {
+            "type": "java",
+            "name": "DisplayItemsExample",
+            "request": "launch",
+            "mainClass": "DisplayItemsExample",
+            "projectName": "RoasterChems_96a1536b"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

@@ -1,5 +1,6 @@
 //import javax.swing.ImageIcon;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -7,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -54,6 +56,34 @@ public class Dashboard {
         dashboardWindow.setScene(dashboardScene);
         dashboardWindow.show();
 
+        /*
+        usersView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Items itemsWindow = new Items();
+                itemsWindow.display();
+                dashboardWindow.close();
+            }
+        });
+        */
+        itemsView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Items itemsWindow = new Items();
+                itemsWindow.display();
+                dashboardWindow.close();
+            }
+        });
+        /*
+        salesView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Items itemsWindow = new Items();
+                itemsWindow.display();
+                dashboardWindow.close();
+            }
+        });
+        */
 
 
     }

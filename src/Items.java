@@ -1,5 +1,7 @@
+//import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javafx.geometry.Insets;
@@ -7,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+//import javafx.scene.control.TableColumn;
 //import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -96,9 +99,16 @@ public class Items {
         itemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
         addTextfield(itemsGridPane);
 
-        //TableView <Item> tableView = new TableView<>();
+        GridPane viewItemsGridPane = new GridPane();
+        viewItemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
+
+
+       
+
 
         containerBox.getChildren().addAll(buttonBox);
+        
+       
 
         itemsWindow.getChildren().addAll(navigationPane, containerBox);
 
@@ -114,7 +124,7 @@ public class Items {
         addItemsButton.setOnAction(e ->{
             
             if(additemsclicklistener <1){
-                containerBox.getChildren().addAll(itemsGridPane);
+                containerBox.getChildren().add(itemsGridPane);
                 additemsclicklistener+=1;
             }
             else{
@@ -144,8 +154,12 @@ public class Items {
                 data.append("\n");
             }
             System.out.println(data.toString());
-            //saveItem(data);
+            saveItem(data);
 
+        });
+        viewItemsButton.setOnAction(e->{
+            displayItems(viewItemsGridPane);
+            containerBox.getChildren().add(viewItemsGridPane);
         });
         
     }
@@ -176,10 +190,14 @@ public class Items {
                 String item_columns[] = row.split("\t");
                 
                 pstmt.setString(1, item_columns[0]);
-                pstmt.setString(2, item_columns[1]);
-                pstmt.setString(3, item_columns[2]);
-                pstmt.setString(4, item_columns[3]);
-                pstmt.setString(5, item_columns[4]);
+                int quantity = Integer.parseInt(item_columns[1]);
+                pstmt.setInt(2, quantity);
+                int ordercontrol = Integer.parseInt(item_columns[2]);
+                pstmt.setInt(3, ordercontrol);
+                double buyingprice = Double.parseDouble(item_columns[3]);
+                pstmt.setDouble(4, buyingprice);
+                double sellingprice = Double.parseDouble(item_columns[4]);
+                pstmt.setDouble(5, sellingprice);
                 pstmt.executeUpdate();
                 
             }
@@ -188,49 +206,36 @@ public class Items {
             System.out.println(e.getMessage());
         }
     }
-    public void getGridPane(){
-        GridPane itemsGridPane = new GridPane();
-        itemsGridPane.setPadding(new Insets(10));
-        itemsGridPane.setHgap(10);
-        itemsGridPane.setVgap(10);
+    public void displayItems(GridPane viewItemsGridPane){
+        try(Connection conn = DatabaseManager.connect();
+            java.sql.Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM items")){
+                int row_count = 1;
+                while (rs.next()) {
+                    TextField itemNameField = new TextField(rs.getString("item_name_items"));
+                    viewItemsGridPane.add(itemNameField, 0, row_count);
+                    TextField quantityField = new TextField(rs.getString("quantity_items"));
+                    viewItemsGridPane.add(quantityField, 1, row_count);
+                    TextField orderControlField = new TextField(rs.getString("order_control_items"));
+                    viewItemsGridPane.add(orderControlField, 2, row_count);
+                    TextField buyingPriceField = new TextField(rs.getString("buying_price_items"));
+                    viewItemsGridPane.add(buyingPriceField, 3, row_count);
+                    TextField sellingPriceField = new TextField(rs.getString("buying_price_items"));
+                    viewItemsGridPane.add(sellingPriceField, 4, row_count);
 
+                    Button editRecordButton = new Button("EDIT");
+                    viewItemsGridPane.add(editRecordButton, 5, row_count);
+                    Button saveRecordButton = new Button("SAVE");
+                    viewItemsGridPane.add(saveRecordButton, 6, row_count);
+                    Button deleteRecordButton = new Button("DELETE");
+                    viewItemsGridPane.add(deleteRecordButton, 7, row_count);
+                    row_count++;
 
-        /*Button addItemButton1 = new Button("ADD ITEM");
-        GridPane.setConstraints(addItemButton1, 0, 0);
-
-        Button itemsTableButton = new Button("VIEW ITEMS");
-        GridPane.setConstraints(itemsTableButton, 1, 0);
-
-
-        Button saveItemsButton = new Button("SAVE ITEMS");
-        GridPane.setConstraints(saveItemsButton, 2, 0);
-
-        Button deleteItemButton = new Button("DELETE ITEM");
-        GridPane.setConstraints(deleteItemButton, 3, 0);
-
-        Button exitButton = new Button("EXIT");
-        GridPane.setConstraints(exitButton, 4, 0);
-        */
-
-        Label itemNameLabel = new Label("ITEM NAME");
-        GridPane.setConstraints(itemNameLabel, 0, 0);
-
-        Label quantityLabel = new Label("QUANTITY");
-        GridPane.setConstraints(quantityLabel, 1, 0);
-
-        Label orderControLabel = new Label("ORDER CONTROL");
-        GridPane.setConstraints(orderControLabel, 2, 0);
-
-        Label buyingPriceLabel = new Label("BUYING PRICE");
-        GridPane.setConstraints(buyingPriceLabel, 3, 0);
-
-        Label sellingpriceLabel = new Label("SELLING PRICE");
-        GridPane.setConstraints(sellingpriceLabel, 4, 0);
-
-        
-
-        itemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
-        addTextfield(itemsGridPane);
-
+                }
+            } catch (SQLException e){
+                System.out.println(e.getMessage());
+            }
     }
+
+    
 }

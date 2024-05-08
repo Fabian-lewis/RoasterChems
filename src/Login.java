@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class Login {
+    Boolean login = false;
     public void display(){
         Stage loginWindow = new Stage();
         loginWindow.setTitle("Roaster Chemicals Login");
@@ -64,7 +65,10 @@ public class Login {
             password = passwordTextField.getText();
 
             if(!username.isEmpty() && !password.isEmpty()){
-                confirmDetails(username, password);
+                login= confirmDetails(username, password);
+                if(login == true){
+                    loginWindow.close();
+                }
             }
             else{
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -78,7 +82,7 @@ public class Login {
 
 
     }
-    public static void confirmDetails(String Username, String Password){
+    public static Boolean confirmDetails(String Username, String Password){
         //DatabaseManager databaseManager = new DatabaseManager();
         Connection conn = DatabaseManager.connect();
         PreparedStatement preparedStatement = null;
@@ -99,16 +103,19 @@ public class Login {
                 alert.showAndWait();
                 Dashboard dashboardWindow = new Dashboard();
                 dashboardWindow.display();
+                return true;
             } else{
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Login Failed");
                 alert.setHeaderText(null);
                 alert.setContentText("Invalid username or password");
                 alert.showAndWait();
+                return false;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             try {
                 if(resultSet != null) resultSet.close();
