@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -29,28 +30,28 @@ public class Signup {
 
         TextField usernameTextField = new TextField();
         GridPane.setConstraints(usernameTextField, 1, 0);
-        GridPane.setColumnSpan(usernameTextField, 3);
+        GridPane.setColumnSpan(usernameTextField, 4);
 
         Label phoneLabel= new Label("PHONE");
         GridPane.setConstraints(phoneLabel, 0, 1);
 
         TextField phoneTextField = new TextField();
         GridPane.setConstraints(phoneTextField, 1, 1);
-        GridPane.setColumnSpan(phoneTextField, 3);
+        GridPane.setColumnSpan(phoneTextField, 4);
 
         Label idnumberLabel = new Label("ID Number");
         GridPane.setConstraints(idnumberLabel, 0, 2);
 
         TextField idnumberTextField = new TextField();
         GridPane.setConstraints(idnumberTextField, 1, 2);
-        GridPane.setColumnSpan(idnumberTextField, 3);
+        GridPane.setColumnSpan(idnumberTextField, 4);
 
         Label userpasswordLabel = new Label("PASSWORD");
         GridPane.setConstraints(userpasswordLabel, 0, 3);
 
-        TextField userpasswordTextField = new TextField();
+        PasswordField userpasswordTextField = new PasswordField();
         GridPane.setConstraints(userpasswordTextField, 1, 3);
-        GridPane.setColumnSpan(userpasswordTextField, 3);
+        GridPane.setColumnSpan(userpasswordTextField, 4);
 
         Button clearButton = new Button("CLEAR");
         GridPane.setConstraints(clearButton, 1, 4);
@@ -60,6 +61,9 @@ public class Signup {
 
         Button signupButton = new Button("SIGN UP");
         GridPane.setConstraints(signupButton, 3, 4);
+
+        Button loginButton = new Button("LOG IN");
+        GridPane.setConstraints(loginButton, 4, 4);
 
         signupButton.setOnAction(e -> {
             Username = usernameTextField.getText();
@@ -89,10 +93,18 @@ public class Signup {
             userpasswordTextField.clear();
             idnumberTextField.clear();
         });
+        loginButton.setOnAction(e->{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("You are being redirrected to the login page");
+            alert.showAndWait();
+            Login loginWindow = new Login();
+            loginWindow.display();
+            signupWindow.close();
+        });
 
-        signupGrid.getChildren().addAll(usernamLabel, usernameTextField, userpasswordLabel, userpasswordTextField, idnumberLabel,idnumberTextField,phoneLabel, phoneTextField, exitButton,clearButton, signupButton);
+        signupGrid.getChildren().addAll(usernamLabel, usernameTextField, userpasswordLabel, userpasswordTextField, idnumberLabel,idnumberTextField,phoneLabel, phoneTextField, exitButton,clearButton, signupButton, loginButton);
 
-        Scene signupScene = new Scene(signupGrid, 350, 300);
+        Scene signupScene = new Scene(signupGrid, 400, 300);
         signupWindow.setScene(signupScene);
         signupWindow.show();
     }

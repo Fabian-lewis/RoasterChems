@@ -5,12 +5,12 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
         //DatabaseManager.createTables();
-        //Login loginWindow = new Login();
-        //loginWindow.display();
+        Login loginWindow = new Login();
+        loginWindow.display();
         //Signup signupWindow = new Signup();
         //signupWindow.display();
-        Items itemsWindow = new Items();
-        itemsWindow.display();
+        //Items itemsWindow = new Items();
+        //itemsWindow.display();
         //Sales salesWindow = new Sales();
         //salesWindow.display();
 

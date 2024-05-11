@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -28,14 +29,14 @@ public class Login {
 
         TextField usernameTextField = new TextField();
         GridPane.setConstraints(usernameTextField, 1, 0);
-        GridPane.setColumnSpan(usernameTextField, 3);
+        GridPane.setColumnSpan(usernameTextField, 4);
 
         Label passwordLabel = new Label("PASSWORD");
         GridPane.setConstraints(passwordLabel, 0, 1);
 
-        TextField passwordTextField = new TextField();
+        PasswordField passwordTextField = new PasswordField();
         GridPane.setConstraints(passwordTextField, 1, 1);
-        GridPane.setColumnSpan(passwordTextField, 3);
+        GridPane.setColumnSpan(passwordTextField, 4);
 
         Button clearButton = new Button("CLEAR");
         GridPane.setConstraints(clearButton, 1, 2);
@@ -43,12 +44,15 @@ public class Login {
         Button loginButton = new Button("LOG IN");
         GridPane.setConstraints(loginButton, 2, 2);
 
+        Button signupButton = new Button("SIGN UP");
+        GridPane.setConstraints(signupButton, 3, 2);
+
         Button exitButton = new Button("EXIT");
-        GridPane.setConstraints(exitButton, 3, 2);
+        GridPane.setConstraints(exitButton, 4, 2);
 
-        loginGrid.getChildren().addAll(usernameLabel, usernameTextField, passwordLabel, passwordTextField, loginButton, clearButton, exitButton);
+        loginGrid.getChildren().addAll(usernameLabel, usernameTextField, passwordLabel, passwordTextField, loginButton, clearButton, exitButton, signupButton);
 
-        Scene loginScene = new Scene(loginGrid, 300, 200);
+        Scene loginScene = new Scene(loginGrid, 400, 200);
         loginWindow.setScene(loginScene);
         loginWindow.show();
 
@@ -78,6 +82,14 @@ public class Login {
             }
             
 
+        });
+        signupButton.setOnAction(e->{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("You are being redirrected to the sign in page.");
+            alert.showAndWait();
+            Signup signupWindow = new Signup();
+            signupWindow.display();
+            loginWindow.close();
         });
 
 

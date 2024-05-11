@@ -22,6 +22,8 @@ import javafx.stage.Stage;
 public class Items {
     int grid_row=1, grid_column;
     int additemsclicklistener = 0;
+    int viewitemsclicklistener = 0;
+    int viewbuttoncount=0;
     public void display(){
         Stage itemsStage = new Stage();
         itemsStage.setTitle("Roaster Chemicals Items");
@@ -98,6 +100,11 @@ public class Items {
 
         itemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
         addTextfield(itemsGridPane);
+        GridPane viewItemsGridPane = new GridPane();
+        viewItemsGridPane.setPadding(new Insets(10));
+        viewItemsGridPane.setHgap(10);
+        viewItemsGridPane.setVgap(10);
+        viewItemsGridPane.setMinWidth(700);
 
         
 
@@ -121,6 +128,7 @@ public class Items {
         
 
         addItemsButton.setOnAction(e ->{
+            viewitemsclicklistener = 0;
             
             if(additemsclicklistener <1){
                 containerBox.getChildren().addAll(itemsGridPane);
@@ -130,7 +138,6 @@ public class Items {
                 TextField textField1 = (TextField)itemsGridPane.getChildren().get((grid_row-1)*5);
                 if(!textField1.getText().isEmpty()){
                 addTextfield(itemsGridPane);
-                System.out.println("fuck");
                 }
                 else{
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -154,15 +161,28 @@ public class Items {
                 data.append("\n");
             }
             System.out.println(data.toString());
-            //saveItem(data);
+            saveItem(data);
 
         });
         viewItemsButton.setOnAction(e->{
-            containerBox.getChildren().remove(itemsGridPane);
-            GridPane viewItemsGridPane = new GridPane();
-            viewItemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
-            displayItems(viewItemsGridPane);
-            containerBox.getChildren().add(viewItemsGridPane);
+            if(viewitemsclicklistener == 0){
+                viewItemsGridPane.getChildren().clear();
+                containerBox.getChildren().removeAll(itemsGridPane);
+                additemsclicklistener=0;
+                displayItems(viewItemsGridPane);
+                viewItemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
+                containerBox.getChildren().add(viewItemsGridPane);
+                viewitemsclicklistener = 1;
+            }
+            else{
+                viewItemsGridPane.getChildren().clear();
+                containerBox.getChildren().removeAll(itemsGridPane);
+                additemsclicklistener=0;
+                displayItems(viewItemsGridPane);
+                viewItemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
+                containerBox.getChildren().add(viewItemsGridPane);
+            }
+            
         });
         
     }
@@ -211,6 +231,7 @@ public class Items {
         }
     }
     public void displayItems(GridPane viewItemsGridPane){
+        viewItemsGridPane.getChildren().clear();
         try(Connection conn = DatabaseManager.connect();
             java.sql.Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM items")){
@@ -229,6 +250,7 @@ public class Items {
 
                     Button editRecordButton = new Button("EDIT");
                     viewItemsGridPane.add(editRecordButton, 5, row_count);
+                    viewbuttoncount = row_count;
                     Button saveRecordButton = new Button("SAVE");
                     viewItemsGridPane.add(saveRecordButton, 6, row_count);
                     Button deleteRecordButton = new Button("DELETE");
