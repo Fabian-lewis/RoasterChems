@@ -98,7 +98,7 @@ public class Items {
 
         
 
-        itemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
+       // itemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
         addTextfield(itemsGridPane);
         GridPane viewItemsGridPane = new GridPane();
         viewItemsGridPane.setPadding(new Insets(10));
@@ -129,12 +129,15 @@ public class Items {
 
         addItemsButton.setOnAction(e ->{
             viewitemsclicklistener = 0;
+            containerBox.getChildren().removeAll(viewItemsGridPane);
             
             if(additemsclicklistener <1){
                 containerBox.getChildren().addAll(itemsGridPane);
                 additemsclicklistener=additemsclicklistener+1;
             }
             else{
+                //itemsGridPane.getChildren().removeAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
+                //itemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
                 TextField textField1 = (TextField)itemsGridPane.getChildren().get((grid_row-1)*5);
                 if(!textField1.getText().isEmpty()){
                 addTextfield(itemsGridPane);
@@ -187,6 +190,21 @@ public class Items {
         
     }
     public Integer addTextfield(GridPane gridPane){
+        Label itemNameLabel = new Label("ITEM NAME");
+        GridPane.setConstraints(itemNameLabel, 0, 0);
+
+        Label quantityLabel = new Label("QUANTITY");
+        GridPane.setConstraints(quantityLabel, 1, 0);
+
+        Label orderControLabel = new Label("ORDER CONTROL");
+        GridPane.setConstraints(orderControLabel, 2, 0);
+
+        Label buyingPriceLabel = new Label("BUYING PRICE");
+        GridPane.setConstraints(buyingPriceLabel, 3, 0);
+
+        Label sellingpriceLabel = new Label("SELLING PRICE");
+        GridPane.setConstraints(sellingpriceLabel, 4, 0);
+        gridPane.getChildren().addAll(itemNameLabel, quantityLabel, buyingPriceLabel, orderControLabel, sellingpriceLabel);
         for(int i=1; i<=1;i++){
             for(grid_column=0; grid_column<5; grid_column++){
                 TextField textField = new TextField();
