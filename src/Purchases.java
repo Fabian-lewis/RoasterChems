@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 
 public class Purchases {
     int grid_column = 0;
-    int grid_row = 1;
+    int grid_row;
     int additemsclicklistener = 0;
     public void display(){
         Stage purchaseWindow = new Stage();
@@ -82,11 +82,9 @@ public class Purchases {
 
         Label purchaseDateLabel = new Label("DATE OF PURCHASE");
         GridPane.setConstraints(purchaseDateLabel, 4, 0);
+        addLables(itemsGridPane);
+        grid_row = 1;
 
-        
-
-       // itemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
-        addTextfield(itemsGridPane);
         containerBox.getChildren().addAll(buttonBox);
         purchaseContainer.getChildren().addAll(navigationPane, containerBox);
 
@@ -96,6 +94,7 @@ public class Purchases {
 
         addItemsButton.setOnAction(e->{
              if(additemsclicklistener <1){
+                addTextfield(itemsGridPane);
                 containerBox.getChildren().addAll(itemsGridPane);
                 additemsclicklistener=additemsclicklistener+1;
             }
@@ -122,7 +121,8 @@ public class Purchases {
 
     }
     public Integer addTextfield(GridPane gridPane){
-        Label itemNameLabel = new Label("ITEM NAME");
+        /*
+         Label itemNameLabel = new Label("ITEM NAME");
         GridPane.setConstraints(itemNameLabel, 0, 0);
 
         Label quantityLabel = new Label("QUANTITY");
@@ -138,6 +138,9 @@ public class Purchases {
         GridPane.setConstraints(purchaseDateLabel, 4, 0);
 
         gridPane.getChildren().addAll(itemNameLabel, quantityLabel, buyingPriceLabel, purchaseDateLabel, sellingpriceLabel);
+
+         */
+       
         for(int i=1; i<=1;i++){
             for(grid_column=0; grid_column<5; grid_column++){
                 TextField textField = new TextField();
@@ -149,5 +152,22 @@ public class Purchases {
         grid_row++;
         return grid_row;
         
+    }
+    public void addLables(GridPane gridPane){
+        Label itemNameLabel = new Label("ITEM NAME");
+        GridPane.setConstraints(itemNameLabel, 0, 0);
+
+        Label quantityLabel = new Label("QUANTITY");
+        GridPane.setConstraints(quantityLabel, 1, 0);
+
+        Label buyingPriceLabel = new Label("BUYING PRICE");
+        GridPane.setConstraints(buyingPriceLabel, 2, 0);
+
+        Label sellingpriceLabel = new Label("SELLING PRICE");
+        GridPane.setConstraints(sellingpriceLabel, 3, 0);
+
+        Label purchaseDateLabel = new Label("DATE OF PURCHASE");
+        GridPane.setConstraints(purchaseDateLabel, 4, 0);
+        gridPane.getChildren().addAll(itemNameLabel, quantityLabel, buyingPriceLabel, purchaseDateLabel, sellingpriceLabel);
     }
 }
