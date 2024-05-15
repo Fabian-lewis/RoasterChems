@@ -56,12 +56,22 @@ public class Purchases {
         buttonBox.setSpacing(30);
 
         Button addItemsButton = new Button("ADD ITEMS");
-        Button viewItemsButton = new Button("VIEW ITEMS");
+        Button searchItemsButton = new Button("SEARCH ITEMS");
         Button saveItemsButton = new Button("SAVE ITEMS");
         Button editItemsButton = new Button("EDIT ITEM");
         Button exitWindowButton = new Button("EXIT");
 
-        buttonBox.getChildren().addAll(addItemsButton,viewItemsButton,saveItemsButton,editItemsButton,exitWindowButton);
+        VBox searchBox = new VBox();
+        searchBox.setPadding(new Insets(10,10, 20, 20));
+
+        buttonBox.getChildren().addAll(addItemsButton,searchItemsButton,saveItemsButton,editItemsButton,exitWindowButton);
+
+        searchItemsButton.setOnAction(e->{
+            TextField searchTextField = new TextField();
+            searchTextField.setPromptText("SEARCH FOR ITEMS");
+            searchBox.getChildren().addAll(searchTextField);
+
+        });
 
         GridPane itemsGridPane = new GridPane();
         itemsGridPane.setPadding(new Insets(10));
@@ -85,7 +95,7 @@ public class Purchases {
         addLables(itemsGridPane);
         grid_row = 1;
 
-        containerBox.getChildren().addAll(buttonBox);
+        containerBox.getChildren().addAll(buttonBox, searchBox);
         purchaseContainer.getChildren().addAll(navigationPane, containerBox);
 
         Scene purchaseScene = new Scene(purchaseContainer);
