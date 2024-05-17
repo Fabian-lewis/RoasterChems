@@ -1,8 +1,13 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -15,6 +20,7 @@ public class Purchases {
     int grid_column = 0;
     int grid_row;
     int additemsclicklistener = 0;
+    
     public void display(){
         Stage purchaseWindow = new Stage();
         purchaseWindow.setTitle("ROASTER CHEMICALS PURCHASES WINDOW");
@@ -66,11 +72,41 @@ public class Purchases {
 
         buttonBox.getChildren().addAll(addItemsButton,searchItemsButton,saveItemsButton,editItemsButton,exitWindowButton);
 
+        TextField searchTextField = new TextField();
+        searchTextField.setPromptText("SEARCH FOR ITEMS");
         searchItemsButton.setOnAction(e->{
-            TextField searchTextField = new TextField();
-            searchTextField.setPromptText("SEARCH FOR ITEMS");
+            searchBox.getChildren().clear();
             searchBox.getChildren().addAll(searchTextField);
 
+        });
+        ListView<String> listView = new ListView<>();
+        searchTextField.textProperty().addListener((observable, newValue, oldValue)->{
+            if(!newValue.isEmpty()){
+                try{
+                    Connection conn = DatabaseManager.connect();
+                    String sql = "SELECT item_name_items FROM items where item_name_items LIKE?";
+                    PreparedStatement psmt = conn.prepareStatement(sql);
+                    psmt.setString(1, newValue + "%"); 
+                    ResultSet rs = psmt.executeQuery();
+                    
+                   
+                    searchBox.getChildren().remove(listView);
+                    while (rs.next()) {
+                        searchBox.getChildren().remove(listView);
+                        listView.getItems().add(rs.getString("item_name_items"));
+                    }
+                    searchBox.getChildren().add(listView);
+                    psmt.close();
+                    conn.close();
+
+                } catch (SQLException ex){
+                    ex.printStackTrace();
+                }
+ 
+            }
+            else{
+                searchBox.getChildren().add(searchTextField);
+            }
         });
 
         GridPane itemsGridPane = new GridPane();
