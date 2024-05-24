@@ -76,12 +76,14 @@ public class Purchases {
         searchTextField.setPromptText("SEARCH FOR ITEMS");
 
         ListView<String> listView = new ListView<>();
-        searchBox.getChildren().addAll(searchTextField, listView);
+
+        searchBox.getChildren().addAll(searchTextField);
 
         searchItemsButton.setOnAction(e -> {
             searchBox.getChildren().clear();
             searchBox.getChildren().addAll(searchTextField, listView);
         });
+        GridPane itemsGridPane = new GridPane();
 
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             listView.getItems().clear();
@@ -92,9 +94,16 @@ public class Purchases {
                     }
                 }
             }
+            listView.setOnMouseClicked(event->{
+                String selecteditem = listView.getSelectionModel().getSelectedItem();
+                if(selecteditem != null){
+                    System.out.println(selecteditem);
+                    addselecteditems(selecteditem, itemsGridPane);
+                }
+            });
         });
 
-        GridPane itemsGridPane = new GridPane();
+        
         itemsGridPane.setPadding(new Insets(10));
         itemsGridPane.setHgap(10);
         itemsGridPane.setVgap(10);
@@ -181,5 +190,15 @@ public class Purchases {
         Label purchaseDateLabel = new Label("DATE OF PURCHASE");
         GridPane.setConstraints(purchaseDateLabel, 4, 0);
         gridPane.getChildren().addAll(itemNameLabel, quantityLabel, buyingPriceLabel, purchaseDateLabel, sellingpriceLabel);
+    }
+    public void addselecteditems (String selecteditem, GridPane itemsGridPane){
+       for(javafx.scene.Node node : itemsGridPane.getChildren()){
+        if(GridPane.getRowIndex(node)==(grid_row-1)&& GridPane.getColumnIndex(node)== 0 && node instanceof TextField){
+            TextField textField = (TextField) node;
+            textField.setText(selecteditem);
+            break;
+        }
+       }
+        
     }
 }
