@@ -22,6 +22,7 @@ public class Purchases {
     int grid_row;
     int additemsclicklistener = 0;
     ArrayList<String> allItems = new ArrayList<>();
+    ArrayList<String> purchasedItems = new ArrayList<>();
 
     public void display() {
         Stage purchaseWindow = new Stage();
@@ -142,7 +143,68 @@ public class Purchases {
         });
 
         fetchAllItemsFromDatabase();
+
+        saveItemsButton.setOnAction(e -> {
+            int count = grid_row - 1;
+            StringBuilder data = new StringBuilder();
+            for(int i = 0; i<count;i++){
+                for(grid_column=0; grid_column<=4;grid_column++){
+                    TextField newTextField = (TextField)itemsGridPane.getChildren().get((i+1)*5+grid_column);
+                    
+                    data.append(newTextField.getText()).append("\t");
+                    System.out.println(newTextField.getText()+"\n");
+                    
+                }
+                data.append("\n");
+            }
+            System.out.println(data.toString());
+            
+        });
+        
+        
     }
+
+    /*
+     * This method updates a TextField in a GridPane with a selected item.
+
+Inputs
+selecteditem: a String representing the item selected from a list.
+itemsGridPane: a GridPane containing TextField nodes.
+Flow
+Iterate through all nodes in the itemsGridPane.
+Check if the node is a TextField at the last row (grid_row-1) and first column (0).
+If the conditions are met, set the text of the TextField to the selecteditem.
+Break out of the loop after updating the TextField.
+Outputs
+None, as the method updates the text of a TextField directly.
+Usage example
+Purchases purchases = new Purchases();
+// Assuming itemsGridPane is initialized and contains TextFields
+String selecteditem = "Selected Item";
+purchases.addselecteditems(selecteditem, itemsGridPane);
+// This will update the last row, first column TextField in the itemsGridPane with "Selected Item"
+
+Purchases.java
+[5/31/2024, 8:14:01 AM]
+fabitolewi@gmail.com
+ 
+Codiumate
+This method retrieves all item names from a database table and stores them in an ArrayList.
+
+Inputs
+None
+Flow
+Establish a database connection using DatabaseManager.connect().
+Prepare a SQL query to select item_name_items from the items table.
+Execute the query and iterate through the result set.
+Add each item name to the allItems ArrayList.
+Close the prepared statement and database connection.
+Outputs
+None, but populates the allItems ArrayList with item names from the database.
+Usage example
+Purchases purchases = new Purchases();
+purchases.fetchAllItemsFromDatabase();
+     */
 
     private void fetchAllItemsFromDatabase() {
         try {
@@ -161,6 +223,26 @@ public class Purchases {
             ex.printStackTrace();
         }
     }
+    //private void fetchPurchasedItemsIDFromDatabase(String[] purchasedItems, GridPane itemsGridPane){
+        /*
+        int arraycount = 0;
+        for(javafx.scene.Node node : itemsGridPane.getChildren()){
+            if(node instanceof TextField){
+                TextField textField = (TextField) node;
+                if (arraycount< purchasedItems.length){
+                    purchasedItems[arraycount] = textField.getText();
+                    arraycount++;
+                }
+            }
+            
+           
+        }
+        System.out.println(purchasedItems);
+
+        */
+   
+
+    //}
 
     public Integer addTextfield(GridPane gridPane) {
         for (int i = 1; i <= 1; i++) {
@@ -191,6 +273,26 @@ public class Purchases {
         GridPane.setConstraints(purchaseDateLabel, 4, 0);
         gridPane.getChildren().addAll(itemNameLabel, quantityLabel, buyingPriceLabel, purchaseDateLabel, sellingpriceLabel);
     }
+    /*
+     * This method updates a TextField in a GridPane with a selected item.
+
+Inputs
+selecteditem: a String representing the item selected from a list.
+itemsGridPane: a GridPane containing TextField nodes.
+Flow
+Iterate through all nodes in the itemsGridPane.
+Check if the node is a TextField at the last row (grid_row-1) and first column (0).
+If the conditions are met, set the text of the TextField to the selecteditem.
+Break out of the loop after updating the TextField.
+Outputs
+None, as the method updates the text of a TextField directly.
+Usage example
+Purchases purchases = new Purchases();
+// Assuming itemsGridPane is initialized and contains TextFields
+String selecteditem = "Selected Item";
+purchases.addselecteditems(selecteditem, itemsGridPane);
+// This will update the last row, first column TextField in the itemsGridPane 
+     */
     public void addselecteditems (String selecteditem, GridPane itemsGridPane){
        for(javafx.scene.Node node : itemsGridPane.getChildren()){
         if(GridPane.getRowIndex(node)==(grid_row-1)&& GridPane.getColumnIndex(node)== 0 && node instanceof TextField){
