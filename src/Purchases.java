@@ -158,7 +158,7 @@ public class Purchases {
                 data.append("\n");
             }
             System.out.println(data.toString());
-            
+
         });
         
         
@@ -223,26 +223,9 @@ purchases.fetchAllItemsFromDatabase();
             ex.printStackTrace();
         }
     }
-    //private void fetchPurchasedItemsIDFromDatabase(String[] purchasedItems, GridPane itemsGridPane){
-        /*
-        int arraycount = 0;
-        for(javafx.scene.Node node : itemsGridPane.getChildren()){
-            if(node instanceof TextField){
-                TextField textField = (TextField) node;
-                if (arraycount< purchasedItems.length){
-                    purchasedItems[arraycount] = textField.getText();
-                    arraycount++;
-                }
-            }
-            
-           
-        }
-        System.out.println(purchasedItems);
-
-        */
-   
-
-    //}
+    private void fetchPurchasedItemsIDFromDatabase(){
+        
+    }
 
     public Integer addTextfield(GridPane gridPane) {
         for (int i = 1; i <= 1; i++) {
