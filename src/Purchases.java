@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Purchases {
     int grid_column = 0;
@@ -23,6 +24,8 @@ public class Purchases {
     int additemsclicklistener = 0;
     ArrayList<String> allItems = new ArrayList<>();
     ArrayList<String> purchasedItems = new ArrayList<>();
+    List<String[]> itemsList = new ArrayList<>();
+
 
     public void display() {
         Stage purchaseWindow = new Stage();
@@ -152,14 +155,15 @@ public class Purchases {
                     TextField newTextField = (TextField)itemsGridPane.getChildren().get((i+1)*5+grid_column);
                     
                     data.append(newTextField.getText()).append("\t");
-                    System.out.println(newTextField.getText()+"\n");
+                    //System.out.println(newTextField.getText()+"\n");
                     
                 }
                 data.append("\n");
             }
             System.out.println(data.toString());
-
+            fetchPurchasedItemsIDFromDatabase(itemsList);
         });
+        
         
         
     }
@@ -223,8 +227,28 @@ purchases.fetchAllItemsFromDatabase();
             ex.printStackTrace();
         }
     }
-    private void fetchPurchasedItemsIDFromDatabase(){
+    private void fetchPurchasedItemsIDFromDatabase(List<String[]> itemsList){
         
+        try {
+            Connection conn = DatabaseManager.connect();
+            String sql = "SELECT item_name_items, id_items FROM items";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String itemName = rs.getString("item_name_items");
+                String itemID = rs.getString("id_items");
+                itemsList.add(new String[]{itemID, itemName});
+            }
+
+            pstmt.close();
+            conn.close();
+            for (String[] item : itemsList) {
+                System.out.println("Item ID: " + item[0] + ", Item Name: " + item[1]);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public Integer addTextfield(GridPane gridPane) {
