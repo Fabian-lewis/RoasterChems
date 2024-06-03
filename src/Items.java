@@ -149,7 +149,7 @@ public class Items {
                 for(grid_column=0; grid_column<=4;grid_column++){
                     TextField newTextField = (TextField)itemsGridPane.getChildren().get((i+1)*5+grid_column);
                     
-                    data.append(newTextField.getText()).append("\t");
+                    data.append(newTextField.getText().toUpperCase()).append("\t");
                     System.out.println(newTextField.getText()+"\n");
                     
                 }
