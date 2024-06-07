@@ -2,6 +2,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -16,6 +17,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 //import java.util.ArrayList;
 import java.util.HashMap;
 //import java.util.List;
@@ -161,7 +163,14 @@ public class Purchases {
 
         for (int i = 0; i < count; i++) {
             for (gridColumn = 0; gridColumn <= 4; gridColumn++) {
+                if(gridColumn == 4){
+                    DatePicker datePicker = (DatePicker) itemsGridPane.getChildren().get((i+1)*5 + gridColumn);
+                    LocalDate date = datePicker.getValue();
+                    data.append(date !=null? date.toString():"").append("\t");
+                    break;
+                }
                 TextField textField = (TextField) itemsGridPane.getChildren().get((i + 1) * 5 + gridColumn);
+                
                 data.append(textField.getText()).append("\t");
 
                 // Retrieve and print the item_id
@@ -184,13 +193,21 @@ public class Purchases {
     }
 
     private boolean arePreviousTextFieldsFilled(GridPane itemsGridPane) {
-        for (int col = 0; col < 5; col++) {
-            TextField textField = (TextField) itemsGridPane.getChildren().get((gridRow - 1) * 5 + col);
-            if (textField.getText().isEmpty()) {
-                return false;
-            }
+        DatePicker datePicker = (DatePicker) itemsGridPane.getChildren().get((gridRow - 1) * 5 + 4);
+        if(datePicker.getValue() == null){
+            return false;
         }
-        return true;
+        else{
+            for (int col = 0; col < 4; col++) {
+                TextField textField = (TextField) itemsGridPane.getChildren().get((gridRow - 1) * 5 + col);
+                if (textField.getText().isEmpty()) {
+                    return false;
+                }
+            }
+            return true;
+
+        }
+        
     }
 
     private void showAlert(String message) {
@@ -208,11 +225,14 @@ public class Purchases {
     }
 
     private void addTextField(GridPane gridPane) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
             TextField textField = new TextField();
             GridPane.setConstraints(textField, i, gridRow);
             gridPane.getChildren().add(textField);
         }
+        DatePicker datePicker = new DatePicker();
+        GridPane.setConstraints(datePicker, 4, gridRow);
+        gridPane.getChildren().add(datePicker);
         gridRow++;
     }
 
