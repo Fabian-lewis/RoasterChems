@@ -131,7 +131,9 @@ public class Purchases {
         });
 
         saveItemsButton.setOnAction(e -> {
-            saveItems(itemsGridPane);
+            String id = new String();
+            saveItems(itemsGridPane, listView, searchTextField, id);
+            
         });
     }
 
@@ -155,8 +157,10 @@ public class Purchases {
         }
     }
 
-    private void saveItems(GridPane itemsGridPane) {
+    private void saveItems(GridPane itemsGridPane, ListView<String> listView, TextField searchTextField, String id) {
     if(arePreviousTextFieldsFilled(itemsGridPane)){
+        clearListview(listView);
+        clearSearchTextField(searchTextField);
         int count = gridRow - 1;
         StringBuilder data = new StringBuilder();
         //fetchPurchasedItemsIDFromDatabase();
@@ -178,10 +182,15 @@ public class Purchases {
                     String itemName = textField.getText();
                     String itemId = allItems.get(itemName);
                     System.out.println("Item ID: " + itemId + " for Item Name: " + itemName);
+                    id = itemId;
+                    data.append(id).append("\t");
                 }
             }
+           
             data.append("\n");
         }
+        //ReturnClearResults(itemsGridPane);
+        
         System.out.println(data.toString());
 
     }
@@ -190,6 +199,14 @@ public class Purchases {
     }
         
         
+    }
+    private void clearListview(ListView<String> listView){
+        listView.getItems().clear();
+
+    }
+    private void clearSearchTextField(TextField searchTextField){
+        searchTextField.getText();
+        searchTextField.clear();
     }
 
     private boolean arePreviousTextFieldsFilled(GridPane itemsGridPane) {
@@ -225,6 +242,7 @@ public class Purchases {
     }
 
     private void addTextField(GridPane gridPane) {
+        
         for (int i = 0; i < 4; i++) {
             TextField textField = new TextField();
             GridPane.setConstraints(textField, i, gridRow);
@@ -264,4 +282,24 @@ public class Purchases {
             }
         }
     }
+    /*
+    private  ReturnClearResults (GridPane itemsGridPane){
+        itemsGridPane.getChildren().removeIf(node->GridPane.getRowIndex(node)>0);
+        gridRow =1;
+        addItemsClickListener+=1;
+        return new ReturnClearResults(gridRow, addItemsClickListener);
+    }
+    */ 
+    
 }
+/*
+class ReturnClearResults(){
+    public int grid_row;
+    public int addItemsClickListener;
+
+    public ReturnClearResults(int gridRow, int addItemsClickListener){
+        this.grid_row = gridRow;
+        this.addItemsClickListener = addItemsClickListener;
+    }
+}
+*/
