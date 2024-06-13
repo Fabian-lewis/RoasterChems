@@ -186,12 +186,13 @@ public class Purchases {
                     data.append(id).append("\t");
                 }
             }
-           
+            
             data.append("\n");
         }
         //ReturnClearResults(itemsGridPane);
         
         System.out.println(data.toString());
+
 
     }
     else{
@@ -281,6 +282,24 @@ public class Purchases {
                 break;
             }
         }
+    }
+    private void saveToDatabase(StringBuilder data){
+        String sql = "INSERT INTO  purchases(id_itemID, item_name_purchases, quantity_purchases, buying_price, selling_price, date_of_purhases) VALUES (?,?,?,?,?,?)";
+
+        try(Connection conn = DatabaseManager.connect();
+        PreparedStatement pstmt = conn.prepareStatement(sql)){
+
+            String item_rows[] = data.toString().split("\n");
+
+            for (String row: item_rows){
+                String item_columns[]= row.split("\t");
+
+                pstmt.setString(1, item_columns[0]);
+                int item_id = Integer.parseInt(item_columns[1]);
+                pstmt.setInt(2, item_columns[2]);
+
+            }
+        };
     }
     /*
     private  ReturnClearResults (GridPane itemsGridPane){
