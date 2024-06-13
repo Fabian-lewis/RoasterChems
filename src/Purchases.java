@@ -192,7 +192,7 @@ public class Purchases {
         //ReturnClearResults(itemsGridPane);
         
         System.out.println(data.toString());
-
+        saveToDatabase(data);
 
     }
     else{
@@ -283,10 +283,13 @@ public class Purchases {
             }
         }
     }
+    
     private void saveToDatabase(StringBuilder data){
-        String sql = "INSERT INTO  purchases(id_itemID, item_name_purchases, quantity_purchases, buying_price, selling_price, date_of_purhases) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO  purchases( item_name_purchases, id_itemID, quantity_purchases, buying_price_purchases, selling_price_purchases, date_of_purchase) VALUES (?,?,?,?,?,?)";
+        String sql2 = "UPDATE items SET quantity_items = quantity_items + ? WHERE id_items = ?";
 
         try(Connection conn = DatabaseManager.connect();
+        PreparedStatement psupdate = conn.prepareStatement(sql2);
         PreparedStatement pstmt = conn.prepareStatement(sql)){
 
             String item_rows[] = data.toString().split("\n");
@@ -296,11 +299,31 @@ public class Purchases {
 
                 pstmt.setString(1, item_columns[0]);
                 int item_id = Integer.parseInt(item_columns[1]);
-                pstmt.setInt(2, item_columns[2]);
+                pstmt.setInt(2, item_id);
+                int item_quantity = Integer.parseInt((item_columns[2]));
+                pstmt.setInt(3, item_quantity);
+                float item_buyingprice = Float.parseFloat(item_columns[3]);
+                pstmt.setFloat(4, item_buyingprice);
+                float item_sellingprice = Float.parseFloat(item_columns[4]);
+                pstmt.setFloat(5, item_sellingprice);
+                pstmt.setString(6, item_columns[5]);
+
+                pstmt.executeUpdate();
+
+                psupdate.setInt(1, item_quantity);
+                psupdate.setInt(2, item_id);
+                psupdate.executeUpdate();
+
+
 
             }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
         };
+
+
     }
+    
     /*
     private  ReturnClearResults (GridPane itemsGridPane){
         itemsGridPane.getChildren().removeIf(node->GridPane.getRowIndex(node)>0);

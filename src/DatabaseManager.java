@@ -23,7 +23,7 @@ public class DatabaseManager {
     + "selling_price_items DOUBLE\n"
     +");";
 
-    /*public static final String CREATE_PURCHASES_TABLE = "CREATE TABLE IF NOT EXISTS purchases(\n"
+    public static final String CREATE_PURCHASES_TABLE = "CREATE TABLE IF NOT EXISTS purchases(\n"
     +"id_purchases INTEGER PRIMARY KEY,\n"
     +"id_itemID INTEGER NOT NULL,\n"
     +"item_name_purchases TEXT NOT NULL, \n"
@@ -36,7 +36,7 @@ public class DatabaseManager {
     //IF ITEM IS NEW, NEW ITEM BUTTON CREATES AN NEW ENTRY AND SAVE THE NEW ITEM IN ITEMS TABLE
     +");";
 
-    public static final String CREATE_SALES_TABLE = "CREATE TABLE IF NOT EXISTS sales(\n"
+    /*public static final String CREATE_SALES_TABLE = "CREATE TABLE IF NOT EXISTS sales(\n"
     +"id_sales INTEGER PRIMARY KEY,\n"
     +"id_itemID INTEGER NOT NULL,\n"
     +"id_userID INTEGER NOT NULL,\n"
@@ -81,10 +81,10 @@ public class DatabaseManager {
             stmt.execute(CREATE_ITEMS_TABLE);
             System.out.println("Items table created successfully");
             
-            /*stmt.execute(CREATE_PURCHASES_TABLE);
+            stmt.execute(CREATE_PURCHASES_TABLE);
             System.out.println("Purchases table created successfully");
             
-            stmt.execute(CREATE_SALES_TABLE);
+            /*stmt.execute(CREATE_SALES_TABLE);
             System.out.println("Sales table created sucessfully");
             */
         } catch (SQLException e) {
