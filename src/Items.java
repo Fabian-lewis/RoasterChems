@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -14,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -38,25 +40,13 @@ public class Items {
         navigationPane.setPadding(new Insets(10,10,10,10));
         navigationPane.setStyle("-fx-background-color: #F0E68C");
 
-        ImageView itemsIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/items.jpg"));
-        itemsIcon.setFitHeight(100);
-        itemsIcon.setFitWidth(100);
+        ImageView purchasesIcon = createImageView("items.jpg");
+        ImageView salesIcon = createImageView("sales.jpg");
+        ImageView usersIcon = createImageView("users.jpg");
+        ImageView dashboardIcon = createImageView("dashboard.jpg");
 
-        ImageView salesIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/sales.jpg"));
-        salesIcon.setFitHeight(100);
-        salesIcon.setFitWidth(100);
+        navigationPane.getChildren().addAll(usersIcon, purchasesIcon, salesIcon, dashboardIcon);
 
-        ImageView usersIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/users.jpg"));
-        usersIcon.setFitHeight(100);
-        usersIcon.setFitWidth(100);
-
-        ImageView orderItemsIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/items.jpg"));
-        orderItemsIcon.setFitHeight(100);
-        orderItemsIcon.setFitWidth(100);
-
-        
-
-        navigationPane.getChildren().addAll(usersIcon,itemsIcon, salesIcon,orderItemsIcon);
 
         VBox containerBox = new VBox();
         containerBox.setPadding(new Insets(10,10,20,20));
@@ -179,6 +169,14 @@ public class Items {
             }
             
         });
+          purchasesIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Purchases purchasesWindow = new Purchases();
+                purchasesWindow.display();
+                itemsStage.close();
+            }
+        });
         
     }
     public Integer addTextfield(GridPane gridPane){
@@ -292,6 +290,12 @@ public class Items {
             } catch (SQLException e){
                 System.out.println(e.getMessage());
             }
+    }
+    private ImageView createImageView(String imageName) {
+        ImageView imageView = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/" + imageName));
+        imageView.setFitHeight(100);
+        imageView.setFitWidth(100);
+        return imageView;
     }
 
     

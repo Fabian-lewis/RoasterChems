@@ -1,3 +1,4 @@
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -7,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -49,9 +51,9 @@ public class Purchases {
         ImageView itemsIcon = createImageView("items.jpg");
         ImageView salesIcon = createImageView("sales.jpg");
         ImageView usersIcon = createImageView("users.jpg");
-        ImageView orderItemsIcon = createImageView("orderItems.jpg");
+        ImageView dashboardIcon = createImageView("dashboard.jpg");
 
-        navigationPane.getChildren().addAll(usersIcon, itemsIcon, salesIcon, orderItemsIcon);
+        navigationPane.getChildren().addAll(usersIcon, itemsIcon, salesIcon, dashboardIcon);
 
         VBox containerBox = new VBox();
         containerBox.setPadding(new Insets(10, 10, 20, 20));
@@ -135,6 +137,15 @@ public class Purchases {
             saveItems(itemsGridPane, listView, searchTextField, id);
             
         });
+        itemsIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Items itemsWindow = new Items();
+                itemsWindow.display();
+                purchaseWindow.close();
+            }
+        });
+        
     }
 
     private void fetchAllItemsFromDatabase() {
