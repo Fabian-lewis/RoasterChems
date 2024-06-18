@@ -13,10 +13,10 @@ public class App extends Application {
         //itemsWindow.display();
         //Sales salesWindow = new Sales();
         //salesWindow.display();
-        //Purchases purchaseWindow = new Purchases();
-        //purchaseWindow.display();
-        Dashboard dashboard = new Dashboard();
-        dashboard.display();
+        Purchases purchaseWindow = new Purchases();
+        purchaseWindow.display();
+        //Dashboard dashboard = new Dashboard();
+        //dashboard.display();
 
     }
 

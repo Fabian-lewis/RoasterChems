@@ -22,7 +22,7 @@ public class Dashboard {
         Label dashboardtitleLabel = new Label("WELCOME TO ROASTER CHEMICALS DASHBOARD");
         dashboardtitleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
-        ImageView purchasesView = createImageView("lib/users.jpg", 100,100);
+        ImageView purchasesView = createImageView("lib/purchases.jpg", 100,100);
         ImageView itemsView = createImageView("lib/items.jpg", 100,100);
         ImageView salesView = createImageView("lib/sales.jpg", 100,100);
 

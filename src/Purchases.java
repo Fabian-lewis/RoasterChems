@@ -145,7 +145,15 @@ public class Purchases {
                 purchaseWindow.close();
             }
         });
-        
+        dashboardIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Dashboard dashboardWindow = new Dashboard();
+                dashboardWindow.display();
+                purchaseWindow.close();
+            }
+        });
+
     }
 
     private void fetchAllItemsFromDatabase() {

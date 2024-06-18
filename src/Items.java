@@ -40,7 +40,7 @@ public class Items {
         navigationPane.setPadding(new Insets(10,10,10,10));
         navigationPane.setStyle("-fx-background-color: #F0E68C");
 
-        ImageView purchasesIcon = createImageView("items.jpg");
+        ImageView purchasesIcon = createImageView("purchases.jpg");
         ImageView salesIcon = createImageView("sales.jpg");
         ImageView usersIcon = createImageView("users.jpg");
         ImageView dashboardIcon = createImageView("dashboard.jpg");
@@ -174,6 +174,14 @@ public class Items {
             public void handle (MouseEvent event){
                 Purchases purchasesWindow = new Purchases();
                 purchasesWindow.display();
+                itemsStage.close();
+            }
+        });
+        dashboardIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Dashboard dashboardWindow = new Dashboard();
+                dashboardWindow.display();
                 itemsStage.close();
             }
         });
