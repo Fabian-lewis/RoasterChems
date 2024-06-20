@@ -1,3 +1,11 @@
+//import java.net.ConnectException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -15,6 +23,7 @@ import javafx.stage.Stage;
 public class Sales {
     
     private int grid_column = 0, grid_row, addItemsClickListener =0;
+    private Map<String, String[]> allItems = new HashMap<>();
     public void display(){
         Stage salesWindow = new Stage();
         salesWindow.setTitle("Roaster Chemicals Sales Window");
@@ -59,10 +68,10 @@ public class Sales {
         Button addItemsButton = new Button("Add Items");
         Button searchItemsButton = new Button("Search Items");
         Button saveItemsButton = new Button("Save Items");
-        //Button editItemsButton = new Button("Edit Item");
+        Button calculateTotalButton = new Button("Calculate Total");
         //Button exitWindowButton = new Button("Exit");
 
-        buttonBox.getChildren().addAll(addItemsButton, searchItemsButton,saveItemsButton);
+        buttonBox.getChildren().addAll(addItemsButton, searchItemsButton,calculateTotalButton,saveItemsButton);
 
 
         VBox searchBox = new VBox();
@@ -74,7 +83,7 @@ public class Sales {
 
         ListView<String> listView = new ListView<>();
 
-        searchBox.getChildren().addAll(searchTextField, listView);
+        //searchBox.getChildren().addAll(searchTextField, listView);
 
         GridPane salesGridPane = new GridPane();
         salesGridPane.setPadding(new Insets(10));
@@ -107,6 +116,90 @@ public class Sales {
             }
            }
         });
+        
+
+        fetchAllItemsFromDatabase();
+        searchItemsButton.setOnAction(e -> {
+            searchBox.getChildren().clear();
+            searchBox.getChildren().addAll(searchTextField, listView);
+        });
+        calculateTotalButton.setOnAction(e ->{
+            for(int j= 1;j<=grid_row-1;j++){
+                TextField textField1 =(TextField)salesGridPane.getChildren().get((j*5 + 1));
+                textField1.getText();
+                TextField textField2 = (TextField)salesGridPane.getChildren().get((j*5+2));
+                textField2.getText();
+                Double totalcost = Double.parseDouble(textField1.getText()) * Double.parseDouble(textField2.getText());
+                Double vat = totalcost * 0.16;
+
+                for(javafx.scene.Node node : salesGridPane.getChildren()){
+                    if(GridPane.getRowIndex(node) == (j)&& GridPane.getColumnIndex(node) == 3 && node instanceof TextField){
+                        TextField textField = (TextField) node;
+                        textField.setText(Double.toString(totalcost));
+                    } 
+                    if(GridPane.getRowIndex(node) == (j)&& GridPane.getColumnIndex(node) == 4 && node instanceof TextField){
+                        TextField textField = (TextField) node;
+                        textField.setText(Double.toString(vat));
+                    }
+                }                  
+
+            }
+                
+        });
+
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) ->{
+            listView.getItems().clear();
+            if(!newValue.isEmpty()){
+                for(String item: allItems.keySet()){
+                    if(item.toLowerCase().startsWith(newValue.toLowerCase())){
+                        listView.getItems().add(item);
+                    }
+                }
+            }
+            
+        });
+        listView.setOnMouseClicked(event ->{
+            String selectedItem = listView.getSelectionModel().getSelectedItem();
+            if(selectedItem != null){
+                addselectedItems(selectedItem, salesGridPane);
+            }
+        });
+    }
+
+    private void fetchAllItemsFromDatabase(){
+        try{
+            Connection conn = DatabaseManager.connect();
+            String sql = "SELECT item_name_items, id_items, selling_price_items FROM items";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()){
+                String itemName = rs.getString("item_name_items");
+                String itemId = rs.getString("id_items");
+                String itemPrice = rs.getString("selling_price_items");
+                allItems.put(itemName, new String[]{itemId, itemPrice});
+                
+            }
+
+            pstmt.close();
+            conn.close();
+        } catch (SQLException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private void addselectedItems(String selectedItem, GridPane gridPane){
+        for(javafx.scene.Node node : gridPane.getChildren()){
+            if(GridPane.getRowIndex(node) == (grid_row -1)&& GridPane.getColumnIndex(node) == 0 && node instanceof TextField){
+                TextField textField = (TextField) node;
+                textField.setText(selectedItem);
+            }
+            if(GridPane.getRowIndex(node) == (grid_row -1)&& GridPane.getColumnIndex(node) == 2 && node instanceof TextField){
+                TextField textField = (TextField) node;
+                String[] s = (allItems.get(selectedItem));
+                textField.setText(s[1]);
+            }
+        }
     }
     private void addLabels(GridPane gridPane) {
         Label itemNameLabel = new Label("ITEM NAME");
