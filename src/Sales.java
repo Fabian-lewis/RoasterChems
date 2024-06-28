@@ -92,6 +92,20 @@ public class Sales {
 
         addLabels(salesGridPane);
         grid_row = 1;
+        GridPane totals = new GridPane();
+        totals.setPadding(new Insets(10));
+        totals.setHgap(10);
+        totals.setVgap(10);
+
+        Label totalPriceLabel = new Label("TOTAL PRICE");
+        GridPane.setConstraints(totalPriceLabel, 0, (0));
+        GridPane.setColumnSpan(totalPriceLabel, 5);
+            
+        TextField totalTextField = new TextField();
+        GridPane.setConstraints(totalTextField, 5, (0));
+
+        totals.getChildren().addAll(totalPriceLabel,totalTextField);
+
 
         containerBox.getChildren().addAll(buttonBox, searchBox);
 
@@ -105,12 +119,14 @@ public class Sales {
         addItemsButton.setOnAction(e ->{
            if(addItemsClickListener < 1){
             addTextField(salesGridPane);
-            containerBox.getChildren().addAll(salesGridPane);
+            containerBox.getChildren().addAll(salesGridPane, totals);
             addItemsClickListener++;
 
            } else{
+            
             if(arePreviousTextFieldsFilled(salesGridPane)){
                 addTextField(salesGridPane);
+                
             } else{
                 showAlert("Fill in the previous row first");
             }
@@ -124,10 +140,11 @@ public class Sales {
             searchBox.getChildren().addAll(searchTextField, listView);
         });
         calculateTotalButton.setOnAction(e ->{
+            
             for(int j= 1;j<=grid_row-1;j++){
-                TextField textField1 =(TextField)salesGridPane.getChildren().get((j*6 + 1));
+                TextField textField1 =(TextField)salesGridPane.getChildren().get((j*7 + 1));
                 textField1.getText();
-                TextField textField2 = (TextField)salesGridPane.getChildren().get((j*6+2));
+                TextField textField2 = (TextField)salesGridPane.getChildren().get((j*7+2));
                 textField2.getText();
                 Double totalcost = Double.parseDouble(textField1.getText()) * Double.parseDouble(textField2.getText());
                 Double vat = totalcost * 0.16;
@@ -144,9 +161,23 @@ public class Sales {
                 }
                 if(isMethodOfPaymentTextFieldsFilled(salesGridPane)==false){
                     showAlert("Fill in the Method of payment");
-                }                  
+                }                 
 
             }
+            Double sum = 0.0;
+            for(int k = 1;k<=grid_row-1;k++){
+                TextField text = (TextField)salesGridPane.getChildren().get((k*7+3));
+                sum = sum + Double.parseDouble(text.getText());
+                    
+                totalTextField.clear();
+                totalTextField.setText(Double.toString(sum));
+                
+                
+
+            }
+            System.out.println(sum);
+            
+            
                 
         });
 
@@ -223,10 +254,13 @@ public class Sales {
         Label methodOfPaymentLabel = new Label("METHOD OF PAYMENT");
         GridPane.setConstraints(methodOfPaymentLabel, 5, 0);
 
-        gridPane.getChildren().addAll(itemNameLabel, quantityLabel, unitPriceLabel, totalPriceLabel, vatCostLabel, methodOfPaymentLabel);
+        Label messageCodeLabel = new Label("MESSAGE CODE");
+        GridPane.setConstraints(messageCodeLabel, 6, 0);
+
+        gridPane.getChildren().addAll(itemNameLabel, quantityLabel, unitPriceLabel, totalPriceLabel, vatCostLabel, methodOfPaymentLabel, messageCodeLabel);
     }
     private void addTextField(GridPane gridPane){
-        for(int i = 0; i<=5; i++){
+        for(int i = 0; i<=6; i++){
             TextField textField = new TextField();
             GridPane.setConstraints(textField, i, grid_row);
             gridPane.getChildren().addAll(textField);
@@ -241,8 +275,8 @@ public class Sales {
     }
 
     private boolean arePreviousTextFieldsFilled(GridPane gridPane){
-        for(int col = 0; col<6; col++){
-            TextField textField = (TextField)gridPane.getChildren().get((grid_row-1)*6 + col);
+        for(int col = 0; col<7; col++){
+            TextField textField = (TextField)gridPane.getChildren().get((grid_row-1)*7 + col);
             if(textField.getText().isEmpty()){
                 return false;
             }
@@ -250,7 +284,7 @@ public class Sales {
         return true;
     }
     private boolean isMethodOfPaymentTextFieldsFilled(GridPane gridPane){
-        TextField textField = (TextField)gridPane.getChildren().get((grid_row-1)*6 + 5);
+        TextField textField = (TextField)gridPane.getChildren().get((grid_row-1)*7 + 5);
         if(textField.getText().isEmpty()){
             return false;
         } else{
