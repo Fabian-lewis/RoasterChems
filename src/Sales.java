@@ -102,6 +102,7 @@ public class Sales {
         GridPane.setColumnSpan(totalPriceLabel, 5);
             
         TextField totalTextField = new TextField();
+        totalTextField.setEditable(false);
         GridPane.setConstraints(totalTextField, 5, (0));
 
         totals.getChildren().addAll(totalPriceLabel,totalTextField);
@@ -263,6 +264,16 @@ public class Sales {
         for(int i = 0; i<=6; i++){
             TextField textField = new TextField();
             GridPane.setConstraints(textField, i, grid_row);
+            if(i==2)
+            {
+                textField.setEditable(false);
+            }
+            if(i==3){
+                textField.setEditable(false);
+            }
+            if(i==4){
+                textField.setEditable(false);
+            }
             gridPane.getChildren().addAll(textField);
         }
         grid_row++;
