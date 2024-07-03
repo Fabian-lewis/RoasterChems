@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -262,19 +263,33 @@ public class Sales {
     }
     private void addTextField(GridPane gridPane){
         for(int i = 0; i<=6; i++){
-            TextField textField = new TextField();
-            GridPane.setConstraints(textField, i, grid_row);
-            if(i==2)
+            if(i==5)
             {
-                textField.setEditable(false);
+                ComboBox<String> methodOfPaymentComboBox = new ComboBox<>();
+                methodOfPaymentComboBox.getItems().addAll("PAYBILL", "CASH");
+                GridPane.setConstraints(methodOfPaymentComboBox, i, grid_row);
+                gridPane.getChildren().addAll(methodOfPaymentComboBox);
+                
             }
-            if(i==3){
-                textField.setEditable(false);
+            else
+            {
+                TextField textField = new TextField();
+                GridPane.setConstraints(textField, i, grid_row);
+                if(i==2)
+                {
+                    textField.setEditable(false);
+                }
+                if(i==3)
+                {
+                    textField.setEditable(false);
+                }
+                if(i==4)
+                {
+                    textField.setEditable(false);
+                }
+                gridPane.getChildren().addAll(textField);
             }
-            if(i==4){
-                textField.setEditable(false);
-            }
-            gridPane.getChildren().addAll(textField);
+            
         }
         grid_row++;
     }
@@ -287,6 +302,9 @@ public class Sales {
 
     private boolean arePreviousTextFieldsFilled(GridPane gridPane){
         for(int col = 0; col<7; col++){
+            if(col ==5){
+                continue;
+            }
             TextField textField = (TextField)gridPane.getChildren().get((grid_row-1)*7 + col);
             if(textField.getText().isEmpty()){
                 return false;
@@ -295,8 +313,8 @@ public class Sales {
         return true;
     }
     private boolean isMethodOfPaymentTextFieldsFilled(GridPane gridPane){
-        TextField textField = (TextField)gridPane.getChildren().get((grid_row-1)*7 + 5);
-        if(textField.getText().isEmpty()){
+        ComboBox<String> textField = (ComboBox<String>)gridPane.getChildren().get((grid_row-1)*7 + 5);
+        if(textField.getValue().isEmpty()){
             return false;
         } else{
             return true;
