@@ -142,31 +142,47 @@ public class Sales {
             searchBox.getChildren().addAll(searchTextField, listView);
         });
         calculateTotalButton.setOnAction(e ->{
+            Double sum = 0.0;
             
             for(int j= 1;j<=grid_row-1;j++){
+                
                 TextField textField1 =(TextField)salesGridPane.getChildren().get((j*7 + 1));
                 textField1.getText();
                 TextField textField2 = (TextField)salesGridPane.getChildren().get((j*7+2));
                 textField2.getText();
-                Double totalcost = Double.parseDouble(textField1.getText()) * Double.parseDouble(textField2.getText());
-                Double vat = totalcost * 0.16;
-
-                for(javafx.scene.Node node : salesGridPane.getChildren()){
-                    if(GridPane.getRowIndex(node) == (j)&& GridPane.getColumnIndex(node) == 3 && node instanceof TextField){
-                        TextField textField = (TextField) node;
-                        textField.setText(Double.toString(totalcost));
-                    } 
-                    if(GridPane.getRowIndex(node) == (j)&& GridPane.getColumnIndex(node) == 4 && node instanceof TextField){
-                        TextField textField = (TextField) node;
-                        textField.setText(Double.toString(vat));
-                    }
+                if(textField1.getText().isEmpty() && textField2.getText().isEmpty()){
+                    showAlert("Fill in the textfields");
+                    break;
                 }
-                if(isMethodOfPaymentTextFieldsFilled(salesGridPane)==false){
-                    showAlert("Fill in the Method of payment");
-                }                 
+                else
+                {
+                    Double totalcost = Double.parseDouble(textField1.getText()) * Double.parseDouble(textField2.getText());
+                    Double vat = totalcost * 0.16;
+                    for(javafx.scene.Node node : salesGridPane.getChildren()){
+                        if(GridPane.getRowIndex(node) == (j)&& GridPane.getColumnIndex(node) == 3 && node instanceof TextField){
+                            TextField textField = (TextField) node;
+                            textField.setText(Double.toString(totalcost));
+                        } 
+                        if(GridPane.getRowIndex(node) == (j)&& GridPane.getColumnIndex(node) == 4 && node instanceof TextField){
+                            TextField textField = (TextField) node;
+                            textField.setText(Double.toString(vat));
+                        }
+                    }
+                    if(isMethodOfPaymentTextFieldsFilled(salesGridPane)==false){
+                        showAlert("Fill in the Method of payment");
+                        break;
+                    }
+                    else{
+                        System.out.println("Combo box has value");
+    
+                    }
+                  
+
+                }
+                
+                                
 
             }
-            Double sum = 0.0;
             for(int k = 1;k<=grid_row-1;k++){
                 TextField text = (TextField)salesGridPane.getChildren().get((k*7+3));
                 sum = sum + Double.parseDouble(text.getText());
@@ -177,6 +193,8 @@ public class Sales {
                 
 
             }
+            
+           
             System.out.println(sum);
             
             
@@ -313,12 +331,16 @@ public class Sales {
         return true;
     }
     private boolean isMethodOfPaymentTextFieldsFilled(GridPane gridPane){
+        
         ComboBox<String> textField = (ComboBox<String>)gridPane.getChildren().get((grid_row-1)*7 + 5);
-        if(textField.getValue().isEmpty()){
+        String value = textField.getValue();
+        if(value == null || value.isEmpty()){
             return false;
         } else{
             return true;
         }
+        
+        
         
         
     }
