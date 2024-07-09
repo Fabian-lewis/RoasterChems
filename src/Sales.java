@@ -5,14 +5,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -200,6 +203,9 @@ public class Sales {
             
                 
         });
+        saveItemsButton.setOnAction(e->{
+            saveAlert();
+        });
 
         searchTextField.textProperty().addListener((observable, oldValue, newValue) ->{
             listView.getItems().clear();
@@ -316,6 +322,53 @@ public class Sales {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.show();
+    }
+    private void saveAlert(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("SAVE RECORDS");
+        alert.setContentText("Are you sure you want to save these records?");
+
+        ButtonType buttonYes = new ButtonType("YES");
+        ButtonType buttonNo = new ButtonType("NO");
+
+        alert.getButtonTypes().setAll(buttonYes, buttonNo);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.get()==buttonYes){
+            System.out.println("You selected Yes");
+            credentials();
+        }
+        else if(result.get() == buttonNo){
+            System.out.println("You selected No");
+        }
+
+    }
+    private void  credentials(){
+        Alert credentialAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        credentialAlert.setTitle("VERIFICATION");
+
+        GridPane credentialGridPane = new GridPane();
+
+        Label usernameCredentialLabel = new Label("USERNAME");
+        GridPane.setConstraints(usernameCredentialLabel, 0, 0);
+        TextField usernameCredentialTextField = new TextField();
+        GridPane.setConstraints(usernameCredentialTextField, 1, 0);
+
+        Label passwordCredentialLabel = new Label("PASSWORD");
+        GridPane.setConstraints(passwordCredentialLabel, 0, 1);
+        PasswordField passwordCredentialField = new PasswordField();
+        GridPane.setConstraints(passwordCredentialField, 1, 1);
+
+        credentialGridPane.getChildren().addAll(usernameCredentialLabel, usernameCredentialTextField, passwordCredentialLabel,passwordCredentialField);
+        
+        credentialAlert.getDialogPane().setContent(credentialGridPane);
+
+        ButtonType buttonOk = new ButtonType("OKAY");
+        credentialAlert.getButtonTypes().setAll(buttonOk);
+
+        credentialAlert.show();
+
+
     }
 
     private boolean arePreviousTextFieldsFilled(GridPane gridPane){
