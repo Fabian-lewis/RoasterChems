@@ -204,7 +204,12 @@ public class Sales {
                 
         });
         saveItemsButton.setOnAction(e->{
-            saveAlert();
+            if(arePreviousTextFieldsFilled(salesGridPane) == true && isMethodOfPaymentTextFieldsFilled(salesGridPane)== true){
+                saveAlert();
+            }else{
+                System.out.println("Fill in the blanks");
+            }
+            
         });
 
         searchTextField.textProperty().addListener((observable, oldValue, newValue) ->{
@@ -336,6 +341,7 @@ public class Sales {
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get()==buttonYes){
             System.out.println("You selected Yes");
+            alert.close();
             credentials();
         }
         else if(result.get() == buttonNo){
@@ -365,11 +371,70 @@ public class Sales {
 
         ButtonType buttonOk = new ButtonType("OKAY");
         credentialAlert.getButtonTypes().setAll(buttonOk);
+        Optional<ButtonType> verify = credentialAlert.showAndWait();
+        if(verify.get()==buttonOk){
+            String username = usernameCredentialTextField.getText();
+            String password = passwordCredentialField.getText();
+            confirmDetails(username, password);
+            credentialAlert.close();
+        }
 
-        credentialAlert.show();
+        
 
 
     }
+    public static Boolean confirmDetails(String Username, String Password){
+        //DatabaseManager databaseManager = new DatabaseManager();
+        Connection conn = DatabaseManager.connect();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String query = "SELECT *FROM users WHERE username = ? AND pass = ?";
+
+        try {
+            preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, Username);
+            preparedStatement.setString(2, Password);
+            resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Success Credentials Confirmed");
+                alert.setHeaderText(null);
+                alert.setContentText("Welcome, "+Username);
+                alert.showAndWait();
+                saveTheItems(Username);
+                return true;
+            } else{
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Verification Failed");
+                alert.setHeaderText(null);
+                alert.setContentText("Invalid username or password");
+                alert.showAndWait();
+                return false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if(resultSet != null) resultSet.close();
+                if(preparedStatement!= null) preparedStatement.close();
+                if(conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    private static void saveTheItems(String Username){
+        
+        System.out.println(Username);
+    for(int i = 1; i<grid_row-1; i++){
+
+    }
+    }
+    
 
     private boolean arePreviousTextFieldsFilled(GridPane gridPane){
         for(int col = 0; col<7; col++){
