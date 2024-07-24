@@ -245,7 +245,7 @@ public class Sales {
                 allItems.put(itemName, new String[]{itemId, itemPrice});
                 
             }
-
+            rs.close();
             pstmt.close();
             conn.close();
         } catch (SQLException ex){
@@ -375,7 +375,12 @@ public class Sales {
         if(verify.get()==buttonOk){
             String username = usernameCredentialTextField.getText();
             String password = passwordCredentialField.getText();
-            confirmDetails(username, password);
+            if(confirmDetails(username, password)==true){
+                System.out.println("Success so we save the data now");
+                bundleDataTogether();
+            } else{
+                System.out.println("Error tu");
+            }
             credentialAlert.close();
         }
 
@@ -383,7 +388,16 @@ public class Sales {
 
 
     }
-    public static Boolean confirmDetails(String Username, String Password){
+    public void bundleDataTogether(){
+        StringBuilder data = new StringBuilder();
+        int count = grid_row -1;
+
+        for(int i = 1;i<=count; i++){
+            System.out.println("This is for row "+i);
+        }
+
+    }
+    public Boolean confirmDetails(String Username, String Password){
         //DatabaseManager databaseManager = new DatabaseManager();
         Connection conn = DatabaseManager.connect();
         PreparedStatement preparedStatement = null;
@@ -427,12 +441,13 @@ public class Sales {
         }
     }
     
-    private static void saveTheItems(String Username){
+    private void saveTheItems(String Username){
         
         System.out.println(Username);
-    for(int i = 1; i<grid_row-1; i++){
+        StringBuilder data = new StringBuilder();
+        for(int i = 1; i<grid_row-1; i++){
 
-    }
+        }
     }
     
 
