@@ -401,7 +401,8 @@ public class Sales {
         for(int i = 0;i<count; i++){
             for(int grid_Column =0; grid_Column<=6; grid_Column++){
                 if(grid_Column == 5){
-                    break;
+                    ComboBox<String> combo1 = (ComboBox<String>) gridpane.getChildren().get((i+1)*7 + grid_Column);
+                    data.append(combo1.getValue()).append("\t");
                 }
                 else{
                     TextField textField1 = (TextField) gridpane.getChildren().get((i + 1) * 7 + grid_Column);
