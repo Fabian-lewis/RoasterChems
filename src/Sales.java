@@ -205,7 +205,8 @@ public class Sales {
         });
         saveItemsButton.setOnAction(e->{
             if(arePreviousTextFieldsFilled(salesGridPane) == true && isMethodOfPaymentTextFieldsFilled(salesGridPane)== true){
-                saveAlert();
+                getGridpane(salesGridPane);
+                saveAlert(salesGridPane);
             }else{
                 System.out.println("Fill in the blanks");
             }
@@ -328,7 +329,10 @@ public class Sales {
         alert.setContentText(message);
         alert.show();
     }
-    private void saveAlert(){
+    public GridPane getGridpane(GridPane gridPane){
+        return gridPane;
+    }
+    private void saveAlert(GridPane salesGridPane){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("SAVE RECORDS");
         alert.setContentText("Are you sure you want to save these records?");
@@ -342,14 +346,15 @@ public class Sales {
         if(result.get()==buttonYes){
             System.out.println("You selected Yes");
             alert.close();
-            credentials();
+            getGridpane(salesGridPane);
+            credentials(salesGridPane);
         }
         else if(result.get() == buttonNo){
             System.out.println("You selected No");
         }
 
     }
-    private void  credentials(){
+    private void  credentials(GridPane salesGridPane){
         Alert credentialAlert = new Alert(Alert.AlertType.CONFIRMATION);
         credentialAlert.setTitle("VERIFICATION");
 
@@ -377,7 +382,7 @@ public class Sales {
             String password = passwordCredentialField.getText();
             if(confirmDetails(username, password)==true){
                 System.out.println("Success so we save the data now");
-                bundleDataTogether();
+                bundleDataTogether(salesGridPane);
             } else{
                 System.out.println("Error tu");
             }
@@ -388,13 +393,25 @@ public class Sales {
 
 
     }
-    public void bundleDataTogether(){
+    public void bundleDataTogether(GridPane gridpane){
         StringBuilder data = new StringBuilder();
         int count = grid_row -1;
 
-        for(int i = 1;i<=count; i++){
-            System.out.println("This is for row "+i);
+        for(int i = 0;i<count; i++){
+            for(int grid_Column =0; grid_Column<=6; grid_Column++){
+                if(grid_Column == 5){
+                    break;
+                }
+                else{
+                    TextField textField1 = (TextField) gridpane.getChildren().get((i + 1) * 7 + grid_Column);
+                    data.append(textField1.getText()).append("\t");
+                }
+            }
+            data.append("\n");
+            
+            
         }
+        System.out.println(data);
 
     }
     public Boolean confirmDetails(String Username, String Password){
