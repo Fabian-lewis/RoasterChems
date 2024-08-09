@@ -382,18 +382,19 @@ public class Sales {
             String password = passwordCredentialField.getText();
             if(confirmDetails(username, password)==true){
                 System.out.println("Success so we save the data now");
-                bundleDataTogether(salesGridPane);
+                bundleDataTogether(salesGridPane, username);
+                credentialAlert.close();
+                
             } else{
                 System.out.println("Error tu");
+                credentialAlert.close();
             }
-            credentialAlert.close();
         }
-
         
 
 
     }
-    public void bundleDataTogether(GridPane gridpane){
+    public void bundleDataTogether(GridPane gridpane, String username){
         StringBuilder data = new StringBuilder();
         int count = grid_row -1;
 
@@ -406,8 +407,9 @@ public class Sales {
                     TextField textField1 = (TextField) gridpane.getChildren().get((i + 1) * 7 + grid_Column);
                     data.append(textField1.getText()).append("\t");
                 }
+                
             }
-            data.append("\n");
+            data.append(username).append("\n");
             
             
         }
