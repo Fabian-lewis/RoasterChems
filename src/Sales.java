@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -382,7 +383,7 @@ public class Sales {
             String password = passwordCredentialField.getText();
             if(confirmDetails(username, password)==true){
                 System.out.println("Success so we save the data now");
-                bundleDataTogether(salesGridPane, username);
+                bundleDataTogether(salesGridPane, username, allItems);
                 credentialAlert.close();
                 
             } else{
@@ -394,7 +395,7 @@ public class Sales {
 
 
     }
-    public void bundleDataTogether(GridPane gridpane, String username){
+    public void bundleDataTogether(GridPane gridpane, String username, Map<String, String[]> allItems){
         StringBuilder data = new StringBuilder();
         int count = grid_row -1;
 
@@ -407,10 +408,21 @@ public class Sales {
                 else{
                     TextField textField1 = (TextField) gridpane.getChildren().get((i + 1) * 7 + grid_Column);
                     data.append(textField1.getText()).append("\t");
+
+                    if (grid_Column == 0) { // Assuming the first column is the item name
+                        String itemName = textField1.getText();
+                        String [] itemData = allItems.get(itemName);
+                        String itemId = itemData[0];
+                        System.out.println("Item ID: " + itemId + " for Item Name: " + itemName);
+                        String id = itemId;
+                        data.append(id).append("\t");
+                    }
                 }
+
                 
             }
-            data.append(username).append("\n");
+            data.append(username).append("\t");
+            data.append(LocalDate.now().toString()).append("\n");
             
             
         }
