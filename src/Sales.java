@@ -423,10 +423,11 @@ public class Sales {
             }
             data.append(username).append("\t");
             data.append(LocalDate.now().toString()).append("\n");
+
             
             
         }
-        System.out.println(data);
+        saveTheItems(gridpane,data);
 
     }
     public Boolean confirmDetails(String Username, String Password){
@@ -448,7 +449,7 @@ public class Sales {
                 alert.setHeaderText(null);
                 alert.setContentText("Welcome, "+Username);
                 alert.showAndWait();
-                saveTheItems(Username);
+                //saveTheItems(Username);
                 return true;
             } else{
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -473,13 +474,24 @@ public class Sales {
         }
     }
     
-    private void saveTheItems(String Username){
+    private void saveTheItems(GridPane gridpane, StringBuilder data){
         
-        System.out.println(Username);
-        StringBuilder data = new StringBuilder();
-        for(int i = 1; i<grid_row-1; i++){
-
+        System.out.println(data);
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setContentText("Success The items have been saved");
+        confirmAlert.show();
+        int remove_count = grid_row-1;
+        for(int i = remove_count - 1; i >= 1; i--){
+            for(int grid_Column = 0; grid_Column <= 6; grid_Column++){
+                int index = i * 7 + grid_Column;
+                if (index < gridpane.getChildren().size()) {
+                    gridpane.getChildren().remove(index);
+                }
+            }
         }
+        
+
+
     }
     
 
