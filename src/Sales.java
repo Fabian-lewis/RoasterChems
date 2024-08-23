@@ -504,7 +504,7 @@ public class Sales {
         confirmAlert.setContentText("Success The items have been saved");
         confirmAlert.show();
         
-        String sql_set = "INSERT INTO sales(id_itemID, username_sales, item_name_sales,quantity_sales,unit_price_sales,total_price_sales,method_of_payment_sales, mpesa_code, vat_price_sales, date_of_sales) VALUES(?,?,?,?,?,?,?,?,?,?)";
+        String sql_set = "INSERT INTO sales(id_itemID, username_sales, item_name_sales,quantity_sales,unit_price_sales,total_price_sales,method_of_payment_sales, mpesa_code_sales, vat_price_sales, date_of_sales) VALUES(?,?,?,?,?,?,?,?,?,?)";
         String sql_update = "UPDATE items SET quantity_items = quantity_items - ? WHERE id_items = ?";
 
         try (Connection conn = DatabaseManager.connect();
@@ -549,6 +549,9 @@ public class Sales {
 
 
             }
+            ps_insert.close();
+            ps_update.close();
+            conn.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

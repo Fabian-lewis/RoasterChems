@@ -4,7 +4,7 @@ import javafx.stage.Stage;
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
-        //DatabaseManager.createTables();
+        DatabaseManager.createTables();
         //Login loginWindow = new Login();
         //loginWindow.display();
         //Signup signupWindow = new Signup();

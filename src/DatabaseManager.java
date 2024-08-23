@@ -36,7 +36,7 @@ public class DatabaseManager {
     //IF ITEM IS NEW, NEW ITEM BUTTON CREATES AN NEW ENTRY AND SAVE THE NEW ITEM IN ITEMS TABLE
     +");";
 
-    /*public static final String CREATE_SALES_TABLE = "CREATE TABLE IF NOT EXISTS sales(\n"
+    public static final String CREATE_SALES_TABLE = "CREATE TABLE IF NOT EXISTS sales(\n"
     +"id_sales INTEGER PRIMARY KEY,\n"
     +"id_itemID INTEGER NOT NULL,\n"
     +"username_sales TEXT NOT NULL,\n"
@@ -47,10 +47,9 @@ public class DatabaseManager {
     +"method_of_payment_sales TEXT NOT NULL,\n"
     +"mpesa_code_sales TEXT,\n"
     +"vat_price_sales DOUBLE NOT NULL,\n"
-    +"date_of_sales DATETIME NOT NULL\n"
+    +"date_of_sales DATETIME NOT NULL,\n"
     +"FOREIGN KEY (id_itemID) REFERENCES items(id_items)\n"
     +");";
-    */
 
     public static Connection connect() {
         Connection conn = null;
@@ -83,9 +82,9 @@ public class DatabaseManager {
             stmt.execute(CREATE_PURCHASES_TABLE);
             System.out.println("Purchases table created successfully");
             
-            /*stmt.execute(CREATE_SALES_TABLE);
+            stmt.execute(CREATE_SALES_TABLE);
             System.out.println("Sales table created sucessfully");
-            */
+            
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
