@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -20,6 +21,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -47,9 +49,9 @@ public class Sales {
         itemsIcon.setFitHeight(100);
         itemsIcon.setFitWidth(100);
 
-        ImageView salesIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/sales.jpg"));
-        salesIcon.setFitHeight(100);
-        salesIcon.setFitWidth(100);
+        ImageView dashboardIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/dashboard.jpg"));
+        dashboardIcon.setFitHeight(100);
+        dashboardIcon.setFitWidth(100);
 
         ImageView usersIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/users.jpg"));
         usersIcon.setFitHeight(100);
@@ -61,7 +63,7 @@ public class Sales {
 
         
 
-        navigationPane.getChildren().addAll(usersIcon,itemsIcon, salesIcon,orderItemsIcon);
+        navigationPane.getChildren().addAll(usersIcon,itemsIcon, dashboardIcon,orderItemsIcon);
 
         
         VBox containerBox = new VBox();
@@ -120,6 +122,27 @@ public class Sales {
         Scene salesScene = new Scene(salesWindowHBox);
         salesWindow.setScene(salesScene);
         salesWindow.show();
+
+
+        itemsIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Items itemsWindow = new Items();
+                itemsWindow.display();
+                salesWindow.close();
+            }
+        });
+        /*
+         dashboardIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Dashboard dashboardWindow = new Dashboard();
+                dashboardWindow.display();
+                purchaseWindow.close();
+            }
+        });
+         */
+        
 
 
         addItemsButton.setOnAction(e ->{
