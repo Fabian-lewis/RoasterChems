@@ -480,6 +480,56 @@ public class Sales {
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmAlert.setContentText("Success The items have been saved");
         confirmAlert.show();
+        
+        String sql_set = "INSERT INTO sales(id_itemID, username_sales, item_name_sales,quantity_sales,unit_price_sales,total_price_sales,method_of_payment_sales, mpesa_code, vat_price_sales, date_of_sales) VALUES(?,?,?,?,?,?,?,?,?,?)";
+        String sql_update = "UPDATE items SET quantity_items = quantity_items - ? WHERE id_items = ?";
+
+        try (Connection conn = DatabaseManager.connect();
+        PreparedStatement ps_insert = conn.prepareStatement(sql_set);
+        PreparedStatement ps_update = conn.prepareStatement(sql_update)){
+            
+            String item_rows[] = data.toString().split("\n");
+            for(String row:item_rows){
+                String item_column[] = row.split("\t");
+
+                int item_id = Integer.parseInt(item_column[1]);
+                ps_insert.setInt(1,item_id);
+
+                ps_insert.setString(2, item_column[8]);
+
+                ps_update.setString(3, item_column[0]);
+
+                int item_quantity = Integer.parseInt(item_column[2]);
+                ps_insert.setInt(4, item_quantity);
+
+                double unit_price = Double.parseDouble(item_column[3]);
+                ps_insert.setDouble(5, unit_price);
+
+                double total_price = Double.parseDouble(item_column[4]);
+                ps_insert.setDouble(6, total_price);
+
+                ps_insert.setString(7, item_column[6]);
+
+                ps_insert.setString(8, item_column[7]);
+
+                double vat = Double.parseDouble(item_column[5]);
+                ps_insert.setDouble(9, vat);
+
+                ps_insert.setString(10, item_column[9]);
+
+                ps_insert.executeUpdate();
+
+                ps_update.setInt(1, item_quantity);
+                ps_update.setInt(2, item_id);
+                ps_update.executeUpdate();
+
+
+
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
         int remove_count = grid_row-1;
         for(int i = remove_count - 1; i >= 1; i--){
             for(int grid_Column = 0; grid_Column <= 6; grid_Column++){
