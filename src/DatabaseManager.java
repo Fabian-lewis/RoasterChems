@@ -47,7 +47,7 @@ public class DatabaseManager {
     +"method_of_payment_sales TEXT NOT NULL,\n"
     +"mpesa_code_sales TEXT,\n"
     +"vat_price_sales DOUBLE NOT NULL,\n"
-    +"date_of_sales DATETIME NOT NULL,\n"
+    +"date_of_sales TEXT NOT NULL,\n"
     +"FOREIGN KEY (id_itemID) REFERENCES items(id_items)\n"
     +");";
 

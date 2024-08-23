@@ -185,6 +185,14 @@ public class Items {
                 itemsStage.close();
             }
         });
+        salesIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Sales salesWindow = new Sales();
+                salesWindow.display();
+                itemsStage.close();
+            }
+        });
         
     }
     public Integer addTextfield(GridPane gridPane){

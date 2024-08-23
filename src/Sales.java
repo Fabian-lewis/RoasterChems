@@ -430,25 +430,34 @@ public class Sales {
                 }
                 else{
                     TextField textField1 = (TextField) gridpane.getChildren().get((i + 1) * 7 + grid_Column);
-                    data.append(textField1.getText()).append("\t");
-
                     if (grid_Column == 0) { // Assuming the first column is the item name
                         String itemName = textField1.getText();
                         String [] itemData = allItems.get(itemName);
-                        String itemId = itemData[0];
-                        System.out.println("Item ID: " + itemId + " for Item Name: " + itemName);
-                        String id = itemId;
-                        data.append(id).append("\t");
-                    }
+                        //String itemId = itemData[0];
+                        //System.out.println("Item ID: " + itemId + " for Item Name: " + itemName);
+                        //String id = itemId;
+                        //data.append(id).append("\t");
+                        if(itemData != null) {
+                            String itemId = itemData[0];
+                            System.out.println("Item ID: " + itemId + " for Item Name: " + itemName);
+                            data.append(itemId).append("\t");
+                        } else {
+                            System.out.println("Item data not found for Item Name: " + itemName);
+                            data.append("NULL\t"); // Handling missing item ID case
+                        }
+                    }   
+                    data.append(textField1.getText()).append("\t");
+
+                   
                 }
+                
 
                 
             }
             data.append(username).append("\t");
-            data.append(LocalDate.now().toString()).append("\n");
-
-            
-            
+            data.append(LocalDate.now().toString());
+            data.append("\n");
+     
         }
         saveTheItems(gridpane,data);
 
@@ -504,7 +513,7 @@ public class Sales {
         confirmAlert.setContentText("Success The items have been saved");
         confirmAlert.show();
         
-        String sql_set = "INSERT INTO sales(id_itemID, username_sales, item_name_sales,quantity_sales,unit_price_sales,total_price_sales,method_of_payment_sales, mpesa_code_sales, vat_price_sales, date_of_sales) VALUES(?,?,?,?,?,?,?,?,?,?)";
+        String sql_set = "INSERT INTO sales(id_itemID, item_name_sales, quantity_sales, unit_price_sales, total_price_sales, vat_price_sales, method_of_payment_sales, mpesa_code_sales, username_sales, date_of_sales) VALUES(?,?,?,?,?,?,?,?,?,?)";
         String sql_update = "UPDATE items SET quantity_items = quantity_items - ? WHERE id_items = ?";
 
         try (Connection conn = DatabaseManager.connect();
@@ -512,31 +521,36 @@ public class Sales {
         PreparedStatement ps_update = conn.prepareStatement(sql_update)){
             
             String item_rows[] = data.toString().split("\n");
+            System.out.println("These are the rows\n");
+            System.out.println(item_rows);
             for(String row:item_rows){
+                System.out.println("These are the columns\n");
+                System.out.println(row);
                 String item_column[] = row.split("\t");
 
-                int item_id = Integer.parseInt(item_column[1]);
+
+                int item_id = Integer.parseInt(item_column[0]);
                 ps_insert.setInt(1,item_id);
 
-                ps_insert.setString(2, item_column[8]);
-
-                ps_update.setString(3, item_column[0]);
+                ps_insert.setString(2, item_column[1]);
 
                 int item_quantity = Integer.parseInt(item_column[2]);
-                ps_insert.setInt(4, item_quantity);
+                ps_insert.setInt(3, item_quantity);
 
                 double unit_price = Double.parseDouble(item_column[3]);
-                ps_insert.setDouble(5, unit_price);
+                ps_insert.setDouble(4, unit_price);
 
                 double total_price = Double.parseDouble(item_column[4]);
-                ps_insert.setDouble(6, total_price);
-
-                ps_insert.setString(7, item_column[6]);
-
-                ps_insert.setString(8, item_column[7]);
+                ps_insert.setDouble(5, total_price);
 
                 double vat = Double.parseDouble(item_column[5]);
-                ps_insert.setDouble(9, vat);
+                ps_insert.setDouble(6, vat);
+
+                ps_insert.setString(7, item_column[6]); //Method of payment
+
+                ps_insert.setString(8, item_column[7]); //Mesage code
+
+                ps_insert.setString(9, item_column[8]);
 
                 ps_insert.setString(10, item_column[9]);
 
@@ -555,7 +569,7 @@ public class Sales {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        
+        /*
         int remove_count = grid_row-1;
         for(int i = remove_count - 1; i >= 1; i--){
             for(int grid_Column = 0; grid_Column <= 6; grid_Column++){
@@ -565,6 +579,8 @@ public class Sales {
                 }
             }
         }
+         */
+        
         
 
 
