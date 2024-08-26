@@ -97,6 +97,37 @@ public class Reports {
 
 
         });
+        seeItemsButton.setOnAction(e->{
+            viewStack.getChildren().clear();
+            TableView<Item> reportsTable = new TableView<>();
+
+            TableColumn<Item, String> itemID = new TableColumn<>("ITEM_ID");
+            itemID.setCellValueFactory(new PropertyValueFactory<>("itemID"));
+
+            TableColumn<Item, String> itemName = new TableColumn<>("ITEM_NAME");
+            itemName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+
+            TableColumn<Item, Integer> itemQuantity = new TableColumn<>("ITEM_QUANTITY");
+            itemQuantity.setCellValueFactory(new PropertyValueFactory<>("itemQuantity"));
+  
+            TableColumn<Item, Double> itemBuyingPrice = new TableColumn<>("ITEM_BUYING_PRICE");
+            itemBuyingPrice.setCellValueFactory(new PropertyValueFactory<>("itemBuyingPrice"));
+  
+            TableColumn<Item, Double> itemSellingPrice = new TableColumn<>("ITEM_SELLING_PRICE");
+            itemSellingPrice.setCellValueFactory(new PropertyValueFactory<>("itemSellingPrice"));
+
+            reportsTable.getColumns().addAll(itemID, itemName, itemQuantity,itemBuyingPrice,itemSellingPrice);
+
+            List<Item> items = itemdata();
+
+            reportsTable.getItems().addAll(items);
+
+            viewStack.getChildren().addAll(reportsTable);
+
+
+            
+  
+        });
 
 
     }
@@ -125,6 +156,62 @@ public class Reports {
         public String getUserphone(){
             return userphone;
         }
+    }
+    public class Item{
+        private String itemID;
+        private String itemName;
+        private Integer itemQuantity;
+        private Double itemBuyingPrice, itemSellingPrice;
+        
+        public Item(String itemID, String itemName, Integer itemQuantity, Double itemBuyingPrice, Double itemSellingPrice){
+            this.itemID = itemID;
+            this.itemName = itemName;
+            this.itemQuantity = itemQuantity;
+            this.itemBuyingPrice = itemBuyingPrice;
+            this.itemSellingPrice = itemSellingPrice;
+
+        }
+        public String getItemID(){
+            return itemID;
+        }
+        public String getItemName(){
+            return itemName;
+        }
+        public Integer getItemQuantity(){
+            return itemQuantity;
+        }
+        public Double getItemBuyingPrice(){
+            return itemBuyingPrice;
+        }
+        public Double getItemSellingPrice(){
+            return itemSellingPrice;
+        }
+    }
+
+    public List<Item> itemdata(){
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT id_items, item_name_items, quantity_items,buying_price_items,selling_price_items";
+        try(Connection conn = DatabaseManager.connect();
+            java.sql.Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql))
+        {
+            while (rs.next()) {
+                String itemID = rs.getString("id_items");
+                String itemName = rs.getString("item_name_items");
+                String quantity = rs.getString("quantity_items");
+                Integer itemQuantity = Integer.parseInt(quantity);
+                String BuyingPrice = rs.getString("buying_price_items");
+                Double itemBuyingPrice = Double.parseDouble(BuyingPrice);
+                String SellingPrice = rs.getString("selling_price_items");
+                Double itemSellingPrice = Double.parseDouble(SellingPrice);
+                
+                items.add(new Item(itemID, itemName, itemQuantity, itemBuyingPrice, itemSellingPrice));
+
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return items;
     }
 
     public List<User> userdata() {
