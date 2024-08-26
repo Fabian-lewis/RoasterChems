@@ -40,9 +40,9 @@ public class Reports {
         Button seeItemsButton = new Button("VIEW ITEMS");
         Button seePurchasesButton = new Button("VIEW PURCHASES");
         Button seeSalesButton = new Button("VIEW SALES");
-        Button seeOrderButton = new Button("VIEW ORDER ITEMS")
+        Button seeOrderButton = new Button("VIEW ORDER ITEMS");
 
-        buttonBox.getChildren().addAll(seeUsersButton, seeItemsButton,seePurchasesButton, seeSalesButton);
+        buttonBox.getChildren().addAll(seeUsersButton, seeItemsButton,seePurchasesButton, seeSalesButton, seeOrderButton);
 
         GridPane reportsGridPane = new GridPane();
         reportsGridPane.setPadding(new Insets(10));
