@@ -55,6 +55,7 @@ public class Reports {
         buttonBox.getChildren().addAll(seeUsersButton, seeItemsButton,seePurchasesButton, seeSalesButton, seeOrderButton);
 
         StackPane viewStack = new StackPane();
+        viewStack.setPadding(new Insets(20,10,10,10));
 
         GridPane reportsGridPane = new GridPane();
         reportsGridPane.setPadding(new Insets(10));
