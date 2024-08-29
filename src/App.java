@@ -4,6 +4,7 @@ import javafx.stage.Stage;
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
+        DatabaseManager.createTables();
         Reports reports = new Reports();
         reports.display();
         //DatabaseManager.createTables();

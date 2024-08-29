@@ -128,6 +128,36 @@ public class Reports {
             
   
         });
+        seePurchasesButton.setOnAction(e->{
+            viewStack.getChildren().clear();
+            TableView<Purchase> reportsTable = new TableView<>();
+
+            TableColumn<Purchase, String> purchaseID = new TableColumn<>("PURCHASE_ID");
+            purchaseID.setCellValueFactory(new PropertyValueFactory<>("purchaseID"));
+            
+            TableColumn<Purchase, String> purchaseName = new TableColumn<>("PURCHASE_NAME");
+            purchaseName.setCellValueFactory(new PropertyValueFactory<>("purchaseName"));
+
+            TableColumn<Purchase, Integer> purchaseQuantity = new TableColumn<>("PURCHASE_QUANTITY");
+            purchaseQuantity.setCellValueFactory(new PropertyValueFactory<>("purchaseQuantity"));
+
+            TableColumn<Purchase, Double> buyingPrice = new TableColumn<>("BUYING_PRICE");
+            buyingPrice.setCellValueFactory(new PropertyValueFactory<>("buyingPrice"));
+
+            TableColumn<Purchase, Double> sellingPrice = new TableColumn<>("SELLING_PRICE");
+            sellingPrice.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
+
+            TableColumn<Purchase,String> dateOfPurchase = new TableColumn<>("DATE_PURCHASED");
+            dateOfPurchase.setCellValueFactory(new PropertyValueFactory<>("dateOfPurchase"));
+
+            reportsTable.getColumns().addAll(purchaseID,purchaseName,purchaseQuantity,buyingPrice,sellingPrice,dateOfPurchase);
+
+            List<Purchase> purchases = purchaseData();
+
+            viewStack.getChildren().addAll(reportsTable);
+
+            
+        });
 
 
     }
@@ -187,10 +217,70 @@ public class Reports {
             return itemSellingPrice;
         }
     }
+    public class Purchase{
+        private String purchaseID;
+        private String purchaseName;
+        private Integer purchaseQuantity;
+        private Integer buyingPrice, sellingPrice;
+        private String dateOfPurchase;
+
+        public Purchase(String purchaseID, String purchaseName, Integer purchaseQuantity, Integer buyingPrice, Integer sellingPrice, String dateOfPurchase){
+            this.purchaseID = purchaseID;
+            this.purchaseName = purchaseName;
+            this.purchaseQuantity = purchaseQuantity;
+            this.buyingPrice = buyingPrice;
+            this.sellingPrice = sellingPrice;
+            this.dateOfPurchase = dateOfPurchase;
+        }
+        public String getPurchaseID(){
+            return purchaseID;
+        }
+        public String getPurchaseName(){
+            return purchaseName;
+        }
+        public Integer getPurchaseQuantity(){
+            return purchaseQuantity;
+        }
+        public Integer getBuyingPrice(){
+            return buyingPrice;
+        }
+        public Integer getSellingPrice(){
+            return sellingPrice;
+        }
+        public String getDateOfPurchase(){
+            return dateOfPurchase;
+        }
+
+    }
+
+    public List<Purchase> purchaseData(){
+        List<Purchase> purchases = new ArrayList<>();
+        String sql = "SELECT id_purchases, item_name_purchases, quantity_purchases,buying_price_purchases,selling_price_purchases,date_of_purchase FROM purchases";
+        try (Connection conn = DatabaseManager.connect();
+            java.sql.Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
+                while(rs.next()){
+                    String purchaseID = rs.getString("id_purchases");
+                    String purchaseName = rs.getString("item_name_purchases");
+                    Integer purchaseQuantity = rs.getInt("quantity_purchases");
+                    Integer buyingPrice = rs.getInt("buying_price_purchases");
+                    Integer sellingPrice = rs.getInt("selling_price_purchases");
+                    String dateOfPurchase = rs.getString("date_of_purchase");
+
+                    purchases.add(new Purchase(purchaseID, purchaseName, purchaseQuantity, buyingPrice, sellingPrice, dateOfPurchase));
+
+                }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return purchases;
+    }
+
 
     public List<Item> itemdata(){
         List<Item> items = new ArrayList<>();
-        String sql = "SELECT id_items, item_name_items, quantity_items,buying_price_items,selling_price_items";
+        String sql = "SELECT id_items, item_name_items, quantity_items,buying_price_items,selling_price_items FROM items";
         try(Connection conn = DatabaseManager.connect();
             java.sql.Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql))
