@@ -154,6 +154,8 @@ public class Reports {
 
             List<Purchase> purchases = purchaseData();
 
+            reportsTable.getItems().addAll(purchases);
+
             viewStack.getChildren().addAll(reportsTable);
 
             
