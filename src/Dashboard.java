@@ -1,5 +1,7 @@
 //import javax.swing.ImageIcon;
 
+import javax.xml.stream.util.EventReaderDelegate;
+
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,9 +27,10 @@ public class Dashboard {
         ImageView purchasesView = createImageView("lib/purchases.jpg", 100,100);
         ImageView itemsView = createImageView("lib/items.jpg", 100,100);
         ImageView salesView = createImageView("lib/sales.jpg", 100,100);
+        ImageView reportsView = createImageView("lib/reports.jpg", 100, 100);
 
         HBox iconBox = new HBox(20);
-        iconBox.getChildren().addAll(purchasesView, itemsView, salesView);
+        iconBox.getChildren().addAll(purchasesView, itemsView, salesView,reportsView);
         iconBox.setAlignment(Pos.CENTER);
 
         
@@ -73,16 +76,25 @@ public class Dashboard {
                 dashboardWindow.close();
             }
         });
-        /*
+       
         salesView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent event){
-                Items itemsWindow = new Items();
-                itemsWindow.display();
+                Sales salesWindow = new Sales();
+                salesWindow.display();
                 dashboardWindow.close();
             }
         });
-        */
+        reportsView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent Evemt){
+                Reports reportsWindow = new Reports();
+                reportsWindow.display();
+                dashboardWindow.close();
+            }
+            
+        });
+        
 
 
     }

@@ -4,9 +4,9 @@ import javafx.stage.Stage;
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
-        DatabaseManager.createTables();
-        Reports reports = new Reports();
-        reports.display();
+        //DatabaseManager.createTables();
+        //Reports reports = new Reports();
+        //reports.display();
         //DatabaseManager.createTables();
         //Login loginWindow = new Login();
         //loginWindow.display();
@@ -20,6 +20,8 @@ public class App extends Application {
         //purchaseWindow.display();
         //Dashboard dashboard = new Dashboard();
         //dashboard.display();
+        AddItems itemsWindow = new AddItems();
+        itemsWindow.display();
 
     }
 

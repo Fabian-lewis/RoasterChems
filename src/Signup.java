@@ -72,6 +72,9 @@ public class Signup {
             NationalId = idnumberTextField.getText();
             if(!Username.isEmpty() && !Phone.isEmpty() && !Password.isEmpty() && !NationalId.isEmpty()){
                 saveUser(Username, Phone, Password, NationalId);
+                if(saveUser(Username, Phone, Password, NationalId)==true){
+                    signupWindow.close();
+                }
             }
             else{
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -108,9 +111,10 @@ public class Signup {
         signupWindow.setScene(signupScene);
         signupWindow.show();
     }
-    public void saveUser(String Username, String Phone, String Password, String NationalId){
+    public boolean saveUser(String Username, String Phone, String Password, String NationalId){
         String usercheck = "SELECT COUNT (*) FROM users WHERE username = ?";
         String sql = "INSERT INTO users(username, phone, pass,nationalid) VALUES (?,?,?,?)";
+        Boolean checkReturn = false;
 
         try (Connection conn = DatabaseManager.connect();
         PreparedStatement check = conn.prepareStatement(usercheck);
@@ -134,6 +138,7 @@ public class Signup {
                 System.out.println("User added Successfully");
                 Login loginWindow = new Login();
                 loginWindow.display();
+                checkReturn = true;
             }
             else{
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -146,6 +151,7 @@ public class Signup {
         } catch (SQLException e){
             System.out.println(e.getMessage());
         }
+        return checkReturn;
     }
 
 }

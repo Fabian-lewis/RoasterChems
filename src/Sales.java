@@ -57,13 +57,17 @@ public class Sales {
         usersIcon.setFitHeight(100);
         usersIcon.setFitWidth(100);
 
-        ImageView orderItemsIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/items.jpg"));
+        ImageView orderItemsIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/purchases.jpg"));
+        orderItemsIcon.setFitHeight(100);
+        orderItemsIcon.setFitWidth(100);
+
+        ImageView reportsIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/reports.jpg"));
         orderItemsIcon.setFitHeight(100);
         orderItemsIcon.setFitWidth(100);
 
         
 
-        navigationPane.getChildren().addAll(usersIcon,itemsIcon, dashboardIcon,orderItemsIcon);
+        navigationPane.getChildren().addAll(usersIcon,itemsIcon, dashboardIcon,orderItemsIcon, reportsIcon);
 
         
         VBox containerBox = new VBox();
@@ -132,16 +136,35 @@ public class Sales {
                 salesWindow.close();
             }
         });
-        /*
+        
          dashboardIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent event){
                 Dashboard dashboardWindow = new Dashboard();
                 dashboardWindow.display();
-                purchaseWindow.close();
+                salesWindow.close();
             }
         });
-         */
+        orderItemsIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Purchases purchasesWindow = new Purchases();
+                purchasesWindow.display();
+                salesWindow.close();
+            }
+            
+        });
+        reportsIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Reports reportsWindow = new Reports();
+                reportsWindow.display();
+                salesWindow.close();
+            }
+            
+        });
+
+        
         
 
 

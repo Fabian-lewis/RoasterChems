@@ -3,15 +3,19 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -36,8 +40,9 @@ public class Reports {
         ImageView salesIcon = createImageView("sales.jpg");
         ImageView usersIcon = createImageView("users.jpg");
         ImageView dashboardIcon = createImageView("dashboard.jpg");
+        ImageView itemsIcon = createImageView("items.jpg");
 
-        navigationPane.getChildren().addAll(usersIcon, purchasesIcon, salesIcon, dashboardIcon);
+        navigationPane.getChildren().addAll(usersIcon, purchasesIcon, salesIcon, dashboardIcon, itemsIcon);
 
         VBox containerBox = new VBox();
         containerBox.setPadding(new Insets(10,10,20,20));
@@ -74,6 +79,40 @@ public class Reports {
         reports.setScene(reportsScene);
         reports.show();
 
+        purchasesIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Purchases purchasesWindow = new Purchases();
+                purchasesWindow.display();
+                reports.close();
+            }
+        });
+        purchasesIcon.setOnMouseDragOver(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Tooltip tooltip = new Tooltip("Purchases Window");
+                tooltip.show(reports);
+
+            }
+            
+        });
+        itemsIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Items itemsWindow = new Items();
+                itemsWindow.display();
+                reports.close();
+            }
+        });
+       
+        salesIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Sales itemsWindow = new Sales();
+                itemsWindow.display();
+                reports.close();
+            }
+        });
         seeUsersButton.setOnAction(e ->{
             viewStack.getChildren().clear();
             TableView<User> reportsTable = new TableView<>();
@@ -160,6 +199,67 @@ public class Reports {
 
             
         });
+        seeSalesButton.setOnAction(e->{
+            viewStack.getChildren().clear();
+            TableView<Sale> reportsTable = new TableView<>();
+
+            TableColumn<Sale, String> saleID = new TableColumn<>("SALE_ID");
+            saleID.setCellValueFactory(new PropertyValueFactory<>("saleID"));
+
+            TableColumn<Sale, String> saleName = new TableColumn<>("ITEM_NAME");
+            saleName.setCellValueFactory(new PropertyValueFactory<>("saleName"));
+
+            TableColumn<Sale, Integer> saleQuantity = new TableColumn<>("SALE_QUANTITY");
+            saleQuantity.setCellValueFactory(new PropertyValueFactory<>("saleQuantity"));
+
+            TableColumn<Sale, Double> saleAmount = new TableColumn<>("SALE_AMOUNT");
+            saleAmount.setCellValueFactory(new PropertyValueFactory<>("saleAmount"));
+
+            TableColumn<Sale, String> methodOfPayment = new TableColumn<>("METHOD_OF_PAY");
+            methodOfPayment.setCellValueFactory(new PropertyValueFactory<>("methodOfPayment"));
+
+            TableColumn<Sale, String> mpesaCode = new TableColumn<>("MPESA_CODE");
+            mpesaCode.setCellValueFactory(new PropertyValueFactory<>("mpesaCode"));
+
+            TableColumn<Sale, String> dateOfSale = new TableColumn<>("DATE_OF_SALE");
+            dateOfSale.setCellValueFactory(new PropertyValueFactory<>("dateOfSale"));
+
+            TableColumn<Sale, String> salePerson = new TableColumn<>("SALE_PERSON");
+            salePerson.setCellValueFactory(new PropertyValueFactory<>("salePerson"));
+
+            reportsTable.getColumns().addAll(saleID,saleName,saleQuantity,saleAmount,methodOfPayment,mpesaCode,dateOfSale,salePerson);
+
+            List<Sale> sales = saleData();
+
+            reportsTable.getItems().addAll(sales);
+
+            viewStack.getChildren().addAll(reportsTable);
+        });
+        seeOrderButton.setOnAction(e->{
+            viewStack.getChildren().clear();
+
+            TableView<Order> reportsTable = new TableView<>();
+
+            TableColumn<Order, String> itemID = new TableColumn<>("ITEM_ID");
+            itemID.setCellValueFactory(new PropertyValueFactory<>("itemID"));
+
+            TableColumn<Order, String> itemName = new TableColumn<>("ITEM_NAME");
+            itemName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+
+            TableColumn<Order, Integer> itemQuantity = new TableColumn<>("ITEM_QUANTITY");
+            itemQuantity.setCellValueFactory(new PropertyValueFactory<>("itemQuantity"));
+
+            reportsTable.getColumns().addAll(itemID,itemName,itemQuantity);
+
+            List<Order> orders = remainingItemdata();
+
+            reportsTable.getItems().addAll(orders);
+
+            viewStack.getChildren().addAll(reportsTable);
+
+
+
+        });
 
 
     }
@@ -187,6 +287,26 @@ public class Reports {
         }
         public String getUserphone(){
             return userphone;
+        }
+    }
+    public class Order{
+        private String itemID;
+        private String itemName;
+        private Integer itemQuantity;
+
+        public Order(String itemID, String itemName, Integer itemQuantity){
+            this.itemID = itemID;
+            this.itemName = itemName;
+            this.itemQuantity = itemQuantity;
+        }
+        public String getItemID(){
+            return itemID;
+        }
+        public String getItemName(){
+            return itemName;
+        }
+        public Integer getItemQuantity(){
+            return itemQuantity;
         }
     }
     public class Item{
@@ -254,6 +374,80 @@ public class Reports {
         }
 
     }
+    public class Sale{
+        private String saleID;
+        private String saleName;
+        private Integer saleQuantity;
+        private Double saleAmount;
+        private String methodOfPayment;
+        private String mpesaCode;
+        private String dateOfSale;
+        private String salePerson;
+
+        public Sale(String saleID, String saleName, Integer saleQuantity, Double saleAmount, String methodOfPayment, String mpesaCode, String dateOfSale, String salePerson){
+            this.saleID = saleID;
+            this.saleName = saleName;
+            this.saleQuantity = saleQuantity;
+            this.saleAmount = saleAmount;
+            this.methodOfPayment = methodOfPayment;
+            this.mpesaCode = mpesaCode;
+            this.dateOfSale = dateOfSale;
+            this.salePerson = salePerson;
+        }
+
+        public String getSaleID(){
+            return saleID;
+        }
+        public String getSaleName(){
+            return saleName;
+        }
+        public Integer getSaleQuantity(){
+            return saleQuantity;
+        }
+        public Double getSaleAmount(){
+            return saleAmount;
+        }
+        public String getMethodOfPayment(){
+            return methodOfPayment;
+        }
+        public String getMpesaCode(){
+            return mpesaCode;
+        }
+        public String getDateOfSale(){
+            return dateOfSale;
+        }
+        public String getSalePerson(){
+            return salePerson;
+        }
+    }
+    public List<Sale> saleData(){
+        List<Sale> sales = new ArrayList<>();
+        String sql = "SELECT id_sales, item_name_sales, quantity_sales, total_price_sales, method_of_payment_sales, mpesa_code_sales, date_of_sales,username_sales FROM sales";
+        try (Connection conn = DatabaseManager.connect();
+            java.sql.Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)){
+                while (rs.next()) {
+                    String saleID = rs.getString("id_sales");
+                    String saleName = rs.getString("item_name_sales");
+                    Integer saleQuantity = rs.getInt("quantity_sales");
+                    Double saleAmount = rs.getDouble("total_price_sales");
+                    String methodOfPayment = rs.getString("method_of_payment_sales");
+                    String mpesaCode = rs.getString("mpesa_code_sales");
+                    String dateOfSale = rs.getString("date_of_sales");
+                    String salePerson = rs.getString("username_sales");
+
+                    sales.add(new Sale(saleID, saleName, saleQuantity, saleAmount, methodOfPayment, mpesaCode, dateOfSale, salePerson));
+
+                    
+                }
+                conn.close();
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        return sales;
+    }
 
     public List<Purchase> purchaseData(){
         List<Purchase> purchases = new ArrayList<>();
@@ -270,12 +464,15 @@ public class Reports {
                     String dateOfPurchase = rs.getString("date_of_purchase");
 
                     purchases.add(new Purchase(purchaseID, purchaseName, purchaseQuantity, buyingPrice, sellingPrice, dateOfPurchase));
+                    
 
                 }
+                conn.close();
             
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
         return purchases;
     }
 
@@ -290,20 +487,42 @@ public class Reports {
             while (rs.next()) {
                 String itemID = rs.getString("id_items");
                 String itemName = rs.getString("item_name_items");
-                String quantity = rs.getString("quantity_items");
-                Integer itemQuantity = Integer.parseInt(quantity);
+                
+                Integer itemQuantity = rs.getInt("quantity_items");
                 String BuyingPrice = rs.getString("buying_price_items");
                 Double itemBuyingPrice = Double.parseDouble(BuyingPrice);
                 String SellingPrice = rs.getString("selling_price_items");
                 Double itemSellingPrice = Double.parseDouble(SellingPrice);
                 
                 items.add(new Item(itemID, itemName, itemQuantity, itemBuyingPrice, itemSellingPrice));
-
             }
+            conn.close();
         } catch (Exception e){
             e.printStackTrace();
         }
         return items;
+    }
+
+    public List<Order> remainingItemdata(){
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT id_items, item_name_items,quantity_items FROM items WHERE quantity_items <= order_control_items"; //
+        try(Connection conn = DatabaseManager.connect();
+            java.sql.Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql))
+        {
+            while (rs.next()) {
+                String itemID = rs.getString("id_items");
+                String itemName = rs.getString("item_name_items");
+                Integer itemQuantity = rs.getInt("quantity_items");
+                
+                orders.add(new Order(itemID, itemName, itemQuantity));
+            }
+            conn.close();
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            //e.printStackTrace();
+        }
+        return orders;
     }
 
     public List<User> userdata() {
@@ -321,8 +540,7 @@ public class Reports {
                     users.add(new User(userID,username,userphone));
                 }
 
-                
-            
+                conn.close();            
         } catch (Exception e) {
             e.printStackTrace();
         }
