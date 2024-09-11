@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -60,10 +61,12 @@ public class AddItems {
         itemsWindow.show();
 
         Integer addItemsListener = 0;
+        
+        GridPane addItemsGridPane = new GridPane();
 
         addItems.setOnAction(e->{
             dataFlowPane.getChildren().clear();
-            GridPane addItemsGridPane = new GridPane();
+            
             addItemsGridPane.setPadding(new Insets(20,20,10,10));
             addItemsGridPane.setGridLinesVisible(true);
             addItemsGridPane.setHgap(30);
@@ -91,8 +94,21 @@ public class AddItems {
         });
         addANewItem.setOnAction(e->{
             for (Node node : dataFlowPane.getChildren()) {
-                System.out.println("Class Name: "+node.getClass().getName());
-                System.out.println("Object Type: "+node);
+                for(int i = 0; i<1;i++){
+                    System.out.println("Class Name: "+node.getClass().getName());
+                    String childName = node.getClass().getName();
+
+                    if(childName == "javafx.scene.layout.GridPane"){
+                        for(int grid_row=1; grid_row<=1;grid_row++){
+                            for(int grid_column=0; grid_column<5; grid_column++){
+                                TextField textField = new TextField();
+                                GridPane.setConstraints(textField, grid_column, grid_row);
+                                addItemsGridPane.getChildren().addAll(textField);
+                            }
+                            
+                        }
+                    }
+                }
             }
             dataFlowPane.getChildren().getClass();
             System.out.println(dataFlowPane.getChildren().getClass().getTypeName());
