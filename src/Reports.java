@@ -443,7 +443,6 @@ public class Reports {
                 conn.close();
             
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
         return sales;

@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "type": "java",
             "name": "Item",
@@ -18,6 +19,7 @@
             "mainClass": "DisplayItemsExample",
             "projectName": "RoasterChems_96a1536b"
         },
+        
         {
             "type": "java",
             "name": "Current File",

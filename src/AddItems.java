@@ -1,10 +1,12 @@
-import javafx.scene.Node;
+//import javafx.scene.Node;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+//import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -60,60 +62,34 @@ public class AddItems {
         itemsWindow.setScene(scene);
         itemsWindow.show();
 
-        Integer addItemsListener = 0;
+        //Integer addItemsListener = 0;
         
         GridPane addItemsGridPane = new GridPane();
+        Integer Row = 1;
 
         addItems.setOnAction(e->{
-            dataFlowPane.getChildren().clear();
-            
-            addItemsGridPane.setPadding(new Insets(20,20,10,10));
-            addItemsGridPane.setGridLinesVisible(true);
-            addItemsGridPane.setHgap(30);
-
-            Label itemNameLabel = new Label("ITEM NAME");
-            GridPane.setConstraints(itemNameLabel, 0, 0);
-
-            Label quantityLabel = new Label("QUANTITY");
-            GridPane.setConstraints(quantityLabel, 1, 0);
-
-            Label orderControlLabel = new Label("ORDER CONTROL");
-            GridPane.setConstraints(orderControlLabel, 2, 0);
-
-            Label buyingPriceLabel = new Label("BUYING PRICE");
-            GridPane.setConstraints(buyingPriceLabel, 3, 0);
-    
-            Label sellingPriceLabel = new Label("SELLING PRICE");
-            GridPane.setConstraints(sellingPriceLabel, 4, 0);
-
-            
-            addItemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControlLabel,buyingPriceLabel,sellingPriceLabel);
-            
-
-            dataFlowPane.getChildren().addAll(addItemsGridPane);
-        });
-        addANewItem.setOnAction(e->{
-            for (Node node : dataFlowPane.getChildren()) {
-                for(int i = 0; i<1;i++){
-                    System.out.println("Class Name: "+node.getClass().getName());
-                    String childName = node.getClass().getName();
-
-                    if(childName == "javafx.scene.layout.GridPane"){
-                        for(int grid_row=1; grid_row<=1;grid_row++){
-                            for(int grid_column=0; grid_column<5; grid_column++){
-                                TextField textField = new TextField();
-                                GridPane.setConstraints(textField, grid_column, grid_row);
-                                addItemsGridPane.getChildren().addAll(textField);
-                            }
-                            
-                        }
-                    }
-                }
+            if(!dataFlowPane.getChildren().isEmpty()){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("You can already add items");
+                alert.show();
+            } else{
+                dataFlowPane.getChildren().clear();
+                setItemsGridPane(addItemsGridPane, dataFlowPane);
             }
-            dataFlowPane.getChildren().getClass();
-            System.out.println(dataFlowPane.getChildren().getClass().getTypeName());
+            
             
         });
+        
+        
+        addANewItem.setOnAction(e->{
+            int r = Row;
+            if(!dataFlowPane.getChildren().isEmpty()){
+                r= addItems(addItemsGridPane, r);
+                
+            } 
+            
+        });
+        
 
     }
         private ImageView createImageView(String imageName) {
@@ -121,6 +97,42 @@ public class AddItems {
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
         return imageView;
+    }
+
+    private void setItemsGridPane(GridPane addItemsGridPane, FlowPane dataFlowPane){
+        addItemsGridPane.setPadding(new Insets(20,20,10,10));
+        addItemsGridPane.setGridLinesVisible(true);
+        addItemsGridPane.setHgap(30);
+
+        Label itemNameLabel = new Label("ITEM NAME");
+        GridPane.setConstraints(itemNameLabel, 0, 0);
+
+        Label quantityLabel = new Label("QUANTITY");
+        GridPane.setConstraints(quantityLabel, 1, 0);
+
+        Label orderControlLabel = new Label("ORDER CONTROL");
+        GridPane.setConstraints(orderControlLabel, 2, 0);
+
+        Label buyingPriceLabel = new Label("BUYING PRICE");
+        GridPane.setConstraints(buyingPriceLabel, 3, 0);
+    
+        Label sellingPriceLabel = new Label("SELLING PRICE");
+        GridPane.setConstraints(sellingPriceLabel, 4, 0);
+
+            
+        addItemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControlLabel,buyingPriceLabel,sellingPriceLabel);
+            
+
+        dataFlowPane.getChildren().addAll(addItemsGridPane);
+    }
+    private Integer addItems(GridPane addItemsGridPane, Integer Row){
+        for(int i = 0; i<5;i++){
+        TextField textField = new TextField();
+        GridPane.setConstraints(textField, i, Row);
+        addItemsGridPane.getChildren().addAll(textField);
+        }
+        Row = Row +1;
+        return Row;
     }
 
 }
