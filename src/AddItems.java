@@ -1,6 +1,7 @@
 //import javafx.scene.Node;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -16,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class AddItems {
+    private  Integer Row = 1;
     public void display(){
         Stage itemsWindow = new Stage();
         itemsWindow.setTitle("Roaster Chems Items Window");
@@ -65,7 +67,9 @@ public class AddItems {
         //Integer addItemsListener = 0;
         
         GridPane addItemsGridPane = new GridPane();
-        Integer Row = 1;
+        addItemsGridPane.setVgap(10);
+        addItemsGridPane.setAlignment(Pos.CENTER);
+       
 
         addItems.setOnAction(e->{
             if(!dataFlowPane.getChildren().isEmpty()){
@@ -82,10 +86,10 @@ public class AddItems {
         
         
         addANewItem.setOnAction(e->{
-            int r = Row;
+            
             if(!dataFlowPane.getChildren().isEmpty()){
-                r= addItems(addItemsGridPane, r);
-                
+                addItems(addItemsGridPane, Row);
+                Row = Row +1;
             } 
             
         });
