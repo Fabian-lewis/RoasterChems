@@ -88,11 +88,33 @@ public class AddItems {
         addANewItem.setOnAction(e->{
             
             if(!dataFlowPane.getChildren().isEmpty()){
-                addItems(addItemsGridPane, Row);
-                Row = Row +1;
+                System.out.println(Row);
+                if(Row>1){
+                    for(int i =1;i<Row ;i++){
+                        for(int j = 1;j<5;j++){
+                            TextField textfield1 = (TextField)addItemsGridPane.getChildren().get((i)*5+j);
+                            if(textfield1.getText().isEmpty()){
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setContentText("Please fill in the blank spaces");
+                                alert.show();
+                                break;
+                            }
+                        }
+                        addItems(addItemsGridPane, Row);
+                        Row = Row +1;
+                        
+                    }
+                }
+                else{
+                    addItems(addItemsGridPane, Row);
+                    Row = Row +1;
+                }
+                
+
             } 
             
         });
+        
         
 
     }
@@ -129,6 +151,7 @@ public class AddItems {
 
         dataFlowPane.getChildren().addAll(addItemsGridPane);
     }
+    
     private Integer addItems(GridPane addItemsGridPane, Integer Row){
         for(int i = 0; i<5;i++){
         TextField textField = new TextField();

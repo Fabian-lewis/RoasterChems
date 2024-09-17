@@ -12,16 +12,16 @@ public class App extends Application {
         //loginWindow.display();
         //Signup signupWindow = new Signup();
         //signupWindow.display();
-        //Items itemsWindow = new Items();
-        //itemsWindow.display();
+        Items itemsWindow = new Items();
+        itemsWindow.display();
         //Sales salesWindow = new Sales();
         //salesWindow.display();
         //Purchases purchaseWindow = new Purchases();
         //purchaseWindow.display();
         //Dashboard dashboard = new Dashboard();
         //dashboard.display();
-        AddItems itemsWindow = new AddItems();
-        itemsWindow.display();
+       // AddItems itemsWindow = new AddItems();
+        //itemsWindow.display();
 
     }
 

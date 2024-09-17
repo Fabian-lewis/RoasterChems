@@ -16,8 +16,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -50,13 +52,15 @@ public class Items {
 
         VBox containerBox = new VBox();
         containerBox.setPadding(new Insets(10,10,20,20));
+        containerBox.setSpacing(10);
         
 
         HBox buttonBox = new HBox();
         buttonBox.setSpacing(30);
 
-        Button addItemsButton = new Button("ADD ITEMS");
-        Button viewItemsButton = new Button("VIEW ITEMS");
+        Button addItemsButton = new Button("ADD ITEMS PANE");
+        Button viewItemsButton = new Button("VIEW ITEMS PANE");
+        Button addItem = new Button("ADD ITEM");
         Button saveItemsButton = new Button("SAVE ITEMS");
         Button editItemsButton = new Button("EDIT ITEM");
         Button exitWindowButton = new Button("EXIT");
@@ -87,15 +91,20 @@ public class Items {
         GridPane.setConstraints(sellingpriceLabel, 4, 0);
 
         addLables(itemsGridPane);
+
         GridPane viewItemsGridPane = new GridPane();
         viewItemsGridPane.setPadding(new Insets(10));
         viewItemsGridPane.setHgap(10);
         viewItemsGridPane.setVgap(10);
         viewItemsGridPane.setMinWidth(700);
+ 
 
-        
+        FlowPane itemsStackPane = new FlowPane();
+        itemsStackPane.setPadding(new Insets(10,10,10,10));
+        itemsStackPane.setStyle("-fx-background-color: #F0E68C");
 
-        containerBox.getChildren().addAll(buttonBox);
+
+        containerBox.getChildren().addAll(buttonBox, itemsStackPane);
         
        
 
@@ -112,13 +121,16 @@ public class Items {
 
         addItemsButton.setOnAction(e ->{
             viewitemsclicklistener = 0;
-            containerBox.getChildren().removeAll(viewItemsGridPane);
+            itemsStackPane.getChildren().clear();
+            itemsStackPane.getChildren().addAll(addItem);
             
             if(additemsclicklistener <1){
                 addTextfield(itemsGridPane);
-                containerBox.getChildren().addAll(itemsGridPane);
-                additemsclicklistener=additemsclicklistener+1;
+                itemsStackPane.getChildren().addAll(itemsGridPane);
+                System.out.println(grid_row);
+                //additemsclicklistener=additemsclicklistener;
             }
+            /*
             else{
                 TextField textField1 = (TextField)itemsGridPane.getChildren().get((grid_row-1)*5);
                 if(!textField1.getText().isEmpty()){
@@ -131,6 +143,34 @@ public class Items {
                     alert.show();
                     }
             }
+             */
+            
+        });
+        addItem.setOnAction(e->{
+            boolean canAddNewRow = true;
+    
+            // Loop over the current row's text fields to check if they are filled
+            for (int i = 0; i < 5; i++) {
+                TextField currentField = (TextField) itemsGridPane.getChildren().get((grid_row) * 5 + i);
+                System.out.println(currentField.getText());
+                if (currentField.getText().isEmpty()) {
+                    canAddNewRow = false;
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Fill in the previous row first");
+                    alert.show();
+                    break;
+                }
+            }
+            
+            // Add new row of text fields only if the current row is completely filled
+            if (canAddNewRow) {
+                grid_row++;
+                addTextfields(itemsGridPane, grid_row);  // Adds new row of text fields
+                
+            }
+            
+
         });
         saveItemsButton.setOnAction(e->{
             int count = grid_row - 1;
@@ -152,11 +192,11 @@ public class Items {
         viewItemsButton.setOnAction(e->{
             if(viewitemsclicklistener == 0){
                 viewItemsGridPane.getChildren().clear();
-                containerBox.getChildren().removeAll(itemsGridPane);
+                itemsStackPane.getChildren().clear();
                 additemsclicklistener=0;
                 displayItems(viewItemsGridPane);
                 viewItemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
-                containerBox.getChildren().add(viewItemsGridPane);
+                itemsStackPane.getChildren().add(viewItemsGridPane);
                 viewitemsclicklistener = 1;
             }
             else{
@@ -165,7 +205,7 @@ public class Items {
                 additemsclicklistener=0;
                 displayItems(viewItemsGridPane);
                 viewItemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
-                containerBox.getChildren().add(viewItemsGridPane);
+                itemsStackPane.getChildren().add(viewItemsGridPane);
             }
             
         });
@@ -196,25 +236,6 @@ public class Items {
         
     }
     public Integer addTextfield(GridPane gridPane){
-        /*
-        Label itemNameLabel = new Label("ITEM NAME");
-        GridPane.setConstraints(itemNameLabel, 0, 0);
-
-        Label quantityLabel = new Label("QUANTITY");
-        GridPane.setConstraints(quantityLabel, 1, 0);
-
-        Label orderControLabel = new Label("ORDER CONTROL");
-        GridPane.setConstraints(orderControLabel, 2, 0);
-
-        Label buyingPriceLabel = new Label("BUYING PRICE");
-        GridPane.setConstraints(buyingPriceLabel, 3, 0);
-
-        Label sellingpriceLabel = new Label("SELLING PRICE");
-        GridPane.setConstraints(sellingpriceLabel, 4, 0);
-        gridPane.getChildren().addAll(itemNameLabel, quantityLabel, buyingPriceLabel, orderControLabel, sellingpriceLabel);
-
-         */
-       
         for(int i=1; i<=1;i++){
             for(grid_column=0; grid_column<5; grid_column++){
                 TextField textField = new TextField();
@@ -223,7 +244,19 @@ public class Items {
             }
             
         }
-        grid_row++;
+        //grid_row++;
+        return grid_row;
+        
+    }
+    public Integer addTextfields(GridPane gridPane, Integer grid_row){
+        for(int i=1; i<=1;i++){
+            for(grid_column=0; grid_column<5; grid_column++){
+                TextField textField = new TextField();
+                GridPane.setConstraints(textField, grid_column, grid_row);
+                gridPane.getChildren().addAll(textField);
+            }
+            
+        }
         return grid_row;
         
     }
