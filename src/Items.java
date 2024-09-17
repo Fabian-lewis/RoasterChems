@@ -3,16 +3,22 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+//import Reports.Item;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 //import javafx.scene.control.TableColumn;
 //import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -190,7 +196,34 @@ public class Items {
 
         });
         viewItemsButton.setOnAction(e->{
-            if(viewitemsclicklistener == 0){
+            itemsStackPane.getChildren().clear();
+            TableView <Items> itemsTable = new TableView<>();
+
+            TableColumn<Item, String> itemName = new TableColumn<>("ITEM NAME");
+            itemName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+
+            TableColumn<Item, Integer> itemQuantity = new TableColumn<>("ITEM REMAINING STOCK");
+            itemQuantity.setCellValueFactory(new PropertyValueFactory<>("itemQuantity"));
+
+            TableColumn<Item, Integer> orderControl = new TableColumn<>("MAKE ORDER VALUE");
+            orderControl.setCellValueFactory(new PropertyValueFactory<>("orderControl"));
+
+            TableColumn<Item, Double> buyingPrice = new TableColumn<>("UNIT BUYING PRICE");
+            buyingPrice.setCellValueFactory(new PropertyValueFactory<>("buyingPrice"));
+
+            TableColumn<Item, Double> sellingPrice = new TableColumn<>("UNIT SELLING PRICE");
+            sellingPrice.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
+
+            itemsTable.getColumns().addAll(itemName,itemQuantity,orderControl,buyingPrice,sellingPrice);
+
+
+            List<Item> items = displayItems();
+            itemsTable.getItems().addAll(items);
+
+            itemsStackPane.getChildren().addAll(itemsTable);
+            
+            /*
+                        if(viewitemsclicklistener == 0){
                 viewItemsGridPane.getChildren().clear();
                 itemsStackPane.getChildren().clear();
                 additemsclicklistener=0;
@@ -207,6 +240,8 @@ public class Items {
                 viewItemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
                 itemsStackPane.getChildren().add(viewItemsGridPane);
             }
+             */
+
             
         });
           purchasesIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -308,13 +343,58 @@ public class Items {
             System.out.println(e.getMessage());
         }
     }
-    public void displayItems(GridPane viewItemsGridPane){
-        viewItemsGridPane.getChildren().clear();
+    public class Item{
+        private String itemID;
+        private String itemName;
+        private Integer itemQuantity;
+        private Double itemBuyingPrice, itemSellingPrice;
+        
+        public Item(String itemID, String itemName, Integer itemQuantity, Double itemBuyingPrice, Double itemSellingPrice){
+            this.itemID = itemID;
+            this.itemName = itemName;
+            this.itemQuantity = itemQuantity;
+            this.itemBuyingPrice = itemBuyingPrice;
+            this.itemSellingPrice = itemSellingPrice;
+
+        }
+        public String getItemID(){
+            return itemID;
+        }
+        public String getItemName(){
+            return itemName;
+        }
+        public Integer getItemQuantity(){
+            return itemQuantity;
+        }
+        public Double getItemBuyingPrice(){
+            return itemBuyingPrice;
+        }
+        public Double getItemSellingPrice(){
+            return itemSellingPrice;
+        }
+    }
+    
+    public List<Item> displayItems(){
+        //viewItemsGridPane.getChildren().clear();
+        List<Item> items = new ArrayList<>();
         try(Connection conn = DatabaseManager.connect();
             java.sql.Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM items")){
                 int row_count = 1;
                 while (rs.next()) {
+
+
+                    String itemID = rs.getString("id_items");
+                    String itemName = rs.getString("item_name_items");
+                    
+                    Integer itemQuantity = rs.getInt("quantity_items");
+                    String BuyingPrice = rs.getString("buying_price_items");
+                    Double itemBuyingPrice = Double.parseDouble(BuyingPrice);
+                    String SellingPrice = rs.getString("selling_price_items");
+                    Double itemSellingPrice = Double.parseDouble(SellingPrice);
+                    
+                    items.add(new Item(itemID, itemName, itemQuantity, itemBuyingPrice, itemSellingPrice));
+                    /*
                     TextField itemNameField = new TextField(rs.getString("item_name_items"));
                     viewItemsGridPane.add(itemNameField, 0, row_count);
                     TextField quantityField = new TextField(rs.getString("quantity_items"));
@@ -335,10 +415,14 @@ public class Items {
                     viewItemsGridPane.add(deleteRecordButton, 7, row_count);
                     row_count++;
 
+                    */
+
                 }
+                conn.close();
             } catch (SQLException e){
                 System.out.println(e.getMessage());
             }
+            return items;
     }
     private ImageView createImageView(String imageName) {
         ImageView imageView = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/" + imageName));
