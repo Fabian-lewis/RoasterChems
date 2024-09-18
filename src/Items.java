@@ -197,7 +197,11 @@ public class Items {
         });
         viewItemsButton.setOnAction(e->{
             itemsStackPane.getChildren().clear();
-            TableView <Items> itemsTable = new TableView<>();
+            TableView <Item> itemsTable = new TableView<>();
+            itemsTable.setMinWidth(800);
+
+            TableColumn<Item, Integer> itemID = new TableColumn<>("ITEM ID");
+            itemID.setCellValueFactory(new PropertyValueFactory<>("itemID"));
 
             TableColumn<Item, String> itemName = new TableColumn<>("ITEM NAME");
             itemName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
@@ -209,38 +213,18 @@ public class Items {
             orderControl.setCellValueFactory(new PropertyValueFactory<>("orderControl"));
 
             TableColumn<Item, Double> buyingPrice = new TableColumn<>("UNIT BUYING PRICE");
-            buyingPrice.setCellValueFactory(new PropertyValueFactory<>("buyingPrice"));
+            buyingPrice.setCellValueFactory(new PropertyValueFactory<>("itemBuyingPrice"));
 
             TableColumn<Item, Double> sellingPrice = new TableColumn<>("UNIT SELLING PRICE");
-            sellingPrice.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
+            sellingPrice.setCellValueFactory(new PropertyValueFactory<>("itemSellingPrice"));
 
-            itemsTable.getColumns().addAll(itemName,itemQuantity,orderControl,buyingPrice,sellingPrice);
+            itemsTable.getColumns().addAll(itemID,itemName,itemQuantity,orderControl,buyingPrice,sellingPrice);
 
 
             List<Item> items = displayItems();
             itemsTable.getItems().addAll(items);
 
             itemsStackPane.getChildren().addAll(itemsTable);
-            
-            /*
-                        if(viewitemsclicklistener == 0){
-                viewItemsGridPane.getChildren().clear();
-                itemsStackPane.getChildren().clear();
-                additemsclicklistener=0;
-                displayItems(viewItemsGridPane);
-                viewItemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
-                itemsStackPane.getChildren().add(viewItemsGridPane);
-                viewitemsclicklistener = 1;
-            }
-            else{
-                viewItemsGridPane.getChildren().clear();
-                containerBox.getChildren().removeAll(itemsGridPane);
-                additemsclicklistener=0;
-                displayItems(viewItemsGridPane);
-                viewItemsGridPane.getChildren().addAll(itemNameLabel,quantityLabel,orderControLabel, buyingPriceLabel, sellingpriceLabel);
-                itemsStackPane.getChildren().add(viewItemsGridPane);
-            }
-             */
 
             
         });
@@ -344,24 +328,29 @@ public class Items {
         }
     }
     public class Item{
-        private String itemID;
+        private Integer itemID;
+        private Integer orderControl;
         private String itemName;
         private Integer itemQuantity;
         private Double itemBuyingPrice, itemSellingPrice;
         
-        public Item(String itemID, String itemName, Integer itemQuantity, Double itemBuyingPrice, Double itemSellingPrice){
+        public Item(Integer itemID, String itemName, Integer orderControl,Integer itemQuantity, Double itemBuyingPrice, Double itemSellingPrice){
             this.itemID = itemID;
             this.itemName = itemName;
+            this.orderControl = orderControl;
             this.itemQuantity = itemQuantity;
             this.itemBuyingPrice = itemBuyingPrice;
             this.itemSellingPrice = itemSellingPrice;
 
         }
-        public String getItemID(){
+        public Integer getItemID(){
             return itemID;
         }
         public String getItemName(){
             return itemName;
+        }
+        public Integer getOrderControl(){
+            return orderControl;
         }
         public Integer getItemQuantity(){
             return itemQuantity;
@@ -380,42 +369,20 @@ public class Items {
         try(Connection conn = DatabaseManager.connect();
             java.sql.Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM items")){
-                int row_count = 1;
+                //int row_count = 1;
                 while (rs.next()) {
 
 
-                    String itemID = rs.getString("id_items");
+                    Integer itemID = rs.getInt("id_items");
                     String itemName = rs.getString("item_name_items");
-                    
+                    Integer orderControl = rs.getInt("order_control_items");
                     Integer itemQuantity = rs.getInt("quantity_items");
                     String BuyingPrice = rs.getString("buying_price_items");
                     Double itemBuyingPrice = Double.parseDouble(BuyingPrice);
                     String SellingPrice = rs.getString("selling_price_items");
                     Double itemSellingPrice = Double.parseDouble(SellingPrice);
                     
-                    items.add(new Item(itemID, itemName, itemQuantity, itemBuyingPrice, itemSellingPrice));
-                    /*
-                    TextField itemNameField = new TextField(rs.getString("item_name_items"));
-                    viewItemsGridPane.add(itemNameField, 0, row_count);
-                    TextField quantityField = new TextField(rs.getString("quantity_items"));
-                    viewItemsGridPane.add(quantityField, 1, row_count);
-                    TextField orderControlField = new TextField(rs.getString("order_control_items"));
-                    viewItemsGridPane.add(orderControlField, 2, row_count);
-                    TextField buyingPriceField = new TextField(rs.getString("buying_price_items"));
-                    viewItemsGridPane.add(buyingPriceField, 3, row_count);
-                    TextField sellingPriceField = new TextField(rs.getString("selling_price_items"));
-                    viewItemsGridPane.add(sellingPriceField, 4, row_count);
-
-                    Button editRecordButton = new Button("EDIT");
-                    viewItemsGridPane.add(editRecordButton, 5, row_count);
-                    viewbuttoncount = row_count;
-                    Button saveRecordButton = new Button("SAVE");
-                    viewItemsGridPane.add(saveRecordButton, 6, row_count);
-                    Button deleteRecordButton = new Button("DELETE");
-                    viewItemsGridPane.add(deleteRecordButton, 7, row_count);
-                    row_count++;
-
-                    */
+                    items.add(new Item(itemID,itemName, orderControl, itemQuantity, itemBuyingPrice, itemSellingPrice));
 
                 }
                 conn.close();
