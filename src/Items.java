@@ -167,11 +167,13 @@ public class Items {
 
         });
         saveItemsButton.setOnAction(e->{
-            int count = grid_row - 1;
+            grid_row++;
+            int count = grid_row;
+            System.out.println(count);
             StringBuilder data = new StringBuilder();
-            for(int i = 0; i<count;i++){
-                for(grid_column=0; grid_column<=4;grid_column++){
-                    TextField newTextField = (TextField)itemsGridPane.getChildren().get((i+1)*5+grid_column);
+            for(int i = 1; i<count;i++){
+                for(grid_column = 0; grid_column < 5;grid_column++){
+                    TextField newTextField = (TextField)itemsGridPane.getChildren().get((i*5)+grid_column);
                     
                     data.append(newTextField.getText().toUpperCase()).append("\t");
                     System.out.println(newTextField.getText()+"\n");
@@ -180,7 +182,19 @@ public class Items {
                 data.append("\n");
             }
             System.out.println(data.toString());
-            saveItem(data);
+            Boolean saving = saveItem(data);
+            if(saving){
+                itemsGridPane.getChildren().clear();
+                //containerBox.getChildren().clear();
+                //viewitemsclicklistener = 0;
+                itemsStackPane.getChildren().clear();
+                //itemsStackPane.getChildren().addAll(addItem);
+                addLables(itemsGridPane);
+                addTextfield(itemsGridPane);
+                itemsStackPane.getChildren().addAll(addItem,itemsGridPane);
+                //containerBox.getChildren().addAll(buttonBox,itemsStackPane);
+                grid_row = 1;
+            }
 
         });
         TableView <Item> itemsTable = new TableView<>();
@@ -336,7 +350,7 @@ public class Items {
         GridPane.setConstraints(sellingpriceLabel, 4, 0);
         gridPane.getChildren().addAll(itemNameLabel, quantityLabel, buyingPriceLabel, orderControLabel, sellingpriceLabel);
     }
-    public void saveItem(StringBuilder data){
+    public boolean saveItem(StringBuilder data){
         String itemcheck = "SELECT COUNT (*) FROM items WHERE item_name_items = ?";
 
         String sql = "INSERT INTO items (item_name_items, quantity_items,order_control_items, buying_price_items, selling_price_items) VALUES (?,?,?,?,?)";
@@ -366,6 +380,7 @@ public class Items {
         } catch(SQLException e){
             System.out.println(e.getMessage());
         }
+        return true;
     }
     public class Item{
         private Integer itemID;
