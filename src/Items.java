@@ -126,6 +126,7 @@ public class Items {
         
 
         addItemsButton.setOnAction(e ->{
+            containerBox.getChildren().clear();
             viewitemsclicklistener = 0;
             itemsStackPane.getChildren().clear();
             itemsStackPane.getChildren().addAll(addItem);
@@ -133,23 +134,10 @@ public class Items {
             if(additemsclicklistener <1){
                 addTextfield(itemsGridPane);
                 itemsStackPane.getChildren().addAll(itemsGridPane);
+                containerBox.getChildren().addAll(buttonBox,itemsStackPane);
                 System.out.println(grid_row);
                 //additemsclicklistener=additemsclicklistener;
             }
-            /*
-            else{
-                TextField textField1 = (TextField)itemsGridPane.getChildren().get((grid_row-1)*5);
-                if(!textField1.getText().isEmpty()){
-                addTextfield(itemsGridPane);
-                }
-                else{
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText(null);
-                    alert.setContentText("Fill in the previous row first");
-                    alert.show();
-                    }
-            }
-             */
             
         });
         addItem.setOnAction(e->{
@@ -195,9 +183,16 @@ public class Items {
             saveItem(data);
 
         });
+        TableView <Item> itemsTable = new TableView<>();
+        FlowPane editingFlowPane = new FlowPane();
+        editingFlowPane.setVgap(10);
         viewItemsButton.setOnAction(e->{
             itemsStackPane.getChildren().clear();
-            TableView <Item> itemsTable = new TableView<>();
+            editingFlowPane.getChildren().clear();
+            itemsTable.getColumns().clear();
+            itemsTable.getItems().clear();
+            containerBox.getChildren().clear();
+            
             itemsTable.setMinWidth(800);
 
             TableColumn<Item, Integer> itemID = new TableColumn<>("ITEM ID");
@@ -226,7 +221,52 @@ public class Items {
 
             itemsStackPane.getChildren().addAll(itemsTable);
 
+
+            editingFlowPane.setStyle("-fx-background-color: #F0E68C");
+            editingFlowPane.setPadding(new Insets(10,10,10,10));
+            editingFlowPane.getChildren().add(editItemsButton);
+            containerBox.getChildren().addAll(buttonBox,itemsStackPane,editingFlowPane);
             
+        });
+        itemsTable.setOnMouseClicked(e->{
+            editingFlowPane.getChildren().clear();
+            editingFlowPane.getChildren().add(editItemsButton);
+            Item selectedItem = itemsTable.getSelectionModel().getSelectedItem();
+            if(selectedItem != null){
+                GridPane editingGridPane = new GridPane();
+                editingGridPane.setHgap(10);
+                editingGridPane.setVgap(10);
+
+                TextField itemIDTextField = new TextField();
+                GridPane.setConstraints(itemIDTextField, 0, 0);
+
+                TextField itemNameTextField = new TextField();
+                GridPane.setConstraints(itemNameTextField, 1, 0);
+
+                TextField itemQuantityTextField = new TextField();
+                GridPane.setConstraints(itemQuantityTextField, 2, 0);
+
+                TextField itemOrderControlTextField = new TextField();
+                GridPane.setConstraints(itemOrderControlTextField, 3, 0);
+
+                TextField itemBuyingPriceTextField = new TextField();
+                GridPane.setConstraints(itemBuyingPriceTextField, 4, 0);
+
+                TextField itemSellingPriceTextField = new TextField();
+                GridPane.setConstraints(itemSellingPriceTextField, 5, 0);
+
+                editingGridPane.getChildren().addAll(itemIDTextField,itemNameTextField,itemQuantityTextField,itemOrderControlTextField,itemBuyingPriceTextField,itemSellingPriceTextField);
+
+                itemIDTextField.setText(selectedItem.getItemID().toString());
+                itemNameTextField.setText(selectedItem.getItemName());
+                itemQuantityTextField.setText(selectedItem.getItemQuantity().toString());
+                itemOrderControlTextField.setText(selectedItem.getOrderControl().toString());
+                itemBuyingPriceTextField.setText(selectedItem.getItemBuyingPrice().toString());
+                itemSellingPriceTextField.setText(selectedItem.getItemSellingPrice().toString());
+
+                editingFlowPane.getChildren().add(editingGridPane);
+
+            }
         });
           purchasesIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
