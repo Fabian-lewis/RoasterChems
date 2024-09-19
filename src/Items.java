@@ -1,10 +1,12 @@
 //import java.beans.Statement;
+import java.lang.foreign.Linker.Option;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 //import Reports.Item;
 import javafx.event.EventHandler;
@@ -12,7 +14,10 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 //import javafx.scene.control.TableColumn;
@@ -71,7 +76,7 @@ public class Items {
         Button editItemsButton = new Button("EDIT ITEM");
         Button exitWindowButton = new Button("EXIT");
 
-        buttonBox.getChildren().addAll(addItemsButton,viewItemsButton,saveItemsButton,editItemsButton,exitWindowButton);
+        buttonBox.getChildren().addAll(addItemsButton,viewItemsButton,saveItemsButton,exitWindowButton);
 
        
         GridPane itemsGridPane = new GridPane();
@@ -200,6 +205,7 @@ public class Items {
         TableView <Item> itemsTable = new TableView<>();
         FlowPane editingFlowPane = new FlowPane();
         editingFlowPane.setVgap(10);
+
         viewItemsButton.setOnAction(e->{
             itemsStackPane.getChildren().clear();
             editingFlowPane.getChildren().clear();
@@ -242,12 +248,13 @@ public class Items {
             containerBox.getChildren().addAll(buttonBox,itemsStackPane,editingFlowPane);
             
         });
+        GridPane editingGridPane = new GridPane();
         itemsTable.setOnMouseClicked(e->{
             editingFlowPane.getChildren().clear();
             editingFlowPane.getChildren().add(editItemsButton);
             Item selectedItem = itemsTable.getSelectionModel().getSelectedItem();
             if(selectedItem != null){
-                GridPane editingGridPane = new GridPane();
+                
                 editingGridPane.setHgap(10);
                 editingGridPane.setVgap(10);
 
@@ -282,6 +289,29 @@ public class Items {
 
             }
         });
+        editItemsButton.setOnAction(e->{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("EDITING AN ITEM");
+            alert.setContentText("Are you sure you want to edit this Item?");
+
+            ButtonType yesButtonType = new ButtonType("YES");
+            ButtonType noButtonType = new ButtonType("NO");
+
+            alert.getButtonTypes().clear();
+            alert.getButtonTypes().addAll(yesButtonType,noButtonType);
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if(result.isPresent()&& result.get()==yesButtonType){
+                verifyCreditials(editingGridPane);
+
+            }else if(result.isPresent() && result.get() == noButtonType){
+
+            }
+            else{
+                System.out.println("User cancelled the alert");
+            }
+        });
           purchasesIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent event){
@@ -307,6 +337,84 @@ public class Items {
             }
         });
         
+    }
+    public void verifyCreditials(GridPane editingGridPane){
+        GridPane credentials = new GridPane();
+
+        Label username = new Label("USERNAME");
+        GridPane.setConstraints(username, 0, 0);
+
+        Label password = new Label("PASSWORD");
+        GridPane.setConstraints(password, 0, 1);
+
+        TextField usernameTextField = new TextField();
+        GridPane.setConstraints(usernameTextField, 1, 0);
+
+        PasswordField passwordTextField = new PasswordField();
+        GridPane.setConstraints(passwordTextField, 1, 1);
+        credentials.setVgap(10);
+        credentials.setHgap(10);
+
+        credentials.getChildren().addAll(username,usernameTextField,password,passwordTextField);
+
+        Alert credentialsAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        credentialsAlert.setHeaderText("VERIFY USER");
+        credentialsAlert.getDialogPane().setContent(credentials);
+
+        ButtonType okayButtonType = new ButtonType("OKAY");
+        ButtonType cancelButtonType = new ButtonType("CANCEL");
+        credentialsAlert.getButtonTypes().clear();
+        credentialsAlert.getButtonTypes().addAll(okayButtonType,cancelButtonType);
+
+        Optional<ButtonType> result = credentialsAlert.showAndWait();
+
+        if(result.isPresent() && result.get()==okayButtonType){
+            try {
+                System.out.println("User Clicked Okay");
+                Connection conn = DatabaseManager.connect();
+                PreparedStatement psmt = null;
+                ResultSet results = null;
+                String sql = "SELECT * FROM users WHERE username =? AND pass = ?";
+
+                psmt = conn.prepareStatement(sql);
+                psmt.setString(1, usernameTextField.getText());
+                psmt.setString(2, passwordTextField.getText());
+                results = psmt.executeQuery();
+
+                if(results.next()){
+                    String role = results.getString("role").toUpperCase();
+                    if(!"ADMIN".equals(role)){
+                        Alert notAdminAlert = new Alert(Alert.AlertType.WARNING);
+                        notAdminAlert.setContentText("You are not an Admin");
+                        notAdminAlert.show();
+                    }else{
+
+                        Alert notAdminAlert = new Alert(Alert.AlertType.INFORMATION);
+                        notAdminAlert.setContentText("You are an Admin");
+                        notAdminAlert.show();
+                        /*
+                        StringBuilder data = new StringBuilder();
+                        for(int i=0;i<6;i++){
+                            TextField suckdata = new TextField();
+                            suckdata = (TextField)editingGridPane.getChildren().get(i);
+                            data.append(suckdata.getText()).append("\t");
+                        }
+                        System.out.println(data);
+                        */
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if(result.isPresent() && result.get()==cancelButtonType){
+            System.out.println("User Cancelled");
+        }
+        else{
+            System.out.println("User Cancelled");
+        }
+
+        credentialsAlert.getButtonTypes().addAll(okayButtonType,cancelButtonType);
+
     }
     public Integer addTextfield(GridPane gridPane){
         for(int i=1; i<=1;i++){

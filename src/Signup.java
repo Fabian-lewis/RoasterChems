@@ -15,7 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class Signup {
-    String Username, Phone, Password, NationalId;
+    String Username, Phone, Password, NationalId, Role;
     public void display(){
         Stage signupWindow = new Stage();
         signupWindow.setTitle("Roaster chemicals sign up");
@@ -53,26 +53,35 @@ public class Signup {
         GridPane.setConstraints(userpasswordTextField, 1, 3);
         GridPane.setColumnSpan(userpasswordTextField, 4);
 
+        Label userroleLabel = new Label("USER ROLE");
+        GridPane.setConstraints(userroleLabel, 0, 4);
+
+
+        PasswordField userroleTextField = new PasswordField();
+        GridPane.setConstraints(userroleTextField, 1, 4);
+        GridPane.setColumnSpan(userroleTextField, 4);
+
         Button clearButton = new Button("CLEAR");
-        GridPane.setConstraints(clearButton, 1, 4);
+        GridPane.setConstraints(clearButton, 1, 5);
 
         Button exitButton = new Button("EXIT");
-        GridPane.setConstraints(exitButton, 2, 4);
+        GridPane.setConstraints(exitButton, 2, 5);
 
         Button signupButton = new Button("SIGN UP");
-        GridPane.setConstraints(signupButton, 3, 4);
+        GridPane.setConstraints(signupButton, 3, 5);
 
         Button loginButton = new Button("LOG IN");
-        GridPane.setConstraints(loginButton, 4, 4);
+        GridPane.setConstraints(loginButton, 4, 5);
 
         signupButton.setOnAction(e -> {
             Username = usernameTextField.getText();
             Phone = phoneTextField.getText();
             Password = userpasswordTextField.getText();
             NationalId = idnumberTextField.getText();
+            Role = userroleTextField.getText();
             if(!Username.isEmpty() && !Phone.isEmpty() && !Password.isEmpty() && !NationalId.isEmpty()){
-                saveUser(Username, Phone, Password, NationalId);
-                if(saveUser(Username, Phone, Password, NationalId)==true){
+                saveUser(Username, Phone, Password, NationalId, Role);
+                if(saveUser(Username, Phone, Password, NationalId, Role)==true){
                     signupWindow.close();
                 }
             }
@@ -105,15 +114,15 @@ public class Signup {
             signupWindow.close();
         });
 
-        signupGrid.getChildren().addAll(usernamLabel, usernameTextField, userpasswordLabel, userpasswordTextField, idnumberLabel,idnumberTextField,phoneLabel, phoneTextField, exitButton,clearButton, signupButton, loginButton);
+        signupGrid.getChildren().addAll(usernamLabel, usernameTextField, userpasswordLabel, userpasswordTextField, idnumberLabel,idnumberTextField,phoneLabel, phoneTextField, userroleLabel,userroleTextField,exitButton,clearButton, signupButton, loginButton);
 
         Scene signupScene = new Scene(signupGrid, 400, 300);
         signupWindow.setScene(signupScene);
         signupWindow.show();
     }
-    public boolean saveUser(String Username, String Phone, String Password, String NationalId){
+    public boolean saveUser(String Username, String Phone, String Password, String NationalId, String Role){
         String usercheck = "SELECT COUNT (*) FROM users WHERE username = ?";
-        String sql = "INSERT INTO users(username, phone, pass,nationalid) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO users(username, phone, pass,nationalid, role) VALUES (?,?,?,?,?)";
         Boolean checkReturn = false;
 
         try (Connection conn = DatabaseManager.connect();
@@ -130,6 +139,7 @@ public class Signup {
                 pstmt.setString(2, Phone);
                 pstmt.setString(3, Password);
                 pstmt.setString(4, NationalId);
+                pstmt.setString(5, Role);
                 pstmt.executeUpdate();
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Success");

@@ -126,7 +126,11 @@ public class Reports {
             TableColumn<User, String> userphone = new TableColumn<>("USER_PHONE");
             userphone.setCellValueFactory(new PropertyValueFactory<>("userphone"));
 
-            reportsTable.getColumns().addAll(userID, username, userphone);
+            TableColumn<User, String> userrole = new TableColumn<>("USER_ROLE");
+            userrole.setCellValueFactory(new PropertyValueFactory<>("userrole"));
+
+
+            reportsTable.getColumns().addAll(userID, username, userphone,userrole);
 
             List<User> users = userdata();
 
@@ -273,11 +277,13 @@ public class Reports {
         private String userID;
         private String username;
         private String userphone;
+        private String userrole;
 
-        public User(String userID, String username, String userphone){
+        public User(String userID, String username, String userphone, String userrole){
             this.userID = userID;
             this.username = username;
             this.userphone = userphone;
+            this.userrole = userrole;
         }
         public String getUserID(){
             return userID;
@@ -287,6 +293,9 @@ public class Reports {
         }
         public String getUserphone(){
             return userphone;
+        }
+        public String getUserrole(){
+            return userrole;
         }
     }
     public class Order{
@@ -526,7 +535,7 @@ public class Reports {
 
     public List<User> userdata() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT id, username, phone FROM users";
+        String sql = "SELECT id, username, phone, role FROM users";
         try(Connection conn = DatabaseManager.connect();
             java.sql.Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql))
@@ -535,8 +544,9 @@ public class Reports {
                     String userID = rs.getString("id");
                     String username = rs.getString("username");
                     String userphone = rs.getString("phone");
+                    String userrole = rs.getString("role");
 
-                    users.add(new User(userID,username,userphone));
+                    users.add(new User(userID,username,userphone, userrole));
                 }
 
                 conn.close();            
