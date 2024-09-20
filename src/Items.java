@@ -73,8 +73,10 @@ public class Items {
         Button viewItemsButton = new Button("VIEW ITEMS PANE");
         Button addItem = new Button("ADD ITEM");
         Button saveItemsButton = new Button("SAVE ITEMS");
-        Button editItemsButton = new Button("EDIT ITEM");
         Button exitWindowButton = new Button("EXIT");
+
+        Button editItemsButton = new Button("EDIT ITEM");
+        Button deleteItemsButton = new Button("DELETE ITEM");
 
         buttonBox.getChildren().addAll(addItemsButton,viewItemsButton,saveItemsButton,exitWindowButton);
 
@@ -244,14 +246,15 @@ public class Items {
 
             editingFlowPane.setStyle("-fx-background-color: #F0E68C");
             editingFlowPane.setPadding(new Insets(10,10,10,10));
-            editingFlowPane.getChildren().add(editItemsButton);
+            editingFlowPane.setHgap(10);
+            editingFlowPane.getChildren().addAll(editItemsButton, deleteItemsButton);
             containerBox.getChildren().addAll(buttonBox,itemsStackPane,editingFlowPane);
             
         });
         GridPane editingGridPane = new GridPane();
         itemsTable.setOnMouseClicked(e->{
             editingFlowPane.getChildren().clear();
-            editingFlowPane.getChildren().add(editItemsButton);
+            editingFlowPane.getChildren().addAll(editItemsButton,deleteItemsButton);
             Item selectedItem = itemsTable.getSelectionModel().getSelectedItem();
             if(selectedItem != null){
                 
@@ -260,6 +263,7 @@ public class Items {
 
                 TextField itemIDTextField = new TextField();
                 GridPane.setConstraints(itemIDTextField, 0, 0);
+                itemIDTextField.setEditable(false);
 
                 TextField itemNameTextField = new TextField();
                 GridPane.setConstraints(itemNameTextField, 1, 0);
@@ -383,16 +387,21 @@ public class Items {
 
                 if(results.next()){
                     String role = results.getString("role").toUpperCase();
-                    if(!"ADMIN".equals(role)){
+                    if(!(role).equals("ADMIN")){
                         Alert notAdminAlert = new Alert(Alert.AlertType.WARNING);
                         notAdminAlert.setContentText("You are not an Admin");
                         notAdminAlert.show();
+
                     }else{
 
                         Alert notAdminAlert = new Alert(Alert.AlertType.INFORMATION);
                         notAdminAlert.setContentText("You are an Admin");
                         notAdminAlert.show();
-                        /*
+
+                        conn.close();
+                        psmt.close();
+                        results.close();
+                        
                         StringBuilder data = new StringBuilder();
                         for(int i=0;i<6;i++){
                             TextField suckdata = new TextField();
@@ -400,7 +409,52 @@ public class Items {
                             data.append(suckdata.getText()).append("\t");
                         }
                         System.out.println(data);
-                        */
+                        try {
+                            String datastring = data.toString();
+
+                            String [] parts = datastring.split("\t");
+                            Connection connect = DatabaseManager.connect();
+                            PreparedStatement prepare = null;
+                            //ResultSet resultSet = null;
+                            String sqlString = "UPDATE items SET item_name_items=?, quantity_items=?,order_control_items=?,buying_price_items=?,selling_price_items=? WHERE id_items=?";
+
+                            prepare = connect.prepareStatement(sqlString);
+
+                                prepare.setString(1, parts[1]);
+
+                                Integer quantity = Integer.parseInt(parts[2]);
+                                prepare.setInt(2, quantity);
+
+                                Integer orderControl = Integer.parseInt(parts[3]);
+                                prepare.setInt(3, orderControl);
+
+                                Double bPrice = Double.parseDouble(parts[4]);
+                                prepare.setDouble(4, bPrice);
+
+                                Double sPrice = Double.parseDouble(parts[5]);
+                                prepare.setDouble(5, sPrice);
+
+                                Integer id = Integer.parseInt(parts[0]);
+                                prepare.setInt(6, id);
+
+                                int rowsAffected = prepare.executeUpdate();
+
+                                // Optional: Check if the update was successful
+                                if (rowsAffected > 0) {
+                                    System.out.println("Update successful.");
+                                } else {
+                                    System.out.println("No rows were updated.");
+                                }
+                            
+                                connect.close();
+                                prepare.close();
+
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        
                     }
                 }
             } catch (Exception e) {
@@ -412,8 +466,6 @@ public class Items {
         else{
             System.out.println("User Cancelled");
         }
-
-        credentialsAlert.getButtonTypes().addAll(okayButtonType,cancelButtonType);
 
     }
     public Integer addTextfield(GridPane gridPane){
@@ -482,6 +534,9 @@ public class Items {
                 double sellingprice = Double.parseDouble(item_columns[4]);
                 pstmt.setDouble(5, sellingprice);
                 pstmt.executeUpdate();
+
+                conn.close();
+                pstmt.close();
                 
             }
                 
@@ -549,6 +604,8 @@ public class Items {
 
                 }
                 conn.close();
+                stmt.close();
+                rs.close();
             } catch (SQLException e){
                 System.out.println(e.getMessage());
             }
