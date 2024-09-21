@@ -296,7 +296,7 @@ public class Items {
         editItemsButton.setOnAction(e->{
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("EDITING AN ITEM");
-            alert.setContentText("Are you sure you want to edit this Item?");
+            alert.setContentText("Are you sure you want to EDIT this Item?");
 
             ButtonType yesButtonType = new ButtonType("YES");
             ButtonType noButtonType = new ButtonType("NO");
@@ -308,6 +308,29 @@ public class Items {
 
             if(result.isPresent()&& result.get()==yesButtonType){
                 verifyCreditials(editingGridPane);
+
+            }else if(result.isPresent() && result.get() == noButtonType){
+
+            }
+            else{
+                System.out.println("User cancelled the alert");
+            }
+        });
+        deleteItemsButton.setOnAction(e->{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("DELETING AN ITEM");
+            alert.setContentText("Are you sure you want to DELETE this Item?");
+
+            ButtonType yesButtonType = new ButtonType("YES");
+            ButtonType noButtonType = new ButtonType("NO");
+
+            alert.getButtonTypes().clear();
+            alert.getButtonTypes().addAll(yesButtonType,noButtonType);
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if(result.isPresent()&& result.get()==yesButtonType){
+                verifyCreditial(editingGridPane);
 
             }else if(result.isPresent() && result.get() == noButtonType){
 
@@ -342,6 +365,120 @@ public class Items {
         });
         
     }
+    public void verifyCreditial(GridPane editingGridPane){
+        GridPane credentials = new GridPane();
+
+        Label username = new Label("USERNAME");
+        GridPane.setConstraints(username, 0, 0);
+
+        Label password = new Label("PASSWORD");
+        GridPane.setConstraints(password, 0, 1);
+
+        TextField usernameTextField = new TextField();
+        GridPane.setConstraints(usernameTextField, 1, 0);
+
+        PasswordField passwordTextField = new PasswordField();
+        GridPane.setConstraints(passwordTextField, 1, 1);
+        credentials.setVgap(10);
+        credentials.setHgap(10);
+
+        credentials.getChildren().addAll(username,usernameTextField,password,passwordTextField);
+
+        Alert credentialsAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        credentialsAlert.setHeaderText("VERIFY USER");
+        credentialsAlert.getDialogPane().setContent(credentials);
+
+        ButtonType okayButtonType = new ButtonType("OKAY");
+        ButtonType cancelButtonType = new ButtonType("CANCEL");
+        credentialsAlert.getButtonTypes().clear();
+        credentialsAlert.getButtonTypes().addAll(okayButtonType,cancelButtonType);
+
+        Optional<ButtonType> result = credentialsAlert.showAndWait();
+
+        if(result.isPresent() && result.get()==okayButtonType){
+            try {
+                System.out.println("User Clicked Okay");
+                Connection conn = DatabaseManager.connect();
+                PreparedStatement psmt = null;
+                ResultSet results = null;
+                String sql = "SELECT * FROM users WHERE username =? AND pass = ?";
+
+                psmt = conn.prepareStatement(sql);
+                psmt.setString(1, usernameTextField.getText());
+                psmt.setString(2, passwordTextField.getText());
+                results = psmt.executeQuery();
+
+                if(results.next()){
+                    String role = results.getString("role").toUpperCase();
+                    if(!(role).equals("ADMIN")){
+                        Alert notAdminAlert = new Alert(Alert.AlertType.WARNING);
+                        notAdminAlert.setContentText("You are not an Admin");
+                        notAdminAlert.show();
+
+                    }else{
+
+                        Alert notAdminAlert = new Alert(Alert.AlertType.INFORMATION);
+                        notAdminAlert.setContentText("You are an Admin");
+                        notAdminAlert.show();
+
+                        conn.close();
+                        psmt.close();
+                        results.close();
+                        
+                        StringBuilder data = new StringBuilder();
+                        for(int i=0;i<6;i++){
+                            TextField suckdata = new TextField();
+                            suckdata = (TextField)editingGridPane.getChildren().get(i);
+                            data.append(suckdata.getText()).append("\t");
+                        }
+                        System.out.println(data);
+                        try {
+                            String datastring = data.toString();
+
+                            String [] parts = datastring.split("\t");
+                            Connection connect = DatabaseManager.connect();
+                            PreparedStatement prepare = null;
+                            //ResultSet resultSet = null;
+                            String sqlString = "DELETE FROM items WHERE id_items=?";
+
+                            prepare = connect.prepareStatement(sqlString);
+
+
+                                Integer id = Integer.parseInt(parts[0]);
+                                prepare.setInt(1, id);
+
+                                int rowsAffected = prepare.executeUpdate();
+
+                                // Optional: Check if the update was successful
+                                if (rowsAffected > 0) {
+                                    System.out.println("Update successful.");
+                                } else {
+                                    System.out.println("No rows were updated.");
+                                }
+                            
+                                connect.close();
+                                prepare.close();
+
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if(result.isPresent() && result.get()==cancelButtonType){
+            System.out.println("User Cancelled");
+        }
+        else{
+            System.out.println("User Cancelled");
+        }
+
+    }
+
     public void verifyCreditials(GridPane editingGridPane){
         GridPane credentials = new GridPane();
 
