@@ -467,6 +467,11 @@ public class Items {
                         
                     }
                 }
+                else{
+                    Alert notAdminAlert = new Alert(Alert.AlertType.INFORMATION);
+                    notAdminAlert.setContentText("Usuer does not exist");
+                    notAdminAlert.show();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -593,6 +598,11 @@ public class Items {
                         }
                         
                     }
+                }
+                else{
+                    Alert notAdminAlert = new Alert(Alert.AlertType.INFORMATION);
+                    notAdminAlert.setContentText("Usuer does not exist");
+                    notAdminAlert.show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

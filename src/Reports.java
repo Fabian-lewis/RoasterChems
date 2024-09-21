@@ -2,15 +2,21 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.sql.PreparedStatement;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -46,6 +52,7 @@ public class Reports {
 
         VBox containerBox = new VBox();
         containerBox.setPadding(new Insets(10,10,20,20));
+        containerBox.setSpacing(10);
         
 
         HBox buttonBox = new HBox();
@@ -61,6 +68,8 @@ public class Reports {
 
         StackPane viewStack = new StackPane();
         viewStack.setPadding(new Insets(20,10,10,10));
+        viewStack.setStyle("-fx-background-color: #F0E68C");
+        viewStack.setMinWidth(800);
 
         GridPane reportsGridPane = new GridPane();
         reportsGridPane.setPadding(new Insets(10));
@@ -114,6 +123,7 @@ public class Reports {
             }
         });
         seeUsersButton.setOnAction(e ->{
+            if(verifyCreditials()){
             viewStack.getChildren().clear();
             TableView<User> reportsTable = new TableView<>();
             
@@ -139,129 +149,134 @@ public class Reports {
             viewStack.getChildren().addAll(reportsTable);
 
 
+            }
+            
         });
         seeItemsButton.setOnAction(e->{
-            viewStack.getChildren().clear();
-            TableView<Item> reportsTable = new TableView<>();
+            if(verifyCreditials()){
+                viewStack.getChildren().clear();
+                TableView<Item> reportsTable = new TableView<>();
+    
+                TableColumn<Item, String> itemID = new TableColumn<>("ITEM_ID");
+                itemID.setCellValueFactory(new PropertyValueFactory<>("itemID"));
+    
+                TableColumn<Item, String> itemName = new TableColumn<>("ITEM_NAME");
+                itemName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+    
+                TableColumn<Item, Integer> itemQuantity = new TableColumn<>("ITEM_QUANTITY");
+                itemQuantity.setCellValueFactory(new PropertyValueFactory<>("itemQuantity"));
+      
+                TableColumn<Item, Double> itemBuyingPrice = new TableColumn<>("ITEM_BUYING_PRICE");
+                itemBuyingPrice.setCellValueFactory(new PropertyValueFactory<>("itemBuyingPrice"));
+      
+                TableColumn<Item, Double> itemSellingPrice = new TableColumn<>("ITEM_SELLING_PRICE");
+                itemSellingPrice.setCellValueFactory(new PropertyValueFactory<>("itemSellingPrice"));
+    
+                reportsTable.getColumns().addAll(itemID, itemName, itemQuantity,itemBuyingPrice,itemSellingPrice);
+    
+                List<Item> items = itemdata();
+    
+                reportsTable.getItems().addAll(items);
+    
+                viewStack.getChildren().addAll(reportsTable);
+            }
 
-            TableColumn<Item, String> itemID = new TableColumn<>("ITEM_ID");
-            itemID.setCellValueFactory(new PropertyValueFactory<>("itemID"));
-
-            TableColumn<Item, String> itemName = new TableColumn<>("ITEM_NAME");
-            itemName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
-
-            TableColumn<Item, Integer> itemQuantity = new TableColumn<>("ITEM_QUANTITY");
-            itemQuantity.setCellValueFactory(new PropertyValueFactory<>("itemQuantity"));
-  
-            TableColumn<Item, Double> itemBuyingPrice = new TableColumn<>("ITEM_BUYING_PRICE");
-            itemBuyingPrice.setCellValueFactory(new PropertyValueFactory<>("itemBuyingPrice"));
-  
-            TableColumn<Item, Double> itemSellingPrice = new TableColumn<>("ITEM_SELLING_PRICE");
-            itemSellingPrice.setCellValueFactory(new PropertyValueFactory<>("itemSellingPrice"));
-
-            reportsTable.getColumns().addAll(itemID, itemName, itemQuantity,itemBuyingPrice,itemSellingPrice);
-
-            List<Item> items = itemdata();
-
-            reportsTable.getItems().addAll(items);
-
-            viewStack.getChildren().addAll(reportsTable);
-
-
-            
-  
         });
         seePurchasesButton.setOnAction(e->{
-            viewStack.getChildren().clear();
-            TableView<Purchase> reportsTable = new TableView<>();
-
-            TableColumn<Purchase, String> purchaseID = new TableColumn<>("PURCHASE_ID");
-            purchaseID.setCellValueFactory(new PropertyValueFactory<>("purchaseID"));
-            
-            TableColumn<Purchase, String> purchaseName = new TableColumn<>("PURCHASE_NAME");
-            purchaseName.setCellValueFactory(new PropertyValueFactory<>("purchaseName"));
-
-            TableColumn<Purchase, Integer> purchaseQuantity = new TableColumn<>("PURCHASE_QUANTITY");
-            purchaseQuantity.setCellValueFactory(new PropertyValueFactory<>("purchaseQuantity"));
-
-            TableColumn<Purchase, Double> buyingPrice = new TableColumn<>("BUYING_PRICE");
-            buyingPrice.setCellValueFactory(new PropertyValueFactory<>("buyingPrice"));
-
-            TableColumn<Purchase, Double> sellingPrice = new TableColumn<>("SELLING_PRICE");
-            sellingPrice.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
-
-            TableColumn<Purchase,String> dateOfPurchase = new TableColumn<>("DATE_PURCHASED");
-            dateOfPurchase.setCellValueFactory(new PropertyValueFactory<>("dateOfPurchase"));
-
-            reportsTable.getColumns().addAll(purchaseID,purchaseName,purchaseQuantity,buyingPrice,sellingPrice,dateOfPurchase);
-
-            List<Purchase> purchases = purchaseData();
-
-            reportsTable.getItems().addAll(purchases);
-
-            viewStack.getChildren().addAll(reportsTable);
-
-            
+            if(verifyCreditials()){
+                viewStack.getChildren().clear();
+                TableView<Purchase> reportsTable = new TableView<>();
+    
+                TableColumn<Purchase, String> purchaseID = new TableColumn<>("PURCHASE_ID");
+                purchaseID.setCellValueFactory(new PropertyValueFactory<>("purchaseID"));
+                
+                TableColumn<Purchase, String> purchaseName = new TableColumn<>("PURCHASE_NAME");
+                purchaseName.setCellValueFactory(new PropertyValueFactory<>("purchaseName"));
+    
+                TableColumn<Purchase, Integer> purchaseQuantity = new TableColumn<>("PURCHASE_QUANTITY");
+                purchaseQuantity.setCellValueFactory(new PropertyValueFactory<>("purchaseQuantity"));
+    
+                TableColumn<Purchase, Double> buyingPrice = new TableColumn<>("BUYING_PRICE");
+                buyingPrice.setCellValueFactory(new PropertyValueFactory<>("buyingPrice"));
+    
+                TableColumn<Purchase, Double> sellingPrice = new TableColumn<>("SELLING_PRICE");
+                sellingPrice.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
+    
+                TableColumn<Purchase,String> dateOfPurchase = new TableColumn<>("DATE_PURCHASED");
+                dateOfPurchase.setCellValueFactory(new PropertyValueFactory<>("dateOfPurchase"));
+    
+                reportsTable.getColumns().addAll(purchaseID,purchaseName,purchaseQuantity,buyingPrice,sellingPrice,dateOfPurchase);
+    
+                List<Purchase> purchases = purchaseData();
+    
+                reportsTable.getItems().addAll(purchases);
+    
+                viewStack.getChildren().addAll(reportsTable);
+            }
+ 
         });
         seeSalesButton.setOnAction(e->{
-            viewStack.getChildren().clear();
-            TableView<Sale> reportsTable = new TableView<>();
+            if(verifyCreditials()){
+                viewStack.getChildren().clear();
+                TableView<Sale> reportsTable = new TableView<>();
+    
+                TableColumn<Sale, String> saleID = new TableColumn<>("SALE_ID");
+                saleID.setCellValueFactory(new PropertyValueFactory<>("saleID"));
+    
+                TableColumn<Sale, String> saleName = new TableColumn<>("ITEM_NAME");
+                saleName.setCellValueFactory(new PropertyValueFactory<>("saleName"));
+    
+                TableColumn<Sale, Integer> saleQuantity = new TableColumn<>("SALE_QUANTITY");
+                saleQuantity.setCellValueFactory(new PropertyValueFactory<>("saleQuantity"));
+    
+                TableColumn<Sale, Double> saleAmount = new TableColumn<>("SALE_AMOUNT");
+                saleAmount.setCellValueFactory(new PropertyValueFactory<>("saleAmount"));
+    
+                TableColumn<Sale, String> methodOfPayment = new TableColumn<>("METHOD_OF_PAY");
+                methodOfPayment.setCellValueFactory(new PropertyValueFactory<>("methodOfPayment"));
+    
+                TableColumn<Sale, String> mpesaCode = new TableColumn<>("MPESA_CODE");
+                mpesaCode.setCellValueFactory(new PropertyValueFactory<>("mpesaCode"));
+    
+                TableColumn<Sale, String> dateOfSale = new TableColumn<>("DATE_OF_SALE");
+                dateOfSale.setCellValueFactory(new PropertyValueFactory<>("dateOfSale"));
+    
+                TableColumn<Sale, String> salePerson = new TableColumn<>("SALE_PERSON");
+                salePerson.setCellValueFactory(new PropertyValueFactory<>("salePerson"));
+    
+                reportsTable.getColumns().addAll(saleID,saleName,saleQuantity,saleAmount,methodOfPayment,mpesaCode,dateOfSale,salePerson);
+    
+                List<Sale> sales = saleData();
+    
+                reportsTable.getItems().addAll(sales);
+    
+                viewStack.getChildren().addAll(reportsTable);
+            }
 
-            TableColumn<Sale, String> saleID = new TableColumn<>("SALE_ID");
-            saleID.setCellValueFactory(new PropertyValueFactory<>("saleID"));
-
-            TableColumn<Sale, String> saleName = new TableColumn<>("ITEM_NAME");
-            saleName.setCellValueFactory(new PropertyValueFactory<>("saleName"));
-
-            TableColumn<Sale, Integer> saleQuantity = new TableColumn<>("SALE_QUANTITY");
-            saleQuantity.setCellValueFactory(new PropertyValueFactory<>("saleQuantity"));
-
-            TableColumn<Sale, Double> saleAmount = new TableColumn<>("SALE_AMOUNT");
-            saleAmount.setCellValueFactory(new PropertyValueFactory<>("saleAmount"));
-
-            TableColumn<Sale, String> methodOfPayment = new TableColumn<>("METHOD_OF_PAY");
-            methodOfPayment.setCellValueFactory(new PropertyValueFactory<>("methodOfPayment"));
-
-            TableColumn<Sale, String> mpesaCode = new TableColumn<>("MPESA_CODE");
-            mpesaCode.setCellValueFactory(new PropertyValueFactory<>("mpesaCode"));
-
-            TableColumn<Sale, String> dateOfSale = new TableColumn<>("DATE_OF_SALE");
-            dateOfSale.setCellValueFactory(new PropertyValueFactory<>("dateOfSale"));
-
-            TableColumn<Sale, String> salePerson = new TableColumn<>("SALE_PERSON");
-            salePerson.setCellValueFactory(new PropertyValueFactory<>("salePerson"));
-
-            reportsTable.getColumns().addAll(saleID,saleName,saleQuantity,saleAmount,methodOfPayment,mpesaCode,dateOfSale,salePerson);
-
-            List<Sale> sales = saleData();
-
-            reportsTable.getItems().addAll(sales);
-
-            viewStack.getChildren().addAll(reportsTable);
         });
         seeOrderButton.setOnAction(e->{
-            viewStack.getChildren().clear();
+            if(verifyCreditials()){
+                viewStack.getChildren().clear();
 
-            TableView<Order> reportsTable = new TableView<>();
-
-            TableColumn<Order, String> itemID = new TableColumn<>("ITEM_ID");
-            itemID.setCellValueFactory(new PropertyValueFactory<>("itemID"));
-
-            TableColumn<Order, String> itemName = new TableColumn<>("ITEM_NAME");
-            itemName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
-
-            TableColumn<Order, Integer> itemQuantity = new TableColumn<>("ITEM_QUANTITY");
-            itemQuantity.setCellValueFactory(new PropertyValueFactory<>("itemQuantity"));
-
-            reportsTable.getColumns().addAll(itemID,itemName,itemQuantity);
-
-            List<Order> orders = remainingItemdata();
-
-            reportsTable.getItems().addAll(orders);
-
-            viewStack.getChildren().addAll(reportsTable);
-
-
+                TableView<Order> reportsTable = new TableView<>();
+    
+                TableColumn<Order, String> itemID = new TableColumn<>("ITEM_ID");
+                itemID.setCellValueFactory(new PropertyValueFactory<>("itemID"));
+    
+                TableColumn<Order, String> itemName = new TableColumn<>("ITEM_NAME");
+                itemName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+    
+                TableColumn<Order, Integer> itemQuantity = new TableColumn<>("ITEM_QUANTITY");
+                itemQuantity.setCellValueFactory(new PropertyValueFactory<>("itemQuantity"));
+    
+                reportsTable.getColumns().addAll(itemID,itemName,itemQuantity);
+    
+                List<Order> orders = remainingItemdata();
+    
+                reportsTable.getItems().addAll(orders);
+    
+                viewStack.getChildren().addAll(reportsTable);
+            }
 
         });
 
@@ -555,5 +570,89 @@ public class Reports {
         }
         return users;
     }
+    public boolean verifyCreditials(){
+        Boolean confirm = false;
+        GridPane credentials = new GridPane();
+
+        Label username = new Label("USERNAME");
+        GridPane.setConstraints(username, 0, 0);
+
+        Label password = new Label("PASSWORD");
+        GridPane.setConstraints(password, 0, 1);
+
+        TextField usernameTextField = new TextField();
+        GridPane.setConstraints(usernameTextField, 1, 0);
+
+        PasswordField passwordTextField = new PasswordField();
+        GridPane.setConstraints(passwordTextField, 1, 1);
+        credentials.setVgap(10);
+        credentials.setHgap(10);
+
+        credentials.getChildren().addAll(username,usernameTextField,password,passwordTextField);
+
+        Alert credentialsAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        credentialsAlert.setHeaderText("VERIFY USER");
+        credentialsAlert.getDialogPane().setContent(credentials);
+
+        ButtonType okayButtonType = new ButtonType("OKAY");
+        ButtonType cancelButtonType = new ButtonType("CANCEL");
+        credentialsAlert.getButtonTypes().clear();
+        credentialsAlert.getButtonTypes().addAll(okayButtonType,cancelButtonType);
+
+        Optional<ButtonType> result = credentialsAlert.showAndWait();
+
+        if(result.isPresent() && result.get()==okayButtonType){
+            try {
+                System.out.println("User Clicked Okay");
+                Connection conn = DatabaseManager.connect();
+                PreparedStatement psmt = null;
+                ResultSet results = null;
+                String sql = "SELECT * FROM users WHERE username =? AND pass = ?";
+
+                psmt = conn.prepareStatement(sql);
+                psmt.setString(1, usernameTextField.getText());
+                psmt.setString(2, passwordTextField.getText());
+                results = psmt.executeQuery();
+
+                if(results.next()){
+                    String role = results.getString("role").toUpperCase();
+                    if(!(role).equals("ADMIN")){
+                        Alert notAdminAlert = new Alert(Alert.AlertType.WARNING);
+                        notAdminAlert.setContentText("You are not an Admin");
+                        notAdminAlert.show();
+
+                    }else{
+
+                        Alert notAdminAlert = new Alert(Alert.AlertType.INFORMATION);
+                        notAdminAlert.setContentText("You are an Admin");
+                        notAdminAlert.show();
+                        confirm = true;
+
+                        conn.close();
+                        psmt.close();
+                        results.close();
+
+                        
+                        
+                    }
+                }
+                else{
+                    Alert notAdminAlert = new Alert(Alert.AlertType.INFORMATION);
+                    notAdminAlert.setContentText("Usuer does not exist");
+                    notAdminAlert.show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if(result.isPresent() && result.get()==cancelButtonType){
+            System.out.println("User Cancelled");
+        }
+        else{
+            System.out.println("User Cancelled");
+        }
+        return confirm;
+
+    }
+
     
 }
