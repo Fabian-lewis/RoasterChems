@@ -13,6 +13,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.scene.layout.StackPane;
 
 public class Signup {
     String Username, Phone, Password, NationalId, Role;
@@ -116,7 +117,11 @@ public class Signup {
 
         signupGrid.getChildren().addAll(usernamLabel, usernameTextField, userpasswordLabel, userpasswordTextField, idnumberLabel,idnumberTextField,phoneLabel, phoneTextField, userroleLabel,userroleTextField,exitButton,clearButton, signupButton, loginButton);
 
-        Scene signupScene = new Scene(signupGrid, 400, 300);
+        StackPane container = new StackPane();
+        container.setStyle("-fx-background-color: #F0E68C");
+        container.getChildren().addAll(signupGrid);
+
+        Scene signupScene = new Scene(container, 400, 300);
         signupWindow.setScene(signupScene);
         signupWindow.show();
     }

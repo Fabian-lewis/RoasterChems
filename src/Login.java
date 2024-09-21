@@ -12,12 +12,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.scene.layout.StackPane;
 
 public class Login {
     Boolean login = false;
     public void display(){
         Stage loginWindow = new Stage();
         loginWindow.setTitle("Roaster Chemicals Login");
+        
 
         GridPane loginGrid = new GridPane();
         loginGrid.setPadding(new Insets(10, 10,10,10));
@@ -52,7 +54,12 @@ public class Login {
 
         loginGrid.getChildren().addAll(usernameLabel, usernameTextField, passwordLabel, passwordTextField, loginButton, clearButton, exitButton, signupButton);
 
-        Scene loginScene = new Scene(loginGrid, 400, 200);
+        StackPane container = new StackPane();
+        container.getChildren().addAll(loginGrid);
+        container.setStyle("-fx-background-color: #F0E68C");
+
+        Scene loginScene = new Scene(container, 400, 200);
+        //loginScene.setFill("-fx-background-color: #F0E68C");
         loginWindow.setScene(loginScene);
         loginWindow.show();
 
