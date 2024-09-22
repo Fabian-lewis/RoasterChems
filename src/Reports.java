@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -26,6 +27,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Reports {
@@ -84,7 +86,15 @@ public class Reports {
         
         reportsWindow.getChildren().addAll(navigationPane, containerBox);
 
+        
         Scene reportsScene = new Scene(reportsWindow);
+        
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        reports.setX(screenBounds.getMinX());
+        reports.setY(screenBounds.getMinY());
+        reports.setWidth(screenBounds.getWidth());
+        reports.setHeight(screenBounds.getHeight());
+        
         reports.setScene(reportsScene);
         reports.show();
 

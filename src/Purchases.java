@@ -1,5 +1,6 @@
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -11,7 +12,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 
@@ -56,7 +59,10 @@ public class Purchases {
         navigationPane.getChildren().addAll(usersIcon, itemsIcon, salesIcon, dashboardIcon);
 
         VBox containerBox = new VBox();
-        containerBox.setPadding(new Insets(10, 10, 20, 20));
+        containerBox.setPadding(new Insets(10, 20, 10, 10));
+        containerBox.setSpacing(10);
+        //containerBox.setStyle("-fx-background-color: #F0E68C");
+        //containerBox.setMinWidth(1000);
 
         HBox buttonBox = new HBox();
         buttonBox.setSpacing(30);
@@ -64,13 +70,14 @@ public class Purchases {
         Button addItemsButton = new Button("Add Items");
         Button searchItemsButton = new Button("Search Items");
         Button saveItemsButton = new Button("Save Items");
-        Button editItemsButton = new Button("Edit Item");
+        //Button editItemsButton = new Button("Edit Item");
         Button exitWindowButton = new Button("Exit");
 
         VBox searchBox = new VBox();
         searchBox.setPadding(new Insets(10, 10, 20, 20));
+        searchBox.setStyle("-fx-background-color: #F0E68C");
 
-        buttonBox.getChildren().addAll(addItemsButton, searchItemsButton, saveItemsButton, editItemsButton, exitWindowButton);
+        buttonBox.getChildren().addAll(addItemsButton, searchItemsButton, saveItemsButton, exitWindowButton);
 
         TextField searchTextField = new TextField();
         searchTextField.setPromptText("Search for items");
@@ -84,6 +91,10 @@ public class Purchases {
             searchBox.getChildren().addAll(searchTextField, listView);
         });
 
+        StackPane containerStackPane = new StackPane();
+        containerStackPane.setStyle("-fx-background-color: #F0E68C");
+        //containerBox.getChildren().add(containerStackPane);
+
         GridPane itemsGridPane = new GridPane();
         itemsGridPane.setPadding(new Insets(10));
         itemsGridPane.setHgap(10);
@@ -92,17 +103,24 @@ public class Purchases {
         addLabels(itemsGridPane);
         gridRow = 1;
 
-        containerBox.getChildren().addAll(buttonBox, searchBox);
+        containerBox.getChildren().addAll(buttonBox, searchBox,containerStackPane);
         purchaseContainer.getChildren().addAll(navigationPane, containerBox);
 
         Scene purchaseScene = new Scene(purchaseContainer);
+        
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        purchaseWindow.setX(screenBounds.getMinX());
+        purchaseWindow.setY(screenBounds.getMinY());
+        purchaseWindow.setWidth(screenBounds.getWidth());
+        purchaseWindow.setHeight(screenBounds.getHeight());
+        
         purchaseWindow.setScene(purchaseScene);
         purchaseWindow.show();
 
         addItemsButton.setOnAction(e -> {
             if (addItemsClickListener < 1) {
                 addTextField(itemsGridPane);
-                containerBox.getChildren().addAll(itemsGridPane);
+                containerStackPane.getChildren().addAll(itemsGridPane);
                 addItemsClickListener++;
             } else {
                 if (arePreviousTextFieldsFilled(itemsGridPane)) {
@@ -343,24 +361,5 @@ public class Purchases {
 
     }
     
-    /*
-    private  ReturnClearResults (GridPane itemsGridPane){
-        itemsGridPane.getChildren().removeIf(node->GridPane.getRowIndex(node)>0);
-        gridRow =1;
-        addItemsClickListener+=1;
-        return new ReturnClearResults(gridRow, addItemsClickListener);
-    }
-    */ 
     
 }
-/*
-class ReturnClearResults(){
-    public int grid_row;
-    public int addItemsClickListener;
-
-    public ReturnClearResults(int gridRow, int addItemsClickListener){
-        this.grid_row = gridRow;
-        this.addItemsClickListener = addItemsClickListener;
-    }
-}
-*/

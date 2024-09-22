@@ -11,8 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -22,7 +24,7 @@ public class Dashboard {
         dashboardWindow.setTitle("Roaster chemicals Dashboard");
 
         Label dashboardtitleLabel = new Label("WELCOME TO ROASTER CHEMICALS DASHBOARD");
-        dashboardtitleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        dashboardtitleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
         ImageView purchasesView = createImageView("lib/purchases.jpg", 100,100);
         ImageView itemsView = createImageView("lib/items.jpg", 100,100);
@@ -51,9 +53,11 @@ public class Dashboard {
 
         dashboardGrid.getChildren().addAll(usersButton, itemsButton, salesButton);
 
-        VBox layout = new VBox(20);
+        FlowPane layout = new FlowPane();
         layout.setPadding(new Insets(20));
+        layout.setVgap(30);
         layout.getChildren().addAll(dashboardtitleLabel, iconBox, dashboardGrid);
+        layout.setStyle("-fx-background-color: #F0E68C");
 
         Scene dashboardScene = new Scene(layout);
         dashboardWindow.setScene(dashboardScene);

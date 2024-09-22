@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -22,9 +23,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Sales {
@@ -34,6 +37,8 @@ public class Sales {
     public void display(){
         Stage salesWindow = new Stage();
         salesWindow.setTitle("Roaster Chemicals Sales Window");
+
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
          //HBox for the entire window
         HBox salesWindowHBox = new HBox();
@@ -62,8 +67,8 @@ public class Sales {
         orderItemsIcon.setFitWidth(100);
 
         ImageView reportsIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/reports.jpg"));
-        orderItemsIcon.setFitHeight(100);
-        orderItemsIcon.setFitWidth(100);
+        reportsIcon.setFitHeight(100);
+        reportsIcon.setFitWidth(100);
 
         
 
@@ -91,8 +96,10 @@ public class Sales {
 
         TextField searchTextField = new TextField();
         searchTextField.setPromptText("Search For item");
+        //searchTextField.setStyle("-fx-background-color: #F0E68C");
 
         ListView<String> listView = new ListView<>();
+        listView.setStyle("-fx-background-color: #F0E68C");
 
         //searchBox.getChildren().addAll(searchTextField, listView);
 
@@ -120,10 +127,21 @@ public class Sales {
 
 
         containerBox.getChildren().addAll(buttonBox, searchBox);
+        FlowPane containerFlowPane = new FlowPane();
+        containerFlowPane.setHgap(20);
+        containerFlowPane.setStyle("-fx-background-color: #F0E68C");
+        containerBox.getChildren().add(containerFlowPane);
 
         salesWindowHBox.getChildren().addAll(navigationPane, containerBox);
 
         Scene salesScene = new Scene(salesWindowHBox);
+
+        salesWindow.setX(screenBounds.getMinX());
+        salesWindow.setY(screenBounds.getMinY());
+        salesWindow.setWidth(screenBounds.getWidth());
+        salesWindow.setHeight(screenBounds.getHeight());
+
+
         salesWindow.setScene(salesScene);
         salesWindow.show();
 
@@ -171,7 +189,7 @@ public class Sales {
         addItemsButton.setOnAction(e ->{
            if(addItemsClickListener < 1){
             addTextField(salesGridPane);
-            containerBox.getChildren().addAll(salesGridPane, totals);
+            containerFlowPane.getChildren().addAll(salesGridPane, totals);
             addItemsClickListener++;
 
            } else{

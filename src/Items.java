@@ -11,6 +11,7 @@ import java.util.Optional;
 //import Reports.Item;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -32,6 +33,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Items {
@@ -123,6 +125,12 @@ public class Items {
 
         itemsWindow.getChildren().addAll(navigationPane, containerBox);
 
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        itemsStage.setX(screenBounds.getMinX());
+        itemsStage.setY(screenBounds.getMinY());
+        itemsStage.setWidth(screenBounds.getWidth());
+        itemsStage.setHeight(screenBounds.getHeight());
+        
         Scene itemsScene = new Scene(itemsWindow);
         itemsStage.setScene(itemsScene);
         itemsStage.show();
