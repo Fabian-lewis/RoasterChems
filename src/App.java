@@ -8,6 +8,8 @@ public class App extends Application {
         //DatabaseManager.createTables();
         //Reports reports = new Reports();
         //reports.display();
+        CreateUser createUser = new CreateUser();
+        createUser.display();
         //DatabaseManager.createTables();
         //Login loginWindow = new Login();
         //loginWindow.display();
@@ -15,8 +17,8 @@ public class App extends Application {
         //signupWindow.display();
         //Items itemsWindow = new Items();
         //itemsWindow.display();
-        Sales salesWindow = new Sales();
-        salesWindow.display();
+        //Sales salesWindow = new Sales();
+        //salesWindow.display();
         //Purchases purchaseWindow = new Purchases();
         //purchaseWindow.display();
         //Dashboard dashboard = new Dashboard();

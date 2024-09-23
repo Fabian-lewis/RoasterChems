@@ -73,16 +73,23 @@ public class Reports {
         viewStack.setStyle("-fx-background-color: #F0E68C");
         viewStack.setMinWidth(800);
 
-        GridPane reportsGridPane = new GridPane();
-        reportsGridPane.setPadding(new Insets(10));
-        reportsGridPane.setHgap(10);
-        reportsGridPane.setVgap(10);
+        StackPane secondPane = new StackPane();
+        secondPane.setPadding(new Insets(20,10,10,10));
+        secondPane.setStyle("-fx-background-color: #F0E68C");
+        secondPane.setMinWidth(800);
+
+
+
+        GridPane editingGridPane = new GridPane();
+        editingGridPane.setPadding(new Insets(10));
+        editingGridPane.setHgap(10);
+        editingGridPane.setVgap(10);
 
         
 
         //viewStack.getChildren().addAll(reportsTable);
 
-        containerBox.getChildren().addAll(buttonBox, viewStack);
+        containerBox.getChildren().addAll(buttonBox, viewStack, secondPane);
         
         reportsWindow.getChildren().addAll(navigationPane, containerBox);
 
