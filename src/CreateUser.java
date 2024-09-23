@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import javax.tools.Tool;
+
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -13,8 +16,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -41,10 +46,54 @@ public class CreateUser {
 
         ImageView purchasesIcon = createImageView("purchases.jpg");
         ImageView salesIcon = createImageView("sales.jpg");
-        ImageView usersIcon = createImageView("users.jpg");
+        ImageView itemsIcon = createImageView("items.jpg");
         ImageView dashboardIcon = createImageView("dashboard.jpg");
 
-        navigationPane.getChildren().addAll(usersIcon, purchasesIcon, salesIcon, dashboardIcon);
+        purchasesIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Purchases purchasesWindow = new Purchases();
+                purchasesWindow.display();
+                createUserStage.close();
+            }
+        });
+        itemsIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Items itemsWindow = new Items();
+                itemsWindow.display();
+                createUserStage.close();
+            }
+        });
+        dashboardIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Dashboard dashboardWindow = new Dashboard();
+                dashboardWindow.display();
+                createUserStage.close();
+            }
+        });
+       
+        salesIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Sales itemsWindow = new Sales();
+                itemsWindow.display();
+                createUserStage.close();
+            }
+        });
+
+        Tooltip purchasesTooltip = new Tooltip("Go to Purchases");
+        Tooltip salesTooltip = new Tooltip("Go to Sales");
+        Tooltip itemsTooltip = new Tooltip("Go to Items");
+        Tooltip dashboardTooltip = new Tooltip("Go to Dashboard");
+
+        Tooltip.install(purchasesIcon, purchasesTooltip);
+        Tooltip.install(dashboardIcon, dashboardTooltip);
+        Tooltip.install(salesIcon, salesTooltip);
+        Tooltip.install(itemsIcon, itemsTooltip);
+
+        navigationPane.getChildren().addAll(itemsIcon, purchasesIcon, salesIcon, dashboardIcon);
 
 
         VBox containerBox = new VBox();

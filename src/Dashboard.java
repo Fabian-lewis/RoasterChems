@@ -8,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -30,9 +31,22 @@ public class Dashboard {
         ImageView itemsView = createImageView("lib/items.jpg", 100,100);
         ImageView salesView = createImageView("lib/sales.jpg", 100,100);
         ImageView reportsView = createImageView("lib/reports.jpg", 100, 100);
+        ImageView createUserView = createImageView("lib/users.jpg", 100, 100);
+
+        Tooltip purchasesTooltip = new Tooltip("Go to Purchases");
+        Tooltip salesTooltip = new Tooltip("Go to Sales");
+        Tooltip itemsTooltip = new Tooltip("Go to Items");
+        Tooltip reportsTooltip = new Tooltip("Go to Reports");
+        Tooltip createUsersTooltip = new Tooltip("Go to Create User");
+
+        Tooltip.install(purchasesView, purchasesTooltip);
+        Tooltip.install(reportsView, reportsTooltip);
+        Tooltip.install(salesView, salesTooltip);
+        Tooltip.install(itemsView, itemsTooltip);
+        Tooltip.install(createUserView, createUsersTooltip);
 
         HBox iconBox = new HBox(20);
-        iconBox.getChildren().addAll(purchasesView, itemsView, salesView,reportsView);
+        iconBox.getChildren().addAll(purchasesView, itemsView, salesView,reportsView,createUserView);
         iconBox.setAlignment(Pos.CENTER);
 
         
@@ -69,6 +83,14 @@ public class Dashboard {
             public void handle (MouseEvent event){
                 Purchases purchasesWindow = new Purchases();
                 purchasesWindow.display();
+                dashboardWindow.close();
+            }
+        });
+        createUserView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event){
+                CreateUser createUser = new CreateUser();
+                createUser.display();
                 dashboardWindow.close();
             }
         });

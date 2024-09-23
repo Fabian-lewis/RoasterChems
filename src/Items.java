@@ -24,6 +24,7 @@ import javafx.scene.control.TableView;
 //import javafx.scene.control.TableColumn;
 //import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -59,6 +60,17 @@ public class Items {
         ImageView salesIcon = createImageView("sales.jpg");
         ImageView usersIcon = createImageView("users.jpg");
         ImageView dashboardIcon = createImageView("dashboard.jpg");
+
+
+        Tooltip purchasesTooltip = new Tooltip("Go to Purchases");
+        Tooltip salesTooltip = new Tooltip("Go to Sales");
+        Tooltip usersTooltip = new Tooltip("Go to Create Users");
+        Tooltip dashboardTooltip = new Tooltip("Go to Dashboard");
+
+        Tooltip.install(purchasesIcon, purchasesTooltip);
+        Tooltip.install(dashboardIcon, dashboardTooltip);
+        Tooltip.install(salesIcon, salesTooltip);
+        Tooltip.install(usersIcon, usersTooltip);
 
         navigationPane.getChildren().addAll(usersIcon, purchasesIcon, salesIcon, dashboardIcon);
 
@@ -347,7 +359,8 @@ public class Items {
                 System.out.println("User cancelled the alert");
             }
         });
-          purchasesIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+        purchasesIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent event){
                 Purchases purchasesWindow = new Purchases();
@@ -368,6 +381,14 @@ public class Items {
             public void handle (MouseEvent event){
                 Sales salesWindow = new Sales();
                 salesWindow.display();
+                itemsStage.close();
+            }
+        });
+        usersIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event){
+                CreateUser createUser = new CreateUser();
+                createUser.display();
                 itemsStage.close();
             }
         });

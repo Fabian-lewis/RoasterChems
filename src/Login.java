@@ -46,7 +46,7 @@ public class Login {
         Button loginButton = new Button("LOG IN");
         GridPane.setConstraints(loginButton, 2, 2);
 
-        Button signupButton = new Button("SIGN UP");
+        Button signupButton = new Button("CREATE NEW USER");
         GridPane.setConstraints(signupButton, 3, 2);
 
         Button exitButton = new Button("EXIT");
@@ -92,10 +92,10 @@ public class Login {
         });
         signupButton.setOnAction(e->{
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("You are being redirrected to the sign in page.");
+            alert.setContentText("You are being redirrected to the CREATE USER page.");
             alert.showAndWait();
-            Signup signupWindow = new Signup();
-            signupWindow.display();
+            CreateUser createUser = new CreateUser();
+            createUser.display();
             loginWindow.close();
         });
 
