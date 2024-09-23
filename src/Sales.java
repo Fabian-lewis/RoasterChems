@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -62,17 +63,27 @@ public class Sales {
         usersIcon.setFitHeight(100);
         usersIcon.setFitWidth(100);
 
-        ImageView orderItemsIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/purchases.jpg"));
-        orderItemsIcon.setFitHeight(100);
-        orderItemsIcon.setFitWidth(100);
+        ImageView purchasesIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/purchases.jpg"));
+        purchasesIcon.setFitHeight(100);
+        purchasesIcon.setFitWidth(100);
 
         ImageView reportsIcon = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/reports.jpg"));
         reportsIcon.setFitHeight(100);
         reportsIcon.setFitWidth(100);
 
+        Tooltip purchasesTooltip = new Tooltip("Go to Purchases");
+        Tooltip reportsTooltip = new Tooltip("Go to Reports");
+        Tooltip itemsTooltip = new Tooltip("Go to Items");
+        Tooltip dashboardTooltip = new Tooltip("Go to Dashboard");
+
+        Tooltip.install(purchasesIcon, purchasesTooltip);
+        Tooltip.install(dashboardIcon, dashboardTooltip);
+        Tooltip.install(reportsIcon, reportsTooltip);
+        Tooltip.install(itemsIcon, itemsTooltip);
+
         
 
-        navigationPane.getChildren().addAll(usersIcon,itemsIcon, dashboardIcon,orderItemsIcon, reportsIcon);
+        navigationPane.getChildren().addAll(usersIcon,itemsIcon, dashboardIcon,purchasesIcon, reportsIcon);
 
         
         VBox containerBox = new VBox();
@@ -163,7 +174,7 @@ public class Sales {
                 salesWindow.close();
             }
         });
-        orderItemsIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        purchasesIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent event){
                 Purchases purchasesWindow = new Purchases();

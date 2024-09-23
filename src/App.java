@@ -6,8 +6,8 @@ public class App extends Application {
     public void start(Stage primaryStage) {
         //DatabaseManager.recreateUsersTable();
         //DatabaseManager.createTables();
-        //Reports reports = new Reports();
-        //reports.display();
+        Reports reports = new Reports();
+        reports.display();
         //CreateUser createUser = new CreateUser();
         //createUser.display();
         //DatabaseManager.createTables();
@@ -15,8 +15,8 @@ public class App extends Application {
         //loginWindow.display();
         //Signup signupWindow = new Signup();
         //signupWindow.display();
-        Items itemsWindow = new Items();
-        itemsWindow.display();
+        //Items itemsWindow = new Items();
+        //itemsWindow.display();
         //Sales salesWindow = new Sales();
         //salesWindow.display();
         //Purchases purchaseWindow = new Purchases();

@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -55,6 +56,17 @@ public class Purchases {
         ImageView salesIcon = createImageView("sales.jpg");
         ImageView usersIcon = createImageView("users.jpg");
         ImageView dashboardIcon = createImageView("dashboard.jpg");
+
+        Tooltip salesTooltip = new Tooltip("Go to Sales");
+        Tooltip usersTooltip = new Tooltip("Go to Reports");
+        Tooltip itemsTooltip = new Tooltip("Go to Items");
+        Tooltip dashboardTooltip = new Tooltip("Go to Dashboard");
+
+        Tooltip.install(salesIcon, salesTooltip);
+        Tooltip.install(dashboardIcon, dashboardTooltip);
+        Tooltip.install(usersIcon, usersTooltip);
+        Tooltip.install(itemsIcon, itemsTooltip);
+
 
         navigationPane.getChildren().addAll(usersIcon, itemsIcon, salesIcon, dashboardIcon);
 

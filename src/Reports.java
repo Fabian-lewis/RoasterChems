@@ -3,6 +3,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.tools.Tool;
+
 import java.sql.PreparedStatement;
 
 import javafx.event.EventHandler;
@@ -23,6 +26,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -50,6 +54,19 @@ public class Reports {
         ImageView dashboardIcon = createImageView("dashboard.jpg");
         ImageView itemsIcon = createImageView("items.jpg");
 
+        
+        Tooltip salesTooltip = new Tooltip("Go to Sales");
+        Tooltip usersTooltip = new Tooltip("Go to Create New User");
+        Tooltip itemsTooltip = new Tooltip("Go to Items");
+        Tooltip dashboardTooltip = new Tooltip("Go to Dashboard");
+        Tooltip purchasesTooltip = new Tooltip("Go to Purchases");
+
+        Tooltip.install(salesIcon, salesTooltip);
+        Tooltip.install(dashboardIcon, dashboardTooltip);
+        Tooltip.install(usersIcon, usersTooltip);
+        Tooltip.install(itemsIcon, itemsTooltip);
+        Tooltip.install(purchasesIcon, purchasesTooltip);
+        
         navigationPane.getChildren().addAll(usersIcon, purchasesIcon, salesIcon, dashboardIcon, itemsIcon);
 
         VBox containerBox = new VBox();
@@ -65,6 +82,8 @@ public class Reports {
         Button seePurchasesButton = new Button("VIEW PURCHASES");
         Button seeSalesButton = new Button("VIEW SALES");
         Button seeOrderButton = new Button("VIEW ORDER ITEMS");
+        Button editUser = new Button("EDIT USER");
+        Button deleteUser = new Button("DELETE USER");
 
         buttonBox.getChildren().addAll(seeUsersButton, seeItemsButton,seePurchasesButton, seeSalesButton, seeOrderButton);
 
@@ -73,10 +92,11 @@ public class Reports {
         viewStack.setStyle("-fx-background-color: #F0E68C");
         viewStack.setMinWidth(800);
 
-        StackPane secondPane = new StackPane();
+        FlowPane secondPane = new FlowPane();
         secondPane.setPadding(new Insets(20,10,10,10));
         secondPane.setStyle("-fx-background-color: #F0E68C");
         secondPane.setMinWidth(800);
+        secondPane.setHgap(10);
 
 
 
@@ -89,7 +109,7 @@ public class Reports {
 
         //viewStack.getChildren().addAll(reportsTable);
 
-        containerBox.getChildren().addAll(buttonBox, viewStack, secondPane);
+        containerBox.getChildren().addAll(buttonBox, viewStack);
         
         reportsWindow.getChildren().addAll(navigationPane, containerBox);
 
@@ -113,15 +133,6 @@ public class Reports {
                 reports.close();
             }
         });
-        purchasesIcon.setOnMouseDragOver(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle (MouseEvent event){
-                Tooltip tooltip = new Tooltip("Purchases Window");
-                tooltip.show(reports);
-
-            }
-            
-        });
         itemsIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle (MouseEvent event){
@@ -139,6 +150,23 @@ public class Reports {
                 reports.close();
             }
         });
+        dashboardIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                Dashboard itemsWindow = new Dashboard();
+                itemsWindow.display();
+                reports.close();
+            }
+        });
+        usersIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle (MouseEvent event){
+                CreateUser itemsWindow = new CreateUser();
+                itemsWindow.display();
+                reports.close();
+            }
+        });
+
         seeUsersButton.setOnAction(e ->{
             if(verifyCreditials()){
             viewStack.getChildren().clear();
@@ -164,6 +192,92 @@ public class Reports {
             reportsTable.getItems().addAll(users);
 
             viewStack.getChildren().addAll(reportsTable);
+            containerBox.getChildren().add(secondPane);
+
+            reportsTable.setOnMouseClicked(f->{
+                secondPane.getChildren().clear();
+                secondPane.getChildren().addAll(editUser,deleteUser);
+
+                User selectedUser = reportsTable.getSelectionModel().getSelectedItem();
+                if(selectedUser != null){
+                    TextField userIDTextField = new TextField();
+                    GridPane.setConstraints(userIDTextField, 0, 0);
+                    userIDTextField.setEditable(false);
+
+                    TextField userNameTextField = new TextField();
+                    GridPane.setConstraints(userNameTextField, 1, 0);
+
+                    TextField userPhoneTextField = new TextField();
+                    GridPane.setConstraints(userPhoneTextField, 2, 0);
+
+                    TextField userRoleTextField = new TextField();
+                    GridPane.setConstraints(userRoleTextField, 3, 0);
+
+                    editingGridPane.getChildren().addAll(userIDTextField,userNameTextField,userPhoneTextField,userRoleTextField);
+
+                    userIDTextField.setText(selectedUser.getUserID().toString());
+                    userNameTextField.setText(selectedUser.getUsername());
+                    userPhoneTextField.setText(selectedUser.getUserphone());
+                    userRoleTextField.setText(selectedUser.getUserrole());
+                    
+                    secondPane.getChildren().add(editingGridPane);
+
+                   
+                }
+
+                
+            });
+            editUser.setOnAction(f->{
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("EDITING AN ITEM");
+            alert.setContentText("Are you sure you want to EDIT this Item?");
+
+            ButtonType yesButtonType = new ButtonType("YES");
+            ButtonType noButtonType = new ButtonType("NO");
+
+            alert.getButtonTypes().clear();
+            alert.getButtonTypes().addAll(yesButtonType,noButtonType);
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if(result.isPresent()&& result.get()==yesButtonType){
+                editUser(editingGridPane);
+                
+                
+
+
+            }else if(result.isPresent() && result.get() == noButtonType){
+
+            }
+            else{
+                System.out.println("User cancelled the alert");
+            }
+            });
+
+            deleteUser.setOnAction(f->{
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("DELETING AN ITEM");
+            alert.setContentText("Are you sure you want to DELETE this Item?");
+
+            ButtonType yesButtonType = new ButtonType("YES");
+            ButtonType noButtonType = new ButtonType("NO");
+
+            alert.getButtonTypes().clear();
+            alert.getButtonTypes().addAll(yesButtonType,noButtonType);
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if(result.isPresent()&& result.get()==yesButtonType){
+                deleteUser(editingGridPane);
+
+            }else if(result.isPresent() && result.get() == noButtonType){
+
+            }
+            else{
+                System.out.println("User cancelled the alert");
+            }
+            });
+
 
 
             }
@@ -171,6 +285,7 @@ public class Reports {
         });
         seeItemsButton.setOnAction(e->{
             if(verifyCreditials()){
+                containerBox.getChildren().remove(secondPane);
                 viewStack.getChildren().clear();
                 TableView<Item> reportsTable = new TableView<>();
     
@@ -201,6 +316,7 @@ public class Reports {
         });
         seePurchasesButton.setOnAction(e->{
             if(verifyCreditials()){
+                containerBox.getChildren().remove(secondPane);
                 viewStack.getChildren().clear();
                 TableView<Purchase> reportsTable = new TableView<>();
     
@@ -234,6 +350,7 @@ public class Reports {
         });
         seeSalesButton.setOnAction(e->{
             if(verifyCreditials()){
+                containerBox.getChildren().remove(secondPane);
                 viewStack.getChildren().clear();
                 TableView<Sale> reportsTable = new TableView<>();
     
@@ -273,6 +390,7 @@ public class Reports {
         });
         seeOrderButton.setOnAction(e->{
             if(verifyCreditials()){
+                containerBox.getChildren().remove(secondPane);
                 viewStack.getChildren().clear();
 
                 TableView<Order> reportsTable = new TableView<>();
@@ -298,6 +416,82 @@ public class Reports {
         });
 
 
+    }
+    public void editUser(GridPane editGridPane){
+        StringBuilder data = new StringBuilder();
+        for(int i=0;i<4;i++){
+            TextField suckdata = new TextField();
+            suckdata = (TextField)editGridPane.getChildren().get(i);
+            data.append(suckdata.getText()).append("\t");
+        }
+        System.out.println(data.toString());
+        
+        try {
+            Connection conn = DatabaseManager.connect();
+            String sql ="UPDATE users SET username=?,phone=?,role=? WHERE id=?";
+            PreparedStatement prepare = conn.prepareStatement(sql);
+
+            String dataString = data.toString();
+            String [] parts = dataString.split("\t");
+
+            prepare.setString(1, parts[1]);
+            prepare.setString(2, parts[2]);
+            prepare.setString(3, parts[3]);
+
+            Integer id = Integer.parseInt(parts[0]);
+            prepare.setInt(4, id);
+
+            int rowsAffected = prepare.executeUpdate(); 
+            if (rowsAffected > 0) {
+                System.out.println("Update successful.");
+            } else {
+                System.out.println("No rows were updated.");
+            }
+
+            conn.close();
+            prepare.close();
+            
+        } catch (Exception e) {
+            
+            e.printStackTrace();
+        }
+    }
+    public void deleteUser(GridPane editingGridPane){
+        StringBuilder data = new StringBuilder();
+        for(int i=0;i<4;i++){
+            TextField suckdata = new TextField();
+            suckdata = (TextField)editingGridPane.getChildren().get(i);
+            data.append(suckdata.getText()).append("\t");
+        }
+        System.out.println(data);
+
+        try {
+            String dataString = data.toString();
+
+            String [] parts = dataString.split("\t");
+
+            Connection connection = DatabaseManager.connect();
+            PreparedStatement prepare = null;
+            String sqlString = "DELETE FROM users where id=?";
+            prepare = connection.prepareStatement(sqlString);
+
+            Integer id = Integer.parseInt(parts[0]);
+            prepare.setInt(1, id);
+
+            int rowsAffected = prepare.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Update successful.");
+            } else {
+                System.out.println("No rows were updated.");
+            }
+        
+            connection.close();
+            prepare.close();
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
     }
     private ImageView createImageView(String imageName) {
         ImageView imageView = new ImageView(new Image("file:///C:/Projects/Roaster%20Chems%20Inventory%20System/RoasterChems/lib/" + imageName));
