@@ -65,7 +65,7 @@ public class Dashboard {
         Button salesButton = new Button("SALES");
         GridPane.setConstraints(salesButton, 2, 0);
 
-        dashboardGrid.getChildren().addAll(usersButton, itemsButton, salesButton);
+        //dashboardGrid.getChildren().addAll(usersButton, itemsButton, salesButton);
 
         FlowPane layout = new FlowPane();
         layout.setPadding(new Insets(20));

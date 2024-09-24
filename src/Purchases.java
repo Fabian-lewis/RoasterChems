@@ -10,6 +10,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -18,6 +19,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.Alert.AlertType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -79,11 +81,12 @@ public class Purchases {
         HBox buttonBox = new HBox();
         buttonBox.setSpacing(30);
 
-        Button addItemsButton = new Button("Add Items");
+        Button addItemsButton = new Button("Add Items Pane");
         Button searchItemsButton = new Button("Search Items");
         Button saveItemsButton = new Button("Save Items");
         //Button editItemsButton = new Button("Edit Item");
         Button exitWindowButton = new Button("Exit");
+        Button addItem = new Button("Add New Item");
 
         VBox searchBox = new VBox();
         searchBox.setPadding(new Insets(10, 10, 20, 20));
@@ -103,8 +106,11 @@ public class Purchases {
             searchBox.getChildren().addAll(searchTextField, listView);
         });
 
-        StackPane containerStackPane = new StackPane();
+        FlowPane containerStackPane = new FlowPane();
         containerStackPane.setStyle("-fx-background-color: #F0E68C");
+        containerStackPane.setHgap(10);
+        containerStackPane.setVgap(10);
+        containerStackPane.setPadding(new Insets(10,10,10,10));
         //containerBox.getChildren().add(containerStackPane);
 
         GridPane itemsGridPane = new GridPane();
@@ -112,8 +118,8 @@ public class Purchases {
         itemsGridPane.setHgap(10);
         itemsGridPane.setVgap(10);
 
-        addLabels(itemsGridPane);
-        gridRow = 1;
+        //addLabels(itemsGridPane);
+        //gridRow = 1;
 
         containerBox.getChildren().addAll(buttonBox, searchBox,containerStackPane);
         purchaseContainer.getChildren().addAll(navigationPane, containerBox);
@@ -130,6 +136,15 @@ public class Purchases {
         purchaseWindow.show();
 
         addItemsButton.setOnAction(e -> {
+            gridRow = 0;
+            containerStackPane.getChildren().clear();
+            itemsGridPane.getChildren().clear();
+            addLabels(itemsGridPane);
+            gridRow=1;
+            addTextField(itemsGridPane,gridRow);
+            containerStackPane.getChildren().addAll(addItem, saveItemsButton);
+            containerStackPane.getChildren().addAll(itemsGridPane);
+            /*
             if (addItemsClickListener < 1) {
                 addTextField(itemsGridPane);
                 containerStackPane.getChildren().addAll(itemsGridPane);
@@ -140,6 +155,16 @@ public class Purchases {
                 } else {
                     showAlert("Fill in the previous row first");
                 }
+            }
+             */
+
+        });
+        addItem.setOnAction(e->{
+            if (arePreviousTextFieldsFilled(itemsGridPane,gridRow)) {
+                gridRow++;
+                addTextField(itemsGridPane,gridRow);
+            } else {
+                showAlert("Fill in the previous row first");
             }
         });
 
@@ -165,6 +190,11 @@ public class Purchases {
         saveItemsButton.setOnAction(e -> {
             String id = new String();
             saveItems(itemsGridPane, listView, searchTextField, id);
+            itemsGridPane.getChildren().removeIf(node->node instanceof TextField);
+            itemsGridPane.getChildren().removeIf(node->node instanceof DatePicker);
+            gridRow = 1;
+            addItemsClickListener=0;
+
             
         });
         itemsIcon.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -207,7 +237,7 @@ public class Purchases {
     }
 
     private void saveItems(GridPane itemsGridPane, ListView<String> listView, TextField searchTextField, String id) {
-    if(arePreviousTextFieldsFilled(itemsGridPane)){
+    if(arePreviousTextFieldsFilled(itemsGridPane,gridRow)){
         clearListview(listView);
         clearSearchTextField(searchTextField);
         int count = gridRow - 1;
@@ -237,7 +267,19 @@ public class Purchases {
             }
             
             data.append("\n");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("SUCCESS");
+            alert.setContentText("The items have been saved");
+            alert.show();
+
+
         }
+        for(int j=count;j>1;j--){
+            for(gridColumn = 1;gridColumn>=5;gridColumn++){
+                itemsGridPane.getChildren().remove(itemsGridPane.getChildren().get(j*5-gridColumn));
+            }
+        }
+
         //ReturnClearResults(itemsGridPane);
         
         System.out.println(data.toString());
@@ -259,19 +301,21 @@ public class Purchases {
         searchTextField.clear();
     }
 
-    private boolean arePreviousTextFieldsFilled(GridPane itemsGridPane) {
-        DatePicker datePicker = (DatePicker) itemsGridPane.getChildren().get((gridRow - 1) * 5 + 4);
+    private boolean arePreviousTextFieldsFilled(GridPane itemsGridPane,Integer gridRow) {
+        Boolean result = false;
+        DatePicker datePicker = (DatePicker) itemsGridPane.getChildren().get((gridRow) * 5 + 4);
         if(datePicker.getValue() == null){
-            return false;
+            return result;
         }
         else{
             for (int col = 0; col < 4; col++) {
-                TextField textField = (TextField) itemsGridPane.getChildren().get((gridRow - 1) * 5 + col);
+                TextField textField = (TextField) itemsGridPane.getChildren().get((gridRow) * 5 + col);
                 if (textField.getText().isEmpty()) {
-                    return false;
+                    return result;
                 }
             }
-            return true;
+            result=true;
+            return result;
 
         }
         
@@ -291,7 +335,7 @@ public class Purchases {
         return imageView;
     }
 
-    private void addTextField(GridPane gridPane) {
+    private void addTextField(GridPane gridPane, Integer gridRow) {
         
         for (int i = 0; i < 4; i++) {
             TextField textField = new TextField();
@@ -311,10 +355,10 @@ public class Purchases {
         Label quantityLabel = new Label("QUANTITY");
         GridPane.setConstraints(quantityLabel, 1, 0);
 
-        Label buyingPriceLabel = new Label("BUYING PRICE");
+        Label buyingPriceLabel = new Label("UNIT BUYING PRICE");
         GridPane.setConstraints(buyingPriceLabel, 2, 0);
 
-        Label sellingPriceLabel = new Label("SELLING PRICE");
+        Label sellingPriceLabel = new Label("UNIT SELLING PRICE");
         GridPane.setConstraints(sellingPriceLabel, 3, 0);
 
         Label purchaseDateLabel = new Label("DATE OF PURCHASE");
@@ -335,7 +379,7 @@ public class Purchases {
     
     private void saveToDatabase(StringBuilder data){
         String sql = "INSERT INTO  purchases( item_name_purchases, id_itemID, quantity_purchases, buying_price_purchases, selling_price_purchases, date_of_purchase) VALUES (?,?,?,?,?,?)";
-        String sql2 = "UPDATE items SET quantity_items = quantity_items + ? WHERE id_items = ?";
+        String sql2 = "UPDATE items SET quantity_items = quantity_items + ?, buying_price_items =?, selling_price_items =? WHERE id_items = ?";
 
         try(Connection conn = DatabaseManager.connect();
         PreparedStatement psupdate = conn.prepareStatement(sql2);
@@ -360,7 +404,9 @@ public class Purchases {
                 pstmt.executeUpdate();
 
                 psupdate.setInt(1, item_quantity);
-                psupdate.setInt(2, item_id);
+                psupdate.setDouble(2, item_buyingprice);
+                psupdate.setDouble(3, item_sellingprice);
+                psupdate.setInt(4, item_id);
                 psupdate.executeUpdate();
 
 
