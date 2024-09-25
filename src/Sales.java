@@ -96,9 +96,10 @@ public class Sales {
         Button searchItemsButton = new Button("Search Items");
         Button saveItemsButton = new Button("Save Items");
         Button calculateTotalButton = new Button("Calculate Total");
+        Button addItem = new Button("ADD A NEW ITEM");
         //Button exitWindowButton = new Button("Exit");
 
-        buttonBox.getChildren().addAll(addItemsButton, searchItemsButton,calculateTotalButton,saveItemsButton);
+        buttonBox.getChildren().addAll(addItemsButton, searchItemsButton);
 
 
         VBox searchBox = new VBox();
@@ -119,8 +120,8 @@ public class Sales {
         salesGridPane.setHgap(10);
         salesGridPane.setVgap(10);
 
-        addLabels(salesGridPane);
-        grid_row = 1;
+        //addLabels(salesGridPane);
+        //grid_row = 1;
         GridPane totals = new GridPane();
         totals.setPadding(new Insets(10));
         totals.setHgap(10);
@@ -140,8 +141,10 @@ public class Sales {
         containerBox.getChildren().addAll(buttonBox, searchBox);
         FlowPane containerFlowPane = new FlowPane();
         containerFlowPane.setHgap(20);
+        containerFlowPane.setPadding(new Insets(10,10,10,10));
         containerFlowPane.setStyle("-fx-background-color: #F0E68C");
         containerBox.getChildren().add(containerFlowPane);
+
 
         salesWindowHBox.getChildren().addAll(navigationPane, containerBox);
 
@@ -193,14 +196,18 @@ public class Sales {
             
         });
 
-        
-        
-
-
         addItemsButton.setOnAction(e ->{
-           if(addItemsClickListener < 1){
+            grid_row = 0;
+            salesGridPane.getChildren().clear();
+            addLabels(salesGridPane);
+            grid_row=1;
             addTextField(salesGridPane);
+            containerFlowPane.getChildren().clear();
+            containerFlowPane.getChildren().addAll(addItem,calculateTotalButton, saveItemsButton);
             containerFlowPane.getChildren().addAll(salesGridPane, totals);
+            /*
+            if(addItemsClickListener < 1){
+            
             addItemsClickListener++;
 
            } else{
@@ -212,6 +219,19 @@ public class Sales {
                 showAlert("Fill in the previous row first");
             }
            }
+             */
+           
+        });
+        addItem.setOnAction(e->{
+            addItemsClickListener = 1;
+            //grid_row++;
+            if(arePreviousTextFieldsFilled(salesGridPane)){
+                
+                addTextField(salesGridPane);
+                
+            } else{
+                showAlert("Fill in the previous row first");
+            }
         });
         
 

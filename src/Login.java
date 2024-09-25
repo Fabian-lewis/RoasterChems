@@ -52,7 +52,7 @@ public class Login {
         Button exitButton = new Button("EXIT");
         GridPane.setConstraints(exitButton, 4, 2);
 
-        loginGrid.getChildren().addAll(usernameLabel, usernameTextField, passwordLabel, passwordTextField, loginButton, clearButton, exitButton, signupButton);
+        loginGrid.getChildren().addAll(usernameLabel, usernameTextField, passwordLabel, passwordTextField, loginButton, clearButton, exitButton);
 
         StackPane container = new StackPane();
         container.getChildren().addAll(loginGrid);

@@ -211,6 +211,10 @@ public class CreateUser {
                 Role = userroleTextField.getText();
                 if(!Username.isEmpty() && !Phone.isEmpty() && !Password.isEmpty() && !NationalId.isEmpty()){
                     saveUser(Username, Phone, Password, NationalId, Role);
+                    usernameTextField.clear();
+                    phoneTextField.clear();
+                    userpasswordTextField.clear();
+                    userroleTextField.clear();
                 }
                 else{
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -291,7 +295,7 @@ public class CreateUser {
         credentials.getChildren().addAll(username,usernameTextField,password,passwordTextField);
 
         Alert credentialsAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        credentialsAlert.setHeaderText("VERIFY USER");
+        credentialsAlert.setHeaderText("VERIFY ADMIN");
         credentialsAlert.getDialogPane().setContent(credentials);
 
         ButtonType okayButtonType = new ButtonType("OKAY");
@@ -324,7 +328,8 @@ public class CreateUser {
                     }else{
 
                         Alert notAdminAlert = new Alert(Alert.AlertType.INFORMATION);
-                        notAdminAlert.setContentText("You are an Admin");
+                        notAdminAlert.setHeaderText("SUCCESS");
+                        notAdminAlert.setContentText("User has been added");
                         notAdminAlert.show();
                         confirm = true;
 

@@ -38,7 +38,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Items {
-    int grid_row=1, grid_column;
+    int grid_row=0, grid_column;
     int additemsclicklistener = 0;
     int viewitemsclicklistener = 0;
     int viewbuttoncount=0;
@@ -117,7 +117,7 @@ public class Items {
         Label sellingpriceLabel = new Label("SELLING PRICE");
         GridPane.setConstraints(sellingpriceLabel, 4, 0);
 
-        addLables(itemsGridPane);
+        //addLables(itemsGridPane);
 
         GridPane viewItemsGridPane = new GridPane();
         viewItemsGridPane.setPadding(new Insets(10));
@@ -129,6 +129,7 @@ public class Items {
         FlowPane itemsStackPane = new FlowPane();
         itemsStackPane.setPadding(new Insets(10,10,10,10));
         itemsStackPane.setStyle("-fx-background-color: #F0E68C");
+        itemsStackPane.setHgap(10);
 
 
         containerBox.getChildren().addAll(buttonBox, itemsStackPane);
@@ -153,11 +154,20 @@ public class Items {
         
 
         addItemsButton.setOnAction(e ->{
+            itemsGridPane.getChildren().clear();
+            grid_row = 0;
+            addLables(itemsGridPane);
+            grid_row=1;
+            addTextfield(itemsGridPane);
+
             containerBox.getChildren().clear();
+            containerBox.getChildren().addAll(buttonBox,itemsStackPane);
+
             viewitemsclicklistener = 0;
             itemsStackPane.getChildren().clear();
-            itemsStackPane.getChildren().addAll(addItem);
-            
+            itemsStackPane.getChildren().addAll(addItem,saveItemsButton);
+            itemsStackPane.getChildren().addAll(itemsGridPane);
+            /*
             if(additemsclicklistener <1){
                 addTextfield(itemsGridPane);
                 itemsStackPane.getChildren().addAll(itemsGridPane);
@@ -165,6 +175,8 @@ public class Items {
                 System.out.println(grid_row);
                 //additemsclicklistener=additemsclicklistener;
             }
+             */
+            
             
         });
         addItem.setOnAction(e->{
@@ -221,6 +233,10 @@ public class Items {
                 itemsStackPane.getChildren().addAll(addItem,itemsGridPane);
                 //containerBox.getChildren().addAll(buttonBox,itemsStackPane);
                 grid_row = 1;
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText("SUCCESS");
+                alert.setContentText("The items have been saved");
+                alert.show();
             }
 
         });
@@ -711,14 +727,16 @@ public class Items {
                 pstmt.setDouble(5, sellingprice);
                 pstmt.executeUpdate();
 
-                conn.close();
-                pstmt.close();
+                
                 
             }
+            conn.close();
+            pstmt.close();
                 
         } catch(SQLException e){
             System.out.println(e.getMessage());
         }
+        
         return true;
     }
     public class Item{
